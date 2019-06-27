@@ -9,9 +9,11 @@ export const getters = {
 
 export const mutations = {
   setToken(state, token) {
+    this.$axios.setToken(token, 'Bearer')
     state.token = token
   },
   clearToken(state) {
+    this.$axios.setToken(false)
     state.token = null
   }
 }
@@ -36,7 +38,8 @@ export const actions = {
       throw e
     }
   },
-  logout({ commit }) {
+  async logout({ commit }) {
+    await this.$axios.setToken(false)
     commit('clearToken')
   },
   setToken({ commit }, token) {

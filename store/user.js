@@ -1,17 +1,12 @@
 export const state = () => ({
-  userId: null,
   currentUser: {}
 })
 
 export const getters = {
-  userId: state => state.userId,
   currentUser: state => state.currentUser
 }
 
 export const mutations = {
-  setId(state, id) {
-    state.userId = id
-  },
   setUser(state, payload) {
     state.currentUser = payload
   }
@@ -24,6 +19,7 @@ export const actions = {
       commit('setUser', data)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
+      throw e
     }
   }
 }

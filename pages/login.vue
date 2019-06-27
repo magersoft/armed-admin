@@ -79,6 +79,13 @@ export default {
           timeout: 0
         })
         break
+      case 'logout':
+        this.$store.dispatch('getError', {
+          color: 'primary',
+          text: 'Вы вышли из системы',
+          timeout: 0
+        })
+        break
     }
   },
   methods: {

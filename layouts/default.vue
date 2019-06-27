@@ -15,8 +15,15 @@
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>name</v-list-tile-title>
-              {{ user }}
+              <v-list-tile-title class="username">
+                {{ user.name }}
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" @click="logout"><v-icon>exit_to_app</v-icon></v-btn>
+                  </template>
+                  <span>Выйти из системы</span>
+                </v-tooltip>
+              </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -151,7 +158,7 @@ export default {
       return this.$store.getters.menu
     },
     user() {
-      return this.$store.getters.currentUser
+      return this.$store.getters['user/currentUser']
     }
   },
   watch: {
@@ -170,7 +177,26 @@ export default {
     closeSnackbar() {
       this.snackbar.state = false
       this.$store.dispatch('clearError')
+    },
+    async logout() {
+      await this.$store.dispatch('auth/logout')
+      this.$router.push('/login?message=logout')
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .username {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 38px;
+    span.v-tooltip--bottom {
+      display: none;
+    }
+    i:hover {
+      color: #1976d2;
+    }
+  }
+</style>
