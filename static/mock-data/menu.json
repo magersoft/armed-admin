@@ -1,0 +1,30 @@
+{
+  "Group 1": [
+    {
+      "title": "Dashboard",
+      "icon": "apps",
+      "available": "true",
+      "to": "/"
+    },
+    {
+      "title": "Inspire",
+      "icon": "bubble_chart",
+      "available": "true",
+      "to": "/inspire"
+    }
+  ],
+  "Group 2": [
+    {
+      "title": "Dashboard",
+      "icon": "apps",
+      "available": "true",
+      "to": "/"
+    },
+    {
+      "title": "Inspire",
+      "icon": "bubble_chart",
+      "available": "true",
+      "to": "/inspire"
+    }
+  ]
+}
