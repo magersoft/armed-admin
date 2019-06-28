@@ -37,8 +37,8 @@ export const actions = {
       const menu = await this.$axios.$get('/mock-data/menu.json', this.getters['user/currentUser'].id)
       commit('setMenu', menu)
     } catch (e) {
-      console.log(this.getters)
       commit('setError', { text: e })
+      throw e
     }
   }
 }

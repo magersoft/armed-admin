@@ -1,5 +1,5 @@
 {
-  "Group 1": [
+  "Основное": [
     {
       "title": "Dashboard",
       "icon": "apps",
@@ -13,18 +13,40 @@
       "to": "/inspire"
     }
   ],
-  "Group 2": [
+  "Контент": [
     {
-      "title": "Dashboard",
-      "icon": "apps",
+      "title": "Товары",
+      "icon": "shopping_basket",
       "available": "true",
-      "to": "/"
+      "to": "/product"
     },
     {
-      "title": "Inspire",
-      "icon": "bubble_chart",
+      "title": "Посты",
+      "icon": "list",
       "available": "true",
-      "to": "/inspire"
+      "to": "/post"
+    }
+  ],
+  "Продажи": [
+    {
+      "title": "Заказы",
+      "icon": "add_shopping_cart",
+      "available": "true",
+      "to": "/order"
+    },
+    {
+      "title": "Заявки",
+      "icon": "assignment",
+      "available": "true",
+      "to": "/feedback"
+    }
+  ],
+  "Администрирование": [
+    {
+      "title": "Пользователи",
+      "icon": "account_circle",
+      "available": "true",
+      "to": "/user"
     }
   ]
 }

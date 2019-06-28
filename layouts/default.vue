@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-app :dark="dark">
     <v-navigation-drawer
       v-model="drawer"
@@ -30,8 +30,15 @@
       </v-toolbar>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
+        <v-progress-circular
+          v-if="!menu"
+          indeterminate
+          color="primary"
+          class="wait-menu"
+        ></v-progress-circular>
         <div
           v-for="(items, group) in menu"
+          v-else
           :key="group">
           <h4 class="group-title" v-if="!miniVariant">{{ group }}</h4>
           <v-list-tile
@@ -40,9 +47,14 @@
             :to="item.to"
             router
             exact>
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
+            <v-tooltip right :disabled="!miniVariant">
+              <template v-slot:activator="{ on }">
+                <v-list-tile-action v-on="on">
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-tile-action>
+              </template>
+              <span>{{ item.title }}</span>
+            </v-tooltip>
             <v-list-tile-content>
               <v-list-tile-title v-text="item.title" />
             </v-list-tile-content>
@@ -82,6 +94,7 @@
       <v-container>
         <nuxt />
       </v-container>
+      <app-action-button />
     </v-content>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -131,8 +144,12 @@
 
 <script>
 // import { mapGetters } from 'vuex'
+import AppActionButton from '@/components/layouts/ActionButton'
 
 export default {
+  components: {
+    AppActionButton
+  },
   data: () => ({
     clipped: false,
     drawer: true,
@@ -198,5 +215,10 @@ export default {
     i:hover {
       color: #1976d2;
     }
+  }
+  .wait-menu {
+    display: flex;
+    margin: 0 auto;
+    margin-top: 2rem;
   }
 </style>

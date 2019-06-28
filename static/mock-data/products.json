@@ -1,0 +1,87 @@
+{
+  "headers": [
+    { "text": "ID", "align": "left", "sortable": false, "value": "id" },
+    { "text": "Название", "align": "left", "value": "title" },
+    { "text": "Статус", "align": "left", "value": "status" },
+    { "text": "Категории", "align": "left", "value": "category" },
+    { "text": "Цены", "align": "left", "value": "prices" },
+    { "text": "Действия", "align": "left", "value": "actions", "sortable": false }],
+  "body": [
+    {
+      "id": 1,
+      "title": "Product 1",
+      "status": "Active",
+      "category": "test",
+      "prices": "100"
+    },
+    {
+      "id": 2,
+      "title": "Product 2",
+      "status": "Active",
+      "category": "test",
+      "prices": "200"
+    },
+    {
+      "id": 3,
+      "title": "Product 3",
+      "status": "Active",
+      "category": "test",
+      "prices": "200"
+    },
+    {
+      "id": 4,
+      "title": "Product 4",
+      "status": "Active",
+      "category": "test",
+      "prices": "200"
+    },
+    {
+      "id": 5,
+      "title": "Product 5",
+      "status": "Active",
+      "category": "test",
+      "prices": "200"
+    },
+    {
+      "id": 6,
+      "title": "Product 6",
+      "status": "Active",
+      "category": "test",
+      "prices": "200"
+    },
+    {
+      "id": 7,
+      "title": "Product 7",
+      "status": "Active",
+      "category": "test",
+      "prices": "200"
+    }
+  ],
+  "filters": [
+    {
+      "type": "text",
+      "label": "Артикул",
+      "model": "sku"
+    },
+    {
+      "type": "text",
+      "label": "Название",
+      "model": "title"
+    },
+    {
+      "type": "select",
+      "label": "Категория",
+      "items": [
+        {
+          "text": "Категория 1",
+          "value": "1"
+        },
+        {
+          "text": "Категория 2",
+          "value": "2"
+        }
+      ],
+      "model": "category_id"
+    }
+  ]
+}
