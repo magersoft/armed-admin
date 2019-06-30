@@ -74,14 +74,39 @@
       "items": [
         {
           "text": "Категория 1",
-          "value": "1"
+          "value": "10"
         },
         {
           "text": "Категория 2",
-          "value": "2"
+          "value": "22"
         }
       ],
       "model": "category_id"
+    },
+    {
+      "type": "text",
+      "label": "Модель",
+      "model": "model"
+    },
+    {
+      "type": "checkbox",
+      "label": "Скидка?",
+      "model": "sale"
+    },
+    {
+      "type": "select",
+      "label": "Статус",
+      "items": [
+        {
+          "text": "Опубликовано",
+          "value": "1"
+        },
+        {
+          "text": "Черновик",
+          "value": "0"
+        }
+      ],
+      "model": "status"
     }
   ]
 }

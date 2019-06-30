@@ -31,7 +31,7 @@
                 v-model="model[idx]"
                 :name="filter.model"
                 color="primary"
-                :label="`label`"></v-checkbox>
+                :label="filter.label"></v-checkbox>
               <v-radio-group v-if="filter.type === 'radio'">
                 <v-radio
                   v-for="n in 3"
@@ -42,12 +42,11 @@
               </v-radio-group>
             </v-flex>
           </v-layout>
-            {{ model }}
           <div class="buttons">
             <v-btn color="primary" @click.prevent="filterHandler">
               Применить
             </v-btn>
-            <v-btn>Сбросить</v-btn>
+            <v-btn @click.prevent="filterClear">Сбросить</v-btn>
           </div>
         </v-form>
       </v-container>
@@ -65,13 +64,13 @@
           <v-icon
             small
             class="mr-2"
-            @click="editItem(props.item)"
+            @click="editItem(props.item.id)"
           >
             edit
           </v-icon>
           <v-icon
             small
-            @click="deleteItem(props.item)"
+            @click="deleteItem(props.item.id)"
           >
             delete
           </v-icon>
@@ -97,8 +96,14 @@ export default {
     async filterHandler() {
       const formData = new FormData(this.$refs.filter.$el)
       try {
-        await this.$store.dispatch('product/filterProduct', formData)
+        this.data = await this.$store.dispatch('product/filterProduct', formData)
       } catch (e) {}
+    },
+    filterClear() {
+      this.model = {}
+    },
+    editItem(id) {
+      this.$router.push(`product/${id}`)
     }
   }
 }

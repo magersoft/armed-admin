@@ -10,6 +10,7 @@ export default {
   components: {
     AppCrud
   },
+  middleware: ['auth'],
   async asyncData({ store }) {
     try {
       const products = await store.dispatch('product/getAll')

@@ -32,7 +32,6 @@ export const actions = {
         }), 1000)
       })
       dispatch('setToken', data.token)
-      commit('user/setId', data.user.id, { root: true })
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e

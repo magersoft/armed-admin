@@ -7,9 +7,17 @@ export const actions = {
       throw e
     }
   },
+  async getOne({ commit }, id) {
+    try {
+      return await this.$axios.$get(`/mock-data/product.json?id=${id}`)
+    } catch (e) {
+      commit('setError', { text: e }, { root: true })
+      throw e
+    }
+  },
   async filterProduct({ commit }, formData) {
     try {
-      await this.$axios.$post('/', formData)
+      return await this.$axios.$post('/', formData)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e
