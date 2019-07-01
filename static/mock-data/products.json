@@ -10,49 +10,49 @@
     {
       "id": 1,
       "title": "Product 1",
-      "status": "Active",
+      "status": "2",
       "category": "test",
       "prices": "100"
     },
     {
       "id": 2,
       "title": "Product 2",
-      "status": "Active",
+      "status": "0",
       "category": "test",
       "prices": "200"
     },
     {
       "id": 3,
       "title": "Product 3",
-      "status": "Active",
+      "status": "0",
       "category": "test",
       "prices": "200"
     },
     {
       "id": 4,
       "title": "Product 4",
-      "status": "Active",
+      "status": "1",
       "category": "test",
       "prices": "200"
     },
     {
       "id": 5,
       "title": "Product 5",
-      "status": "Active",
+      "status": "2",
       "category": "test",
       "prices": "200"
     },
     {
       "id": 6,
       "title": "Product 6",
-      "status": "Active",
+      "status": "2",
       "category": "test",
       "prices": "200"
     },
     {
       "id": 7,
       "title": "Product 7",
-      "status": "Active",
+      "status": "2",
       "category": "test",
       "prices": "200"
     }
@@ -89,11 +89,6 @@
       "model": "model"
     },
     {
-      "type": "checkbox",
-      "label": "Скидка?",
-      "model": "sale"
-    },
-    {
       "type": "select",
       "label": "Статус",
       "items": [
@@ -107,6 +102,31 @@
         }
       ],
       "model": "status"
+    },
+    {
+      "type": "text",
+      "label": "Что-то еще",
+      "model": "model"
+    },
+    {
+      "type": "text",
+      "label": "Что-то еще",
+      "model": "model"
+    },
+    {
+      "type": "text",
+      "label": "Что-то еще",
+      "model": "model"
+    },
+    {
+      "type": "text",
+      "label": "Что-то еще",
+      "model": "model"
+    },
+    {
+      "type": "checkbox",
+      "label": "Скидка?",
+      "model": "sale"
     }
   ]
 }

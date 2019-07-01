@@ -11,9 +11,10 @@
         </v-tooltip>
       </v-card-title>
       <v-divider></v-divider>
-      <v-container v-if="filterShow">
+      <v-slide-y-transition>
+        <v-container v-show="filterShow">
         <v-form ref="filter">
-          <v-layout>
+          <v-layout row wrap>
             <v-flex v-for="(filter, idx) in data.filters" :key="idx" xs12 md2>
               <v-text-field
                 v-if="filter.type === 'text'"
@@ -34,22 +35,28 @@
                 :label="filter.label"></v-checkbox>
               <v-radio-group v-if="filter.type === 'radio'">
                 <v-radio
-                  v-for="n in 3"
-                  :key="n"
+                  v-for="(item, idx) in filter.items"
+                  :key="idx"
                   color="primary"
-                  :label="`Radio ${n}`"
-                  :value="n"></v-radio>
+                  :label="item.label"
+                  :value="item.value"></v-radio>
               </v-radio-group>
             </v-flex>
           </v-layout>
           <div class="buttons">
-            <v-btn color="primary" @click.prevent="filterHandler">
+            <v-btn
+              type="submit"
+              color="primary"
+              :loading="loading"
+              :disabled="loading"
+              @click.prevent="filterHandler">
               Применить
             </v-btn>
             <v-btn @click.prevent="filterClear">Сбросить</v-btn>
           </div>
         </v-form>
       </v-container>
+      </v-slide-y-transition>
     </v-card>
     <v-data-table
       :headers="data.headers"
@@ -60,20 +67,32 @@
         <td v-for="item in props.item" :key="item.id">
           {{ item }}
         </td>
-        <td class="justify-center layout px-0">
-          <v-icon
-            small
-            class="mr-2"
-            @click="editItem(props.item.id)"
-          >
-            edit
-          </v-icon>
-          <v-icon
-            small
-            @click="deleteItem(props.item.id)"
-          >
-            delete
-          </v-icon>
+        <td class="layout px-0">
+          <v-btn icon>
+            <v-icon
+                    color="blue darken-2"
+                    @click="deleteItem(props.item.id)"
+            >
+              visibility
+            </v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon
+              color="orange darken-2"
+              @click="editItem(props.item.id)"
+            >
+              edit
+            </v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon
+              color="red darken-2"
+              @click="deleteItem(props.item.id)"
+            >
+              delete
+            </v-icon>
+          </v-btn>
+          <app-action-button :item="props.item" />
         </td>
       </template>
     </v-data-table>
@@ -81,7 +100,12 @@
 </template>
 
 <script>
+import AppActionButton from '@/components/ActionButton'
+
 export default {
+  components: {
+    AppActionButton
+  },
   props: {
     data: {
       type: Object,
@@ -90,14 +114,23 @@ export default {
   },
   data: () => ({
     filterShow: true,
-    model: {}
+    model: {},
+    loading: false,
+    colors: {
+      '0': 'red',
+      '1': 'primary',
+      '2': 'green'
+    },
+    status: ''
   }),
   methods: {
     async filterHandler() {
+      this.loading = true
       const formData = new FormData(this.$refs.filter.$el)
       try {
         this.data = await this.$store.dispatch('product/filterProduct', formData)
       } catch (e) {}
+      this.loading = false
     },
     filterClear() {
       this.model = {}
