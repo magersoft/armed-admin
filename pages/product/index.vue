@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AppCrud from '@/components/CRUD'
+import AppCrud from '@/components/CRUD/CRUD'
 export default {
   components: {
     AppCrud

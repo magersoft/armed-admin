@@ -8,11 +8,11 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
-        :color="statusColor"
+        :color="colorsComputed"
         flat
         v-on="on"
       >
-        {{ statusText }}
+        {{ textComputed }}
       </v-btn>
     </template>
 
@@ -20,7 +20,7 @@
       <v-list>
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
+            <img src="/img/user.png" alt="John">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
@@ -47,7 +47,7 @@
           <v-list-tile-action>
             <v-switch v-model="hide" color="primary"></v-switch>
           </v-list-tile-action>
-          <v-list-tile-title>{{ hide ? 'Скрыто' : 'Скрыть' }}</v-list-tile-title>
+          <v-list-tile-title>{{ hide ? text['1'] : 'В архив' }}</v-list-tile-title>
         </v-list-tile>
 
         <v-list-tile>
@@ -61,11 +61,11 @@
       <v-card-actions>
         <v-spacer />
 
-        <v-btn flat @click="menu = false">
+        <v-btn flat :disabled="loading" @click="cancel">
           Отмена
         </v-btn>
-        <v-btn color="primary" flat @click="menu = false">
-          Сохранить
+        <v-btn :loading="loading" :disabled="loading || saveText.value" color="primary" flat @click.prevent="save">
+          {{ saveText.text }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -85,35 +85,88 @@ export default {
     menu: false,
     hide: false,
     status: true,
+    loading: false,
+    temp: {
+      status: null,
+      hide: null
+    },
     colors: {
       '0': 'red',
       '1': 'primary',
       '2': 'green'
     },
-    text: ['Не опубликовано', 'Скрыто', 'Опубликовано']
+    text: ['Не опубликовано', 'В архиве', 'Опубликовано'],
+    saveText: {
+      text: 'Сохранить',
+      value: false
+    }
   }),
   computed: {
     statusText() {
-      if (+this.item.status === 1) {
-        return this.text['1']
-      }
       return this.status ? this.text['2'] : this.text['0']
     },
+    hideText() {
+      return this.hide ? this.text['1'] : this.statusText
+    },
     statusColor() {
-      if (+this.item.status === 1) {
-        return this.colors['1']
-      }
       return this.status ? this.colors['2'] : this.colors['0']
+    },
+    hideColor() {
+      return this.hide ? this.colors['1'] : this.statusColor
+    },
+    colorsComputed() {
+      return this.hide ? this.hideColor : this.statusColor
+    },
+    textComputed() {
+      return this.hide ? this.hideText : this.statusText
     }
   },
   watch: {
     statusText() {
-      this.hide = !this.status
+      if (this.status) {
+        this.hide = false
+      }
+    },
+    hideText() {
+      if (this.hide) {
+        this.status = false
+      }
     }
   },
   mounted() {
     this.status = +this.item.status === 2
     this.hide = +this.item.status === 1
+    this.temp.status = +this.item.status === 2
+    this.temp.hide = +this.item.status === 1
+  },
+  methods: {
+    async save() {
+      this.loading = true
+      try {
+        const formData = {
+          status: this.hide ? 1
+            : this.status ? 2 : 0
+        }
+        await this.$store.dispatch('product/changeStatus', formData)
+      } catch (e) {
+        this.loading = false
+        throw e
+      }
+      this.loading = false
+      this.saveText.value = true
+      this.saveText.text = 'Сохранено'
+      setTimeout(() => {
+        this.saveText.text = 'Сохранить'
+        this.saveText.value = false
+      }, 1500)
+      this.temp.status = this.status
+      this.temp.hide = this.hide
+    },
+    cancel() {
+      this.status = this.temp.status
+      this.hide = this.temp.hide
+      this.menu = false
+    }
   }
 }
 </script>

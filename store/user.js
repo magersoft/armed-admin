@@ -15,7 +15,7 @@ export const mutations = {
 export const actions = {
   async get({ commit }) {
     try {
-      const { data } = await this.$axios.get('https://jsonplaceholder.typicode.com/users/1')
+      const { data } = await this.$axios.get('/mock-data/user.json')
       commit('setUser', data)
     } catch (e) {
       commit('setError', { text: e }, { root: true })

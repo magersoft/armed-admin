@@ -16,7 +16,6 @@
 
 <script>
 export default {
-  layout: 'empty',
   props: {
     error: {
       type: Object,
@@ -44,7 +43,7 @@ h1 {
   font-size: 20px;
 }
 .wrapper {
-  background-color: rgba(0,0,0,.85);
+  background-color: rgba(0,0,0,.1);
   border-radius: 10px;
   padding: 4rem;
   max-width: 800px;

@@ -1,39 +1,39 @@
 {
   "headers": [
-    { "text": "ID", "align": "left", "sortable": false, "value": "id" },
-    { "text": "Название", "align": "left", "value": "title" },
-    { "text": "Статус", "align": "left", "value": "status" },
-    { "text": "Категории", "align": "left", "value": "category" },
-    { "text": "Цены", "align": "left", "value": "prices" },
-    { "text": "Действия", "align": "left", "value": "actions", "sortable": false }],
+    { "text": "ID", "value": "id" },
+    { "text": "Название", "sortable": false, "value": "title" },
+    { "text": "Статус", "sortable": false, "value": "status" },
+    { "text": "Категории", "sortable": false, "value": "category" },
+    { "text": "Цены", "value": "prices" },
+    { "text": "Действия", "value": "actions", "sortable": false }],
   "body": [
     {
       "id": 1,
-      "title": "Product 1",
+      "title": "Концентратор кислорода Армед 7F-1L",
       "status": "2",
-      "category": "test",
-      "prices": "100"
+      "category": "Кислородные концентраторы",
+      "prices": "20000"
     },
     {
       "id": 2,
-      "title": "Product 2",
+      "title": "Концентратор кислорода Армед 8Ф-1/1",
       "status": "0",
       "category": "test",
-      "prices": "200"
+      "prices": "400000"
     },
     {
       "id": 3,
-      "title": "Product 3",
+      "title": "Концентратор кислорода Армед 8Ф-1/2",
       "status": "0",
       "category": "test",
-      "prices": "200"
+      "prices": "5000000"
     },
     {
       "id": 4,
       "title": "Product 4",
       "status": "1",
       "category": "test",
-      "prices": "200"
+      "prices": "80000000"
     },
     {
       "id": 5,
@@ -53,7 +53,7 @@
       "id": 7,
       "title": "Product 7",
       "status": "2",
-      "category": "test",
+      "category": "Комплектующие и запчасти для кислородного оборудования",
       "prices": "200"
     }
   ],
