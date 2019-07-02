@@ -96,7 +96,7 @@
         </tr>
       </template>
       <template v-slot:items="props">
-        <tr :active="props.selected" @click="props.selected = !props.selected">
+        <tr>
           <td>
             <v-checkbox
               :input-value="props.selected"
