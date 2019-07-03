@@ -16,7 +16,7 @@
 
             <v-list-tile-content>
               <v-list-tile-title class="username">
-                {{ user.name }}
+                {{ user.surname }} {{ user.name }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" @click="logout"><v-icon>exit_to_app</v-icon></v-btn>

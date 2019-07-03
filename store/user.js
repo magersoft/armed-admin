@@ -15,8 +15,8 @@ export const mutations = {
 export const actions = {
   async get({ commit }) {
     try {
-      const { data } = await this.$axios.get('/mock-data/user.json')
-      commit('setUser', data)
+      const { user } = await this.$axios.$get(`api/user/?token=${this.getters['auth/token']}`)
+      commit('setUser', user)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e

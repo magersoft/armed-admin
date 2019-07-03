@@ -27,13 +27,7 @@ export const actions = {
   },
   async changeStatus({ commit }, formData) {
     try {
-      await this.$axios.$post('/', formData)
-      await new Promise(resolve => {
-        setTimeout(() => {
-          resolve(formData)
-        }, 2000)
-      })
-      console.log(formData)
+      await this.$axios.$post('http://dobrota.yii/api/change-status/', formData)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
     }

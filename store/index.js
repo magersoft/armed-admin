@@ -34,7 +34,7 @@ export const actions = {
   },
   async getMenu({ commit, dispatch }) {
     try {
-      const menu = await this.$axios.$get('/mock-data/menu.json', this.getters['user/currentUser']._id)
+      const menu = await this.$axios.$get(`api/menu/?user_id=${this.getters['user/currentUser'].user_id}`)
       commit('setMenu', menu)
     } catch (e) {
       commit('setError', { text: e })

@@ -144,6 +144,7 @@ export default {
       this.loading = true
       try {
         const formData = {
+          id: this.item.id,
           status: this.hide ? 1
             : this.status ? 2 : 0
         }

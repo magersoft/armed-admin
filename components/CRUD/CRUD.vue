@@ -1,18 +1,25 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
     <app-filters :data="data" />
-    <v-data-table
-      v-model="selected"
-      :headers="data.headers"
-      :items="data.body"
-      :rows-per-page-items="[10, 25, 50]"
-      :total-items="data.total"
-      :loading="loading"
-      :pagination.sync="pagination"
-      select-all
-      item-key="id"
-      class="elevation-1"
-    >
+    <v-card>
+      <v-card-title>
+        <h3>Товары</h3>
+        <v-spacer></v-spacer>
+        <v-btn small flat>Кнопка</v-btn>
+      </v-card-title>
+      <v-data-table
+        v-model="selected"
+        :headers="data.headers"
+        :items="data.body"
+        :rows-per-page-items="[10, 25, 50]"
+        :total-items="data.total"
+        :loading="loading"
+        :pagination.sync="pagination"
+        rows-per-page-text="Показать"
+        select-all
+        item-key="id"
+        class="elevation-1"
+      >
       <template v-if="!loading" v-slot:no-data>
         <v-alert :value="true" color="error" icon="warning">
           Ничего не найдено :(
@@ -97,6 +104,7 @@
         </tr>
       </template>
     </v-data-table>
+    </v-card>
   </div>
 </template>
 
@@ -130,14 +138,27 @@ export default {
           page,
           rowsPerPage
         }
-        console.log(page)
-        console.log(rowsPerPage)
-        console.log(descending)
-        console.log(sortBy)
         try {
           const { body, total } = await this.$store.dispatch('product/getAll', params)
           this.data.body = body
           this.data.total = total
+
+          if (this.pagination.sortBy) {
+            this.data.body = this.data.body.sort((a, b) => {
+              const sortA = a[sortBy]
+              const sortB = b[sortBy]
+
+              if (descending) {
+                if (sortA < sortB) return 1
+                if (sortA > sortB) return -1
+                return 0
+              } else {
+                if (sortA < sortB) return -1
+                if (sortA > sortB) return 1
+                return 0
+              }
+            })
+          }
         } catch (e) {}
         this.loading = false
       },

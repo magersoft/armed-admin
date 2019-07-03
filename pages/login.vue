@@ -13,6 +13,7 @@
       <v-text-field
         v-model="controls.password"
         v-validate="'required|min:6'"
+        type="password"
         :error-messages="errors.collect('password')"
         label="Пароль"
         data-vv-name="password"
@@ -86,6 +87,13 @@ export default {
           timeout: 0
         })
         break
+      case 'forbidden':
+        this.$store.dispatch('getError', {
+          color: 'error',
+          text: 'Доступ запрещен',
+          timeout: 0
+        })
+        break
     }
   },
   methods: {
@@ -94,7 +102,7 @@ export default {
         if (valid) {
           try {
             const formData = {
-              email: this.controls.email,
+              login: this.controls.email,
               password: this.controls.password,
               remember_me: this.controls.checkbox
             }
