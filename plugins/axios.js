@@ -16,8 +16,8 @@ export default ({ $axios, redirect, store }) => {
         store.dispatch('auth/logout')
       }
       if (error.response.status === 403) {
-        redirect('/login?message=forbidden')
         store.dispatch('auth/logout')
+        redirect('/login?message=forbidden')
       }
       if (error.response.status === 500) {
         console.error('Server 500 error')

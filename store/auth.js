@@ -26,10 +26,7 @@ export const actions = {
     try {
       const { token, password, login, forbidden } = await this.$axios.$post('api/login/', formData)
       if (!token) {
-        commit('setError', { text: login || password || forbidden }, { root: true })
-        if (forbidden) {
-          throw Error(forbidden)
-        }
+        throw new Error(login || password || forbidden)
       }
       dispatch('setToken', token)
     } catch (e) {
