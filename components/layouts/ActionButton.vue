@@ -91,5 +91,7 @@ export default {
 .v-speed-dial {
     position: fixed;
     z-index: 100;
+    bottom: 5px;
+    right: 5px;
 }
 </style>

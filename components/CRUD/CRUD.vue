@@ -1,74 +1,19 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
-    <v-card class="mb2" v-if="data.filters">
-      <v-card-title class="filters-title">
-        <h3>Фильтры</h3>
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on" @click.prevent="filterShow = !filterShow"><v-icon :class="{ active: !filterShow }">unfold_more</v-icon></v-btn>
-          </template>
-          <span>{{ filterShow ? 'Скрыть' : 'Показать' }} фильтры</span>
-        </v-tooltip>
-      </v-card-title>
-      <v-divider></v-divider>
-      <v-slide-y-transition>
-        <v-container v-show="filterShow">
-        <v-form ref="filter">
-          <v-layout row wrap>
-            <v-flex v-for="(filter, idx) in data.filters" :key="idx" xs12 md2>
-              <v-text-field
-                v-if="filter.type === 'text'"
-                v-model="model[idx]"
-                :name="filter.model"
-                :label="filter.label"></v-text-field>
-              <v-select
-                v-if="filter.type === 'select'"
-                v-model="model[idx]"
-                :items="filter.items"
-                :name="filter.model"
-                :label="filter.label"></v-select>
-              <v-checkbox
-                v-if="filter.type === 'checkbox'"
-                v-model="model[idx]"
-                :name="filter.model"
-                color="primary"
-                :label="filter.label"></v-checkbox>
-              <v-radio-group v-if="filter.type === 'radio'">
-                <v-radio
-                  v-for="(item, idx) in filter.items"
-                  :key="idx"
-                  color="primary"
-                  :label="item.label"
-                  :value="item.value"></v-radio>
-              </v-radio-group>
-            </v-flex>
-          </v-layout>
-          <div class="buttons">
-            <v-btn
-              type="submit"
-              color="primary"
-              :loading="loading"
-              :disabled="loading"
-              @click.prevent="filterHandler">
-              Применить
-            </v-btn>
-            <v-btn @click.prevent="filterClear">Сбросить</v-btn>
-          </div>
-        </v-form>
-      </v-container>
-      </v-slide-y-transition>
-    </v-card>
+    <app-filters :data="data" />
     <v-data-table
       v-model="selected"
       :headers="data.headers"
       :items="data.body"
       :rows-per-page-items="[10, 25, 50]"
+      :total-items="data.total"
       :loading="loading"
+      :pagination.sync="pagination"
       select-all
       item-key="id"
       class="elevation-1"
     >
-      <template v-slot:no-data>
+      <template v-if="!loading" v-slot:no-data>
         <v-alert :value="true" color="error" icon="warning">
           Ничего не найдено :(
         </v-alert>
@@ -104,7 +49,7 @@
               hide-details
             ></v-checkbox>
           </td>
-          <td v-for="item in props.item" :key="item.id">
+          <td v-for="(item, idx) in props.item" :key="idx">
             {{ item }}
           </td>
           <td class="layout px-0 text-xs-right">
@@ -157,10 +102,11 @@
 
 <script>
 import AppActionButton from '@/components/CRUD/ActionButton'
+import AppFilters from '@/components/CRUD/Filters'
 
 export default {
   components: {
-    AppActionButton
+    AppActionButton, AppFilters
   },
   props: {
     data: {
@@ -177,8 +123,23 @@ export default {
   }),
   watch: {
     pagination: {
-      handler() {
-        console.log('pag')
+      async handler() {
+        this.loading = true
+        const { sortBy, descending, page, rowsPerPage } = this.pagination
+        const params = {
+          page,
+          rowsPerPage
+        }
+        console.log(page)
+        console.log(rowsPerPage)
+        console.log(descending)
+        console.log(sortBy)
+        try {
+          const { body, total } = await this.$store.dispatch('product/getAll', params)
+          this.data.body = body
+          this.data.total = total
+        } catch (e) {}
+        this.loading = false
       },
       deep: true
     }
@@ -218,28 +179,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.v-input {
-    padding: 10px;
-}
-.buttons {
-    display: flex;
-    justify-content: flex-end;
-}
-.filters-title {
-    display: flex;
-    justify-content: space-between;
-    button {
-        margin: 0;
-        i {
-            &.active {
-              color: #1976d2;
-            }
-        }
-    }
-    .v-tooltip--top {
-        display: none;
-    }
-}
 table.v-table {
   .column {
     padding: 0 10px;

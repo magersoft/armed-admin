@@ -1,7 +1,9 @@
 export const actions = {
-  async getAll({ commit }) {
+  async getAll({ commit }, params = null) {
+    const page = params ? `?page=${params.page}` : ''
+    const pageSize = params ? `&size=${params.rowsPerPage}` : ''
     try {
-      return await this.$axios.$get('http://dobrota.yii/api/products/')
+      return await this.$axios.$get(`http://dobrota.yii/api/products/${page}${pageSize}`)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e
