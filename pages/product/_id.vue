@@ -12,7 +12,7 @@ export default {
   middleware: ['auth'],
   async asyncData({ store, params }) {
     try {
-      const post = await store.dispatch('product/getOne', params.id)
+      const post = await store.dispatch('crud/getOne', params.id)
       return { post }
     } catch (e) {}
   }

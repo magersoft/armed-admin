@@ -148,7 +148,7 @@ export default {
           status: this.hide ? 1
             : this.status ? 2 : 0
         }
-        await this.$store.dispatch('product/changeStatus', formData)
+        await this.$store.dispatch('crud/changeStatus', formData)
       } catch (e) {
         this.loading = false
         throw e

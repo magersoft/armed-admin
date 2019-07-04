@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-edit-dialog
-    :return-value.sync="item"
+    :return-value.sync="item.title"
     large
     lazy
     persistent
@@ -9,7 +9,7 @@
     @open="open"
     @close="close"
   >
-    <div>{{ item }}</div>
+    <div>{{ item.title }}</div>
     <template v-slot:input>
       <div class="mt-3 title">
         Обновить название
@@ -17,7 +17,7 @@
     </template>
     <template v-slot:input>
       <v-text-field
-        v-model="item"
+        v-model="item.title"
         label="Редактировать"
         single-line
         counter
@@ -36,20 +36,26 @@
 export default {
   props: {
     item: {
-      type: String,
+      type: Object,
       required: true
     }
   },
   data: () => ({
     snack: false,
     snackColor: '',
-    snackText: ''
+    snackText: '',
+    loading: false
   }),
   methods: {
-    save() {
-      this.snack = true
-      this.snackColor = 'green'
-      this.snackText = 'Сохранено'
+    async save() {
+      this.loading = true
+      try {
+        await this.$store.dispatch('crud/changeTitle', { id: this.item.id, title: this.item.title })
+        this.snack = true
+        this.snackColor = 'green'
+        this.snackText = 'Сохранено'
+      } catch (e) {}
+      this.loading = false
     },
     cancel() {
       this.snack = true

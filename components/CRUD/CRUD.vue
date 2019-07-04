@@ -1,9 +1,9 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
-    <app-filters :data="data" />
+    <app-filters v-if="data.filters.length" :data="data" />
     <v-card>
       <v-card-title>
-        <h3>Товары</h3>
+        <h3>{{ data.name }}</h3>
         <v-spacer />
         <v-btn small flat>
           Кнопка
@@ -59,11 +59,12 @@
                 hide-details></v-checkbox>
             </td>
             <td v-for="row in rows" :key="row">
-              <app-inline-editor v-if="row === 'title'" :item="props.item.title" />
-              <div v-else>{{ props.item[row] }}</div>
+              <app-inline-editor v-if="row === 'title:editable'" :item="props.item" />
+              <div v-else-if="row === 'prices'">{{ props.item[row.split(':')[0]] | currency }}</div>
+              <div v-else>{{ props.item[row.split(':')[0]] }}</div>
             </td>
             <td class="layout px-0 text-xs-right">
-              <app-action-icon :item="props.item" />
+              <app-action-icon :item="props.item" :actions="actions" />
               <app-action-button :item="props.item" />
             </td>
           </tr>
@@ -91,6 +92,11 @@ export default {
     rows: {
       type: Array,
       required: true
+    },
+    actions: {
+      type: Object,
+      required: false,
+      default: () => ({ view: true, update: true, delete: true })
     }
   },
   data: () => ({
@@ -110,7 +116,7 @@ export default {
           rowsPerPage
         }
         try {
-          const { body, total } = await this.$store.dispatch('product/getAll', params)
+          const { body, total } = await this.$store.dispatch('crud/getAll', params)
           this.data.body = body
           this.data.total = total
 

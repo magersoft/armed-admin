@@ -2,7 +2,7 @@
   <div>
     <app-crud
       :data="data"
-      :rows="['id', 'title', 'category', 'prices']"
+      :rows="['id', 'title:editable']"
       :actions="{view: true, update: true, delete: true}"
     />
   </div>
@@ -16,7 +16,7 @@ export default {
   },
   middleware: ['auth'],
   async asyncData({ store }) {
-    store.commit('crud/set', 'product')
+    store.commit('crud/set', 'post')
     try {
       const data = await store.dispatch('crud/getAll')
       return { data }

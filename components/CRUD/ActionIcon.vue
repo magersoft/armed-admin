@@ -1,6 +1,6 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
-    <v-tooltip top>
+    <v-tooltip v-if="actions.view" top>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
           <v-icon
@@ -13,7 +13,7 @@
       </template>
       <span>Посмотреть</span>
     </v-tooltip>
-    <v-tooltip top>
+    <v-tooltip v-if="actions.update" top>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
           <v-icon
@@ -26,7 +26,7 @@
       </template>
       <span>Редактировать</span>
     </v-tooltip>
-    <v-tooltip top>
+    <v-tooltip v-if="actions.delete" top>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
           <v-icon
@@ -48,6 +48,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    actions: {
+      type: Object,
+      required: false
     }
   },
   methods: {
