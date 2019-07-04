@@ -40,10 +40,10 @@ export const actions = {
       throw e
     }
   },
-  async changeStatus({ commit }, formData) {
+  async changeStatus({ commit }, { status, items }) {
     const crud = this.getters['crud/crud']
     try {
-      await this.$axios.$post(`api/${crud}/change-status/`, formData)
+      await this.$axios.$post(`api/${crud}/change-status/`, { status, items })
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e

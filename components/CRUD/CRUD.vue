@@ -5,9 +5,7 @@
       <v-card-title>
         <h3>{{ data.name }}</h3>
         <v-spacer />
-        <v-btn small flat>
-          Кнопка
-        </v-btn>
+        <app-action-button :statuses="statuses" :items="selected"/>
       </v-card-title>
       <v-data-table
         v-model="selected"
@@ -51,12 +49,13 @@
           </tr>
         </template>
         <template v-slot:items="props">
-          <tr>
-            <td>
+          <tr :active="props.selected" @click="props.selected = !props.selected">
+            <td class="status">
               <v-checkbox
                 :input-value="props.selected"
                 color="primary"
                 hide-details></v-checkbox>
+              <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" />
             </td>
             <td v-for="row in rows" :key="row">
               <app-inline-editor v-if="row === 'title:editable'" :item="props.item" />
@@ -65,7 +64,6 @@
             </td>
             <td class="layout px-0 text-xs-right">
               <app-action-icon :item="props.item" :actions="actions" />
-              <app-action-button :item="props.item" />
             </td>
           </tr>
         </template>
@@ -77,12 +75,13 @@
 <script>
 import AppActionButton from '@/components/CRUD/ActionButton'
 import AppActionIcon from '@/components/CRUD/ActionIcon'
+import AppStatusIcon from '@/components/CRUD/StatusIcon'
 import AppFilters from '@/components/CRUD/Filters'
 import AppInlineEditor from '@/components/CRUD/InlineEditor'
 
 export default {
   components: {
-    AppActionButton, AppActionIcon, AppFilters, AppInlineEditor
+    AppActionButton, AppActionIcon, AppFilters, AppInlineEditor, AppStatusIcon
   },
   props: {
     data: {
@@ -106,6 +105,11 @@ export default {
     model: {},
     loading: false
   }),
+  computed: {
+    statuses() {
+      return Object.assign({}, this.data.statuses)
+    }
+  },
   watch: {
     pagination: {
       async handler() {
@@ -179,5 +183,10 @@ table.v-table {
     padding: 0 10px;
     text-align: left;
   }
+}
+.status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
