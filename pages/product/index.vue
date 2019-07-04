@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-crud :data="products" />
+    <app-crud :data="products" :rows="['id', 'title', 'category', 'prices']" />
   </div>
 </template>
 

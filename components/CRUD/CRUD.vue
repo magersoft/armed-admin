@@ -4,8 +4,10 @@
     <v-card>
       <v-card-title>
         <h3>Товары</h3>
-        <v-spacer></v-spacer>
-        <v-btn small flat>Кнопка</v-btn>
+        <v-spacer />
+        <v-btn small flat>
+          Кнопка
+        </v-btn>
       </v-card-title>
       <v-data-table
         v-model="selected"
@@ -20,105 +22,74 @@
         item-key="id"
         class="elevation-1"
       >
-      <template v-if="!loading" v-slot:no-data>
-        <v-alert :value="true" color="error" icon="warning">
-          Ничего не найдено :(
-        </v-alert>
-      </template>
-      <template v-slot:headers="props">
-        <tr>
-          <th>
-            <v-checkbox
-              :input-value="props.all"
-              :indeterminate="props.indeterminate"
-              primary
-              hide-details
-              @click.stop="toggleAll"
-            ></v-checkbox>
-          </th>
-          <th
-            v-for="header in props.headers"
-            :key="header.text"
-            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-            @click="changeSort(header.value)"
-          >
-            <v-icon small>arrow_upward</v-icon>
-            {{ header.text }}
-          </th>
-        </tr>
-      </template>
-      <template v-slot:items="props">
-        <tr>
-          <td>
-            <v-checkbox
-              :input-value="props.selected"
-              color="primary"
-              hide-details
-            ></v-checkbox>
-          </td>
-          <td v-for="(item, idx) in props.item" :key="idx">
-            {{ item }}
-          </td>
-          <td class="layout px-0 text-xs-right">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon>
-                  <v-icon
-                          color="blue darken-2"
-                          @click="deleteItem(props.item.id)"
-                  >
-                    visibility
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Посмотреть</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon>
-                  <v-icon
-                          color="orange darken-2"
-                          @click="editItem(props.item.id)"
-                  >
-                    edit
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Редактировать</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" icon>
-                  <v-icon
-                          color="red darken-2"
-                          @click="deleteItem(props.item.id)"
-                  >
-                    delete
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Удалить</span>
-            </v-tooltip>
-            <app-action-button :item="props.item" />
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
+        <template v-if="!loading" v-slot:no-data>
+          <v-alert :value="true" color="error" icon="warning">
+            Ничего не найдено :(
+          </v-alert>
+        </template>
+        <template v-slot:headers="props">
+          <tr>
+            <th>
+              <v-checkbox
+                :input-value="props.all"
+                :indeterminate="props.indeterminate"
+                primary
+                hide-details
+                @click.stop="toggleAll"></v-checkbox>
+            </th>
+            <th
+              v-for="header in props.headers"
+              :key="header.text"
+              :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+              @click="changeSort(header.value)"
+            >
+              <v-icon small>
+                arrow_upward
+              </v-icon>
+              {{ header.text }}
+            </th>
+          </tr>
+        </template>
+        <template v-slot:items="props">
+          <tr>
+            <td>
+              <v-checkbox
+                :input-value="props.selected"
+                color="primary"
+                hide-details></v-checkbox>
+            </td>
+            <td v-for="row in rows" :key="row">
+              <app-inline-editor v-if="row === 'title'" :item="props.item.title" />
+              <div v-else>{{ props.item[row] }}</div>
+            </td>
+            <td class="layout px-0 text-xs-right">
+              <app-action-icon :item="props.item" />
+              <app-action-button :item="props.item" />
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
     </v-card>
   </div>
 </template>
 
 <script>
 import AppActionButton from '@/components/CRUD/ActionButton'
+import AppActionIcon from '@/components/CRUD/ActionIcon'
 import AppFilters from '@/components/CRUD/Filters'
+import AppInlineEditor from '@/components/CRUD/InlineEditor'
 
 export default {
   components: {
-    AppActionButton, AppFilters
+    AppActionButton, AppActionIcon, AppFilters, AppInlineEditor
   },
   props: {
     data: {
       type: Object,
+      required: true
+    },
+    rows: {
+      type: Array,
       required: true
     }
   },
@@ -183,9 +154,6 @@ export default {
     },
     filterClear() {
       this.model = {}
-    },
-    editItem(id) {
-      this.$router.push(`product/${id}`)
     },
     changeSort(column) {
       if (this.pagination.sortBy === column) {
