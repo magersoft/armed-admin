@@ -32,9 +32,9 @@ export const actions = {
       throw e
     }
   },
-  async filterProduct({ commit }, formData) {
+  async filterProduct({ commit }, data) {
     try {
-      return await this.$axios.$post('/', formData)
+      return await this.$axios.$post('/', data)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e
@@ -49,10 +49,19 @@ export const actions = {
       throw e
     }
   },
-  async changeTitle({ commit }, formData) {
+  async changeTitle({ commit }, data) {
     try {
       const crud = this.getters['crud/crud']
-      await this.$axios.$post(`api/${crud}/change-title/`, formData)
+      await this.$axios.$post(`api/${crud}/change-title/`, data)
+    } catch (e) {
+      commit('setError', { text: e }, { root: true })
+      throw e
+    }
+  },
+  async delete({ commit }, data) {
+    try {
+      const crud = this.getters['crud/crud']
+      await this.$axios.$post(`api/${crud}/delete/`, data)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e

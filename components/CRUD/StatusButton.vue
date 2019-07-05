@@ -4,10 +4,10 @@
       <template v-slot:activator="{ on }">
         <v-btn
           color="primary"
-          dark
+          :disabled="!items.length"
           v-on="on"
         >
-          Действия
+          Сменить статус
         </v-btn>
       </template>
       <v-list>
@@ -38,11 +38,11 @@ export default {
   methods: {
     async changeStatus(key) {
       try {
-        await this.$store.dispatch('crud/changeStatus', { status: key, items: this.items })
+        await this.$store.dispatch('crud/changeStatus', { status: +key, items: this.items.map(i => i.id) })
         for (const item in this.items) {
           if (this.items.hasOwnProperty(item)) {
             const id = this.items[item].id
-            this.$root.$emit(`crud:selectedItem-${id}`, key)
+            this.$root.$emit(`crud:selectedItem-${id}`, +key)
           }
         }
       } catch (e) {}

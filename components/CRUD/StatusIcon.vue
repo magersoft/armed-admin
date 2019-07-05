@@ -2,7 +2,7 @@
   <v-tooltip bottom>
     <template v-slot:activator="{ on }">
       <v-icon :color="statusColor" v-on="on">
-        home
+        adjust
       </v-icon>
     </template>
     <span>{{ statusText }}</span>
@@ -17,7 +17,7 @@ export default {
       required: true
     },
     status: {
-      type: Number,
+      type: Object,
       required: true
     },
     statuses: {
@@ -25,21 +25,17 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    changeStatus: null
-  }),
   computed: {
     statusText() {
-      return this.statuses.labels[this.changeStatus ? this.changeStatus : this.status]
+      return this.statuses.labels[this.status.value]
     },
     statusColor() {
-      return this.statuses.colors[this.changeStatus ? this.changeStatus : this.status]
+      return this.statuses.colors[this.status.value]
     }
   },
   mounted() {
     this.$root.$on(`crud:selectedItem-${this.id}`, value => {
-      this.changeStatus = value
-      console.log(`id: ${this.id}`, this.changeStatus)
+      this.status.value = value
     })
   },
   methods: {}

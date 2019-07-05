@@ -28,7 +28,15 @@
     </v-tooltip>
     <v-tooltip v-if="actions.delete" top>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
+        <v-progress-circular
+          v-show="loading"
+          indeterminate
+          color="red"
+          class="loading"
+          width="3"
+          size="24"
+        ></v-progress-circular>
+        <v-btn v-show="!loading" :disabled="loading" icon v-on="on">
           <v-icon
             color="red darken-2"
             @click="deleteItem(item.id)"
@@ -54,10 +62,27 @@ export default {
       required: false
     }
   },
+  data: () => ({
+    loading: false
+  }),
   methods: {
     editItem(id) {
       this.$router.push(`product/${id}`)
+    },
+    async deleteItem(id) {
+      this.loading = true
+      try {
+        await this.$store.dispatch('crud/delete', { items: [id] })
+        this.$emit('deleted', [id])
+      } catch (e) {}
+      this.loading = false
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.loading {
+  padding: 0 26px;
+}
+</style>

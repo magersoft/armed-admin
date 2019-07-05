@@ -5,7 +5,8 @@
       <v-card-title>
         <h3>{{ data.name }}</h3>
         <v-spacer />
-        <app-action-button :statuses="statuses" :items="selected"/>
+        <app-status-button v-if="actions.update" :statuses="statuses" :items="selected"/>
+        <app-delete-button v-if="actions.delete" :items="selected" @deleted="deleted" />
       </v-card-title>
       <v-data-table
         v-model="selected"
@@ -55,7 +56,7 @@
                 :input-value="props.selected"
                 color="primary"
                 hide-details></v-checkbox>
-              <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" />
+              <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" @deleted="deleted" />
             </td>
             <td v-for="row in rows" :key="row">
               <app-inline-editor v-if="row === 'title:editable'" :item="props.item" />
@@ -63,9 +64,12 @@
               <div v-else>{{ props.item[row.split(':')[0]] }}</div>
             </td>
             <td class="layout px-0 text-xs-right">
-              <app-action-icon :item="props.item" :actions="actions" />
+              <app-action-icon :item="props.item" :actions="actions" @deleted="deleted" />
             </td>
           </tr>
+        </template>
+        <template v-slot:pageText="props">
+          {{ props.pageStart }} - {{ props.pageStop }} из {{ props.itemsLength }}
         </template>
       </v-data-table>
     </v-card>
@@ -73,7 +77,8 @@
 </template>
 
 <script>
-import AppActionButton from '@/components/CRUD/ActionButton'
+import AppStatusButton from '@/components/CRUD/StatusButton'
+import AppDeleteButton from '@/components/CRUD/DeleteButton'
 import AppActionIcon from '@/components/CRUD/ActionIcon'
 import AppStatusIcon from '@/components/CRUD/StatusIcon'
 import AppFilters from '@/components/CRUD/Filters'
@@ -81,7 +86,7 @@ import AppInlineEditor from '@/components/CRUD/InlineEditor'
 
 export default {
   components: {
-    AppActionButton, AppActionIcon, AppFilters, AppInlineEditor, AppStatusIcon
+    AppStatusButton, AppActionIcon, AppFilters, AppInlineEditor, AppStatusIcon, AppDeleteButton
   },
   props: {
     data: {
@@ -172,6 +177,21 @@ export default {
         this.pagination.sortBy = column
         this.pagination.descending = false
       }
+    },
+    async deleted(ids) {
+      this.loading = true
+      const { page, rowsPerPage } = this.pagination
+      const params = {
+        page,
+        rowsPerPage
+      }
+      try {
+        this.data.body = this.data.body.filter(item => !ids.includes(item.id))
+        const { body, total } = await this.$store.dispatch('crud/getAll', params)
+        this.data.body = body
+        this.data.total = total
+      } catch (e) {}
+      this.loading = false
     }
   }
 }
