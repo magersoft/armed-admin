@@ -29,7 +29,6 @@
                 v-if="filter.type === 'select'"
                 v-model="model[idx]"
                 :items="filter.items"
-                :name="filter.model"
                 :label="filter.label"
               />
               <v-checkbox
@@ -50,6 +49,7 @@
               </v-radio-group>
             </v-flex>
           </v-layout>
+            {{ model }}
           <div class="buttons">
             <v-btn
               type="submit"
@@ -87,8 +87,15 @@ export default {
     async filterHandler() {
       this.loading = true
       const formData = new FormData(this.$refs.filter.$el)
+      this.data.filters.forEach((v, k) => {
+        if (v.type !== 'select') {
+          return
+        }
+        formData.append(v.model, this.model[k])
+      })
       try {
-        this.data = await this.$store.dispatch('product/filterProduct', formData)
+        // this.data = await this.$store.dispatch('crud/filterProduct', formData)
+        await this.$store.dispatch('crud/filterProduct', formData)
       } catch (e) {}
       this.loading = false
     }
