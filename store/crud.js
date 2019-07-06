@@ -32,7 +32,7 @@ export const actions = {
       throw e
     }
   },
-  async filterProduct({ commit }, data) {
+  async filter({ commit }, data) {
     try {
       const crud = this.getters['crud/crud']
       return await this.$axios.$post(`api/${crud}/filtered/`, data)

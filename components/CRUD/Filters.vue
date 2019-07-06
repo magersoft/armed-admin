@@ -49,13 +49,12 @@
               </v-radio-group>
             </v-flex>
           </v-layout>
-            {{ model }}
           <div class="buttons">
             <v-btn
               type="submit"
               color="primary"
               :loading="loading"
-              :disabled="loading"
+              :disabled="loading || filterTouch"
               @click.prevent="filterHandler"
             >
               Применить
@@ -83,6 +82,11 @@ export default {
     filterShow: true,
     model: {}
   }),
+  computed: {
+    filterTouch() {
+      return !Object.keys(this.model).length
+    }
+  },
   methods: {
     async filterHandler() {
       this.loading = true
@@ -91,13 +95,19 @@ export default {
         if (v.type !== 'select') {
           return
         }
-        formData.append(v.model, this.model[k])
+        if (this.model[k]) {
+          formData.append(v.model, this.model[k])
+        }
       })
       try {
-        // this.data = await this.$store.dispatch('crud/filterProduct', formData)
-        await this.$store.dispatch('crud/filterProduct', formData)
+        const { body, total } = await this.$store.dispatch('crud/filter', formData)
+        this.data.body = body
+        this.data.total = total
       } catch (e) {}
       this.loading = false
+    },
+    filterClear() {
+      this.model = {}
     }
   }
 }

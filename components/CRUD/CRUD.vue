@@ -152,23 +152,12 @@ export default {
     }
   },
   methods: {
-    async filterHandler() {
-      this.loading = true
-      const formData = new FormData(this.$refs.filter.$el)
-      try {
-        this.data = await this.$store.dispatch('product/filterProduct', formData)
-      } catch (e) {}
-      this.loading = false
-    },
     toggleAll() {
       if (this.selected.length) {
         this.selected = []
       } else {
         this.selected = this.data.body.slice()
       }
-    },
-    filterClear() {
-      this.model = {}
     },
     changeSort(column) {
       if (this.pagination.sortBy === column) {
