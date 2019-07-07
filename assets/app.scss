@@ -10,6 +10,26 @@
   padding: 5px 10px;
 }
 
+.flex {
+  display: flex;
+}
+
 .mb2 {
   margin-bottom: 2rem;
+}
+
+.mt1 {
+  margin-top: 1rem;
+}
+
+.mt2 {
+  margin-top: 2rem;
+}
+
+@media only screen and (min-width: 1264px) {
+  .fix-extension-toolbar {
+    .v-toolbar__extension {
+      display: none!important;
+    }
+  }
 }

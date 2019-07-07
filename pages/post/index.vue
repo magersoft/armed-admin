@@ -2,7 +2,7 @@
   <div>
     <app-crud
       :data="data"
-      :rows="['id', 'title:editable', 'type']"
+      :rows="['id', 'title:editable', 'type', 'created_at']"
       :actions="{view: true, update: true, delete: true}"
     />
   </div>

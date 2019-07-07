@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import ru from 'vuetify/es5/locale/ru'
 
 export default {
   mode: 'spa',
@@ -76,6 +77,10 @@ export default {
       warning: colors.amber.base,
       error: colors.deepOrange.accent4,
       success: colors.green.accent3
+    },
+    lang: {
+      locale: { ru },
+      current: 'ru'
     }
   },
   /*

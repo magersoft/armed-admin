@@ -3,6 +3,17 @@
     <v-btn color="error" :loading="loading" :disabled="!items.length || loading" @click.prevent="deleteItems">
       Удалить
     </v-btn>
+    <v-dialog v-model="dialog" persistent max-width="360">
+      <v-card>
+        <v-card-title class="headline">Подтвердите действие</v-card-title>
+        <v-card-text>Вы хотите удалить <b>{{ items.length | decimals(['запись', 'записи', 'записей']) }}</b>.<br> Вы уверены?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat :disabled="loading" @click="dialog = false">Отмена</v-btn>
+          <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="deleteItems">Принять</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -15,17 +26,22 @@ export default {
     }
   },
   data: () => ({
-    loading: false
+    loading: false,
+    dialog: false
   }),
   methods: {
     async deleteItems() {
-      this.loading = true
-      try {
-        const ids = this.items.map(i => i.id)
-        await this.$store.dispatch('crud/delete', { items: ids })
-        this.$emit('deleted', ids)
-      } catch (e) {}
-      this.loading = false
+      if (!this.dialog) {
+        this.dialog = true
+      } else {
+        this.loading = true
+        try {
+          const ids = this.items.map(i => i.id)
+          await this.$store.dispatch('crud/delete', { items: ids })
+          this.$emit('deleted', ids)
+        } catch (e) {}
+        this.loading = false
+      }
     }
   }
 }

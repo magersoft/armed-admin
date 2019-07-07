@@ -7,8 +7,10 @@
         <v-spacer />
         <app-status-button v-if="actions.update" :statuses="statuses" :items="selected"/>
         <app-delete-button v-if="actions.delete" :items="selected" @deleted="deleted" />
+        <app-grid-button @grid="gridChange" />
       </v-card-title>
       <v-data-table
+        v-if="!grid"
         v-model="selected"
         :headers="data.headers"
         :items="data.body"
@@ -16,7 +18,7 @@
         :total-items="data.total"
         :loading="loading"
         :pagination.sync="pagination"
-        rows-per-page-text="Показать"
+        rows-per-page-text="Записей на странице:"
         select-all
         item-key="id"
         class="elevation-1"
@@ -34,7 +36,8 @@
                 :indeterminate="props.indeterminate"
                 primary
                 hide-details
-                @click.stop="toggleAll"></v-checkbox>
+                @click.stop="toggleAll"
+              />
             </th>
             <th
               v-for="header in props.headers"
@@ -55,13 +58,28 @@
               <v-checkbox
                 :input-value="props.selected"
                 color="primary"
-                hide-details></v-checkbox>
+                hide-details
+              />
               <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" @deleted="deleted" />
             </td>
             <td v-for="row in rows" :key="row">
               <app-inline-editor v-if="row === 'title:editable'" :item="props.item" />
-              <div v-else-if="row === 'prices'">{{ props.item[row.split(':')[0]] | currency }}</div>
-              <div v-else>{{ props.item[row.split(':')[0]] }}</div>
+              <div v-else-if="row === 'prices'">
+                {{ props.item[row.split(':')[0]] | currency }}
+              </div>
+              <div v-else-if="row === 'created_at' || row === 'updated_at' || row === 'date'">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <div v-on="on">
+                      {{ props.item[row] | date('date') }}
+                    </div>
+                  </template>
+                  <span>{{ props.item[row] | date('time') }}</span>
+                </v-tooltip>
+              </div>
+              <div v-else>
+                {{ props.item[row.split(':')[0]] }}
+              </div>
             </td>
             <td class="layout px-0 text-xs-right">
               <app-action-icon :item="props.item" :actions="actions" @deleted="deleted" />
@@ -72,6 +90,22 @@
           {{ props.pageStart }} - {{ props.pageStop }} из {{ props.itemsLength }}
         </template>
       </v-data-table>
+      <div v-else>
+        <v-container
+          fluid
+          grid-list-md
+        >
+          <v-layout row wrap>
+            <v-flex
+              v-for="item in data.body"
+              :key="item.id"
+              xs3
+            >
+              <app-card :item="item" :actions="actions" />
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </div>
     </v-card>
   </div>
 </template>
@@ -83,10 +117,12 @@ import AppActionIcon from '@/components/CRUD/ActionIcon'
 import AppStatusIcon from '@/components/CRUD/StatusIcon'
 import AppFilters from '@/components/CRUD/Filters'
 import AppInlineEditor from '@/components/CRUD/InlineEditor'
+import AppGridButton from '@/components/CRUD/GridButton'
+import AppCard from '@/components/CRUD/Card'
 
 export default {
   components: {
-    AppStatusButton, AppActionIcon, AppFilters, AppInlineEditor, AppStatusIcon, AppDeleteButton
+    AppStatusButton, AppActionIcon, AppFilters, AppInlineEditor, AppStatusIcon, AppDeleteButton, AppGridButton, AppCard
   },
   props: {
     data: {
@@ -106,9 +142,8 @@ export default {
   data: () => ({
     selected: [],
     pagination: {},
-    filterShow: true,
-    model: {},
-    loading: false
+    loading: false,
+    grid: false
   }),
   computed: {
     statuses() {
@@ -166,6 +201,9 @@ export default {
         this.pagination.sortBy = column
         this.pagination.descending = false
       }
+    },
+    gridChange(state) {
+      this.grid = state
     },
     async deleted(ids) {
       this.loading = true

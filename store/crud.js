@@ -18,15 +18,16 @@ export const actions = {
     const page = params ? `?page=${params.page}` : ''
     const pageSize = params ? `&size=${params.rowsPerPage}` : ''
     try {
-      return await this.$axios.$get(`http://dobrota.yii/api/${crud}/all/${page}${pageSize}`)
+      return await this.$axios.$get(`api/${crud}/all/${page}${pageSize}`)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e
     }
   },
   async getOne({ commit }, id) {
+    const crud = this.getters['crud/crud']
     try {
-      return await this.$axios.$get(`/mock-data/product.json?id=${id}`)
+      return await this.$axios.$get(`api/${crud}/one/?id=${id}`)
     } catch (e) {
       commit('setError', { text: e }, { root: true })
       throw e

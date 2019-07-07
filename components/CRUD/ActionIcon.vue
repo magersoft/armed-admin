@@ -47,6 +47,17 @@
       </template>
       <span>Удалить</span>
     </v-tooltip>
+    <v-dialog v-model="dialog" persistent max-width="360">
+      <v-card>
+        <v-card-title class="headline">Подтвердите действие</v-card-title>
+        <v-card-text>Вы хотите удалить запись "<b>{{ item.title }}</b>".<br> Вы уверены?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat :disabled="loading" @click="dialog = false">Отмена</v-btn>
+          <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="deleteItem(item.id)">Принять</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -63,19 +74,26 @@ export default {
     }
   },
   data: () => ({
-    loading: false
+    loading: false,
+    dialog: false
   }),
   methods: {
     editItem(id) {
       this.$router.push(`product/${id}`)
     },
     async deleteItem(id) {
-      this.loading = true
-      try {
-        await this.$store.dispatch('crud/delete', { items: [id] })
-        this.$emit('deleted', [id])
-      } catch (e) {}
-      this.loading = false
+      if (!this.dialog) {
+        this.dialog = true
+      } else {
+        this.loading = true
+        try {
+          await this.$store.dispatch('crud/delete', { items: [id] })
+          this.$emit('deleted', [id])
+          this.dialog = false
+          this.$store.dispatch('getError', { text: 'Удалено', color: 'green', timeout: 3600 })
+        } catch (e) {}
+        this.loading = false
+      }
     }
   }
 }
