@@ -80,11 +80,11 @@
                   <v-text-field
                     v-model="controls.title"
                     v-validate="'required'"
-                    :error-messages="errors.collect('title')"
+                    :error-messages="errors.collect('scope0.title')"
                     data-vv-name="title"
+                    data-vv-scope="scope0"
                     label="Название"
-                    required
-                  />
+                    required></v-text-field>
                 </v-card>
               </v-tab-item>
               <v-tab-item>
@@ -92,11 +92,11 @@
                   <v-text-field
                     v-model="controls.test"
                     v-validate="'required'"
-                    :error-messages="errors.collect('test')"
+                    :error-messages="errors.collect('scope1.test')"
                     data-vv-name="test"
+                    data-vv-scope="scope1"
                     label="Тест"
-                    required
-                  />
+                    required></v-text-field>
                 </v-card>
               </v-tab-item>
               <v-tab-item>
@@ -175,6 +175,7 @@ export default {
     fieldsDirty: false,
     controls: {
       title: '',
+      name: '',
       test: ''
     },
     menu: [
@@ -191,10 +192,7 @@ export default {
   }),
   computed: {
     isDirty() {
-      return Object.keys(this.fields).some(key => this.fields[key].dirty)
-    },
-    isValid() {
-      return Object.keys(this.fields).some(key => this.fields[key].valid)
+      return Object.keys(this.fields).some(key => key.startsWith('$') ? Object.keys(this.fields[key]).some(innerKey => this.fields[key][innerKey].dirty) : this.fields[key].dirty)
     }
   },
   async asyncData({ store, params }) {
@@ -209,13 +207,13 @@ export default {
   },
   methods: {
     menuTabs(idx) {
-      this.$validator.validateAll().then(valid => {
-        if (!valid && this.isDirty) {
+      this.$validator.validate(`scope${this.tab}.*`).then(valid => {
+        if (!valid) {
           const msg = this.$validator.errors.items.map(item => item.msg)
           this.$store.dispatch('getError', { text: msg.join('\n'), timeout: 3600 })
           return false
         }
-        if (this.isDirty && this.isValid) {
+        if (this.isDirty) {
           this.fieldsDirty = true
           this.needTab = idx
           return false
@@ -225,9 +223,12 @@ export default {
     },
     save() {
       this.loading = true
-      setTimeout(() => {
-        this.$validator.validateAll().then(valid => {
+      this.menu.forEach((item, idx) => {
+        this.$validator.validateAll(`scope${idx}`).then(valid => {
+          console.log(`scope${idx}`, valid)
+          console.log(`scope${idx}`, this.$validator.errors.items)
           if (!valid) {
+            this.tab = idx
             const msg = this.$validator.errors.items.map(item => item.msg)
             this.$store.dispatch('getError', { text: msg.join('\n'), timeout: 7200 })
             this.loading = false
@@ -240,7 +241,7 @@ export default {
           }
           this.fieldsDirty = false
         })
-      }, 1500)
+      })
     }
   }
 }
