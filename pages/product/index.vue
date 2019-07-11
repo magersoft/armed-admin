@@ -2,8 +2,8 @@
   <div>
     <app-crud
       :data="data"
-      :rows="['id', 'title', 'category', 'prices']"
-      :actions="{view: true, update: true, delete: true}"
+      :rows="['id', 'title', 'sku', 'category', 'prices', 'stock']"
+      :actions="{view: true, update: true, delete: false}"
     />
   </div>
 </template>

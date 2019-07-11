@@ -2,7 +2,7 @@
   <v-tooltip bottom>
     <template v-slot:activator="{ on }">
       <v-icon :color="statusColor" v-on="on">
-        adjust
+        {{ statusIcon }}
       </v-icon>
     </template>
     <span>{{ statusText }}</span>
@@ -31,6 +31,15 @@ export default {
     },
     statusColor() {
       return this.statuses.colors[this.status.value]
+    },
+    statusIcon() {
+      if (this.statusColor === 'green') {
+        return 'check_circle'
+      } else if (this.statusColor === 'red') {
+        return 'cancel'
+      } else {
+        return 'error'
+      }
     }
   },
   mounted() {

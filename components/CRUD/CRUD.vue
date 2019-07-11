@@ -5,7 +5,7 @@
       <v-card-title>
         <h3>{{ data.name }}</h3>
         <v-spacer />
-        <app-status-button v-if="actions.update" :statuses="statuses" :items="selected"/>
+        <app-status-button v-if="actions.update" :statuses="statuses" :items="selected" />
         <app-delete-button v-if="actions.delete" :items="selected" @deleted="deleted" />
         <app-grid-button @grid="gridChange" />
       </v-card-title>
@@ -53,12 +53,13 @@
           </tr>
         </template>
         <template v-slot:items="props">
-          <tr :active="props.selected" @click="props.selected = !props.selected">
+          <tr :active="props.selected">
             <td class="status">
               <v-checkbox
                 :input-value="props.selected"
                 color="primary"
                 hide-details
+                @change="props.selected = !props.selected"
               />
               <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" @deleted="deleted" />
             </td>
@@ -77,9 +78,26 @@
                   <span>{{ props.item[row] | date('time') }}</span>
                 </v-tooltip>
               </div>
-              <div v-else>
-                {{ props.item[row.split(':')[0]] }}
+              <div v-else-if="row === 'stock'" class="stock">
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on }">
+                    <span :class="{ 'stock-value': props.item[row].value > 0 }" v-on="on">
+                      {{ typeof props.item[row].value !== 'object' ? props.item[row].value : Object.values(props.item[row].value).reduce((a, b) => a + b) }} шт.
+                    </span>
+                  </template>
+                  <v-list v-if="props.item[row].value > 0" class="stock-list">
+                    <v-list-tile v-for="(stock, key) in props.item[row].data" :key="key" class="stock-menu">
+                      <v-list-tile-title class="stock-item">
+                        <div class="stock-title">
+                          {{ stock.title }}
+                        </div>
+                        <div>{{ stock.count }} шт.</div>
+                      </v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
               </div>
+              <div v-else v-html="props.item[row.split(':')[0]]"></div>
             </td>
             <td class="layout px-0 text-xs-right">
               <app-action-icon :item="props.item" :actions="actions" @deleted="deleted" />
@@ -235,5 +253,24 @@ table.v-table {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.stock {
+  &-value {
+    cursor: pointer;
+    border-bottom: 1px dotted;
+    color: #1976d2;
+    text-decoration: none;
+  }
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+  &-title {
+    margin-right: 30px;
+  }
+  &-list {
+    padding: 0;
+  }
 }
 </style>

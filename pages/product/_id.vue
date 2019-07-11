@@ -144,10 +144,10 @@
         <v-card-title class="headline">
           Подтвердите действие
         </v-card-title>
-        <v-card-text>Были изменены поля ... Вы хотите сохранить изменения?</v-card-text>
+        <v-card-text>Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?</v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="green darken-1" flat :disabled="loading" @click="fieldsDirty = false">
+          <v-btn color="dark" flat :disabled="loading" @click="fieldsDirty = false">
             Отменить
           </v-btn>
           <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="save">
@@ -193,6 +193,9 @@ export default {
   computed: {
     isDirty() {
       return Object.keys(this.fields).some(key => key.startsWith('$') ? Object.keys(this.fields[key]).some(innerKey => this.fields[key][innerKey].dirty) : this.fields[key].dirty)
+    },
+    getDirty() {
+      return Object.keys(this.fields).map(key => key.startsWith('$') ? Object.keys(this.fields[key]).map(innerKey => this.fields[key][innerKey].dirty ? Object.keys(this.fields[key]) : null) : this.fields[key].dirty ? Object.keys(this.fields[key]) : null).join(',')
     }
   },
   async asyncData({ store, params }) {
@@ -225,8 +228,6 @@ export default {
       this.loading = true
       this.menu.forEach((item, idx) => {
         this.$validator.validateAll(`scope${idx}`).then(valid => {
-          console.log(`scope${idx}`, valid)
-          console.log(`scope${idx}`, this.$validator.errors.items)
           if (!valid) {
             this.tab = idx
             const msg = this.$validator.errors.items.map(item => item.msg)

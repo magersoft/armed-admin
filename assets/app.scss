@@ -22,6 +22,12 @@
   margin-top: 2rem;
 }
 
+.stock-menu > .v-list__tile {
+  height: 20px;
+  padding: 20px;
+  border-top: 1px solid #ededed;
+}
+
 @media only screen and (min-width: 1264px) {
   .fix-extension-toolbar {
     .v-toolbar__extension {
