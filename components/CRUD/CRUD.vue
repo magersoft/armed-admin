@@ -97,6 +97,17 @@
                   </v-list>
                 </v-menu>
               </div>
+              <div v-else-if="row === 'sku'">
+                <div v-if="Array.isArray(props.item[row])">
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <div v-on="on">{{ props.item[row][0] }} <v-icon small>help</v-icon></div>
+                    </template>
+                    <span>{{ props.item[row].join(', ') }}</span>
+                  </v-tooltip>
+                </div>
+                <div v-else>{{ props.item[row] }}</div>
+              </div>
               <div v-else v-html="props.item[row.split(':')[0]]"></div>
             </td>
             <td class="layout px-0 text-xs-right">

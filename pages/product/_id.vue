@@ -77,14 +77,27 @@
             <v-tabs-items v-model="tab">
               <v-tab-item>
                 <v-card flat>
-                  <v-text-field
-                    v-model="controls.title"
-                    v-validate="'required'"
-                    :error-messages="errors.collect('scope0.title')"
-                    data-vv-name="title"
-                    data-vv-scope="scope0"
-                    label="Название"
-                    required></v-text-field>
+                  <v-layout row wrap>
+                    <v-flex md8 xs12>
+                      <v-layout pa-3>
+                        <v-flex md12>
+                          <v-text-field
+                            v-model="controls.title"
+                            v-validate="'required'"
+                            :error-messages="errors.collect('scope0.title')"
+                            data-vv-name="title"
+                            data-vv-scope="scope0"
+                            label="Название"
+                            required></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex md4 xs12>
+                      <v-layout pa-3>
+                        <file-upload :id="data.id" />
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
                 </v-card>
               </v-tab-item>
               <v-tab-item>
@@ -160,6 +173,8 @@
 </template>
 
 <script>
+import fileUpload from '@/components/UploadFiles'
+
 export default {
   validate({ params }) {
     return Boolean(params.id)
@@ -167,6 +182,9 @@ export default {
   middleware: ['auth'],
   $_veeValidate: {
     validator: 'new'
+  },
+  components: {
+    fileUpload
   },
   data: () => ({
     tab: null,
