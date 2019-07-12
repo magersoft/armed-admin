@@ -90,7 +90,7 @@ export default {
 <style lang="scss" scoped>
 .v-speed-dial {
     position: fixed;
-    z-index: 100;
+    z-index: 7;
     bottom: 5px;
     right: 5px;
 }
