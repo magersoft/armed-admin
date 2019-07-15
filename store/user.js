@@ -15,7 +15,7 @@ export const mutations = {
 export const actions = {
   async get({ commit }) {
     try {
-      const { user } = await this.$axios.$get(`api/user/?token=${this.getters['auth/token']}`)
+      const { user } = await this.$axios.$get(`api/user/get/?token=${this.getters['auth/token']}`)
       commit('setUser', user)
     } catch (e) {
       commit('setError', { text: e }, { root: true })

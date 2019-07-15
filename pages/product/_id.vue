@@ -93,9 +93,7 @@
                       </v-layout>
                     </v-flex>
                     <v-flex md4 xs12>
-                      <v-layout pa-3>
-                        <file-upload :id="data.id" />
-                      </v-layout>
+                        <file-upload :id="data.id" :files="data.thumbnail" :multiple="false" />
                     </v-flex>
                   </v-layout>
                 </v-card>
