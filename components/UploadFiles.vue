@@ -1,48 +1,54 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-layout pa-3 column>
     <v-flex v-if="loadFiles && !!loadFiles.length" xs12>
-      <v-layout row wrap>
-        <v-flex
-          v-for="(file) in loadFiles"
-          :key="file.src"
-          :class="flexGrid"
-          xs12>
-          <v-img
-            :src="file.src"
-            :lazy-src="file.src"
-            aspect-ratio="1"
-            contain
-            class="elevation-1 ma-2"
+      <draggable
+          v-model="loadFiles"
+          @start="dragging = true"
+          @end="dragging = false"
+          class="layout row wrap"
+        >
+          <v-flex
+            v-for="(file) in loadFiles"
+            :key="file.src"
+            :class="flexGrid"
+            xs12
           >
-            <v-layout
-              column
-              fill-height
+            <v-img
+              :src="file.src"
+              :lazy-src="file.src"
+              aspect-ratio="1"
+              contain
+              class="elevation-1 ma-2"
             >
-              <v-card-title>
-                <v-spacer />
-
-                <v-btn icon :class="{ 'white v-btn--small': loadFiles.length > 2 }" class="mr-1">
-                  <v-icon>edit</v-icon>
-                </v-btn>
-
-                <v-btn icon :class="{ 'white v-btn--small': loadFiles.length > 2 }" @click="deleteFile(file.src)">
-                  <v-icon>delete</v-icon>
-                </v-btn>
-              </v-card-title>
-            </v-layout>
-            <template v-slot:placeholder>
               <v-layout
+                column
                 fill-height
-                align-center
-                justify-center
-                ma-0
               >
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                <v-card-title>
+                  <v-spacer />
+
+                  <v-btn icon :class="{ 'white v-btn--small': loadFiles.length > 2 }" class="mr-1">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+
+                  <v-btn icon :class="{ 'white v-btn--small': loadFiles.length > 2 }" @click="deleteFile(file.src)">
+                    <v-icon>delete</v-icon>
+                  </v-btn>
+                </v-card-title>
               </v-layout>
-            </template>
-          </v-img>
-        </v-flex>
-      </v-layout>
+              <template v-slot:placeholder>
+                <v-layout
+                  fill-height
+                  align-center
+                  justify-center
+                  ma-0
+                >
+                  <v-progress-circular indeterminate color="primary" />
+                </v-layout>
+              </template>
+            </v-img>
+          </v-flex>
+        </draggable>
     </v-flex>
     <v-flex xs12>
       <file-pond
@@ -58,12 +64,18 @@
     </v-flex>
     <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
-        <v-card-title class="headline">Подтвердите действие</v-card-title>
+        <v-card-title class="headline">
+          Подтвердите действие
+        </v-card-title>
         <v-card-text>Вы хотите удалить это изображение.<br> Вы уверены?</v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat :disabled="loading" @click="dialog = false">Отмена</v-btn>
-          <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="deleteFile(deleted)">Принять</v-btn>
+          <v-spacer />
+          <v-btn color="green darken-1" flat :disabled="loading" @click="dialog = false">
+            Отмена
+          </v-btn>
+          <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="deleteFile(deleted)">
+            Принять
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,6 +84,7 @@
 
 <script>
 import vueFilePond from 'vue-filepond'
+import draggable from 'vuedraggable'
 import 'filepond/dist/filepond.min.css'
 
 // plugins
@@ -81,7 +94,7 @@ const FilePond = vueFilePond(FilePondPluginFileValidateType)
 
 export default {
   components: {
-    FilePond
+    FilePond, draggable
   },
   props: {
     id: {
@@ -109,7 +122,8 @@ export default {
     loading: false,
     server: {},
     myFiles: [],
-    deleted: null
+    deleted: null,
+    dragging: false
   }),
   computed: {
     flexGrid() {
