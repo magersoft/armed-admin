@@ -30,7 +30,7 @@ export const actions = {
       }
       dispatch('setToken', token)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },

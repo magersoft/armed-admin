@@ -8,7 +8,7 @@
       </div>
     </v-content>
     <v-snackbar
-      v-if="error"
+      v-if="message"
       v-model="snackbar.state"
       :color="snackbar.color"
       top="top"
@@ -37,12 +37,12 @@ export default {
     }
   }),
   computed: {
-    error() {
-      return this.$store.getters.error
+    message() {
+      return this.$store.getters.message
     }
   },
   watch: {
-    error({ color, text, timeout, state }) {
+    message({ color, text, timeout, state }) {
       this.snackbar.state = state
       this.snackbar.color = color
       this.snackbar.text = text
@@ -52,7 +52,7 @@ export default {
   methods: {
     closeSnackbar() {
       this.snackbar.state = false
-      this.$store.dispatch('clearError')
+      this.$store.dispatch('clearMessage')
     }
   }
 }

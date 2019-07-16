@@ -74,21 +74,21 @@ export default {
 
     switch (message) {
       case 'login':
-        this.$store.dispatch('getError', {
+        this.$store.dispatch('getMessage', {
           color: 'primary',
           text: 'Чтобы продолжить, войдите в систему',
           timeout: 0
         })
         break
       case 'logout':
-        this.$store.dispatch('getError', {
+        this.$store.dispatch('getMessage', {
           color: 'primary',
           text: 'Вы вышли из системы',
           timeout: 0
         })
         break
       case 'forbidden':
-        this.$store.dispatch('getError', {
+        this.$store.dispatch('getMessage', {
           color: 'error',
           text: 'Доступ запрещен',
           timeout: 0

@@ -3,7 +3,7 @@
     <v-flex v-if="loadFiles && !!loadFiles.length" xs12>
       <v-layout row wrap>
         <v-flex
-          v-for="file in loadFiles"
+          v-for="(file) in loadFiles"
           :key="file.src"
           :class="flexGrid"
           xs12>
@@ -11,6 +11,7 @@
             :src="file.src"
             :lazy-src="file.src"
             aspect-ratio="1"
+            contain
             class="elevation-1 ma-2"
           >
             <v-layout
@@ -92,6 +93,11 @@ export default {
       required: false,
       default: () => ([])
     },
+    folder: {
+      type: String,
+      required: false,
+      default: '/'
+    },
     multiple: {
       type: Boolean,
       default: true
@@ -113,23 +119,30 @@ export default {
         return 'md6'
       } else if (this.files.length === 3) {
         return 'md4'
+      } else if (this.files.length > 3) {
+        return 'md2'
       } else {
-        return 'md3'
+        return 'md12'
       }
     }
   },
   created() {
-    this.loadFiles = this.files
+    this.loadFiles = this.files.map(file => {
+      return {
+        src: process.env.fileURL + file.src
+      }
+    })
   },
   methods: {
     handleFilePondInit() {
       // FilePond instance methods are available on `this.$refs.pond`
 
+      console.log(this.$refs.pond)
       this.server = {
         process: (fieldName, file, metadata, load, error, progress, abort) => {
           const formData = new FormData()
           formData.append(fieldName, file, file.name)
-          formData.append('folder', 'from-vue')
+          formData.append('folder', this.folder)
 
           const request = new XMLHttpRequest()
           request.withCredentials = true
@@ -148,6 +161,7 @@ export default {
                 } else {
                   this.loadFiles = [JSON.parse(request.responseText)]
                 }
+                this.$emit('fileUpload', JSON.parse(request.responseText))
               } catch (e) {
                 alert('Validate error')
               }
@@ -177,9 +191,7 @@ export default {
         revert: async (uniqueFileId, load, error) => {
           try {
             const file = JSON.parse(uniqueFileId).src
-            await this.deleteFile(file, () => {
-              load()
-            })
+            await this.deleteFile(file)
           } catch (e) {
             error(e)
           }
@@ -187,6 +199,8 @@ export default {
         remove: async (source, load, error) => {
           try {
             await this.$store.dispatch('file/delete', source)
+            this.loadFiles = this.loadFiles.filter(e => e.src !== source)
+            this.$emit('fileRemove', source)
             load()
           } catch (e) {
             error(e)
@@ -194,18 +208,12 @@ export default {
         }
       }
     },
-    async deleteFile(file, cb) {
-      if (!this.dialog) {
-        this.dialog = true
-        this.deleted = file
-        return
-      }
+    async deleteFile(src) {
       this.loading = true
       try {
-        await this.$store.dispatch('file/delete', this.deleted)
-        this.loadFiles = this.loadFiles.filter(e => e.src !== this.deleted)
-        this.$refs.pond.removeFile({ path: this.deleted })
-        cb()
+        await this.$store.dispatch('file/delete', src)
+        this.loadFiles = this.loadFiles.filter(e => e.src !== src)
+        this.$emit('fileRemove', src)
       } catch (e) {}
       this.loading = false
       this.dialog = false

@@ -4,7 +4,7 @@
       <div class="flex fix-extension-toolbar">
         <v-navigation-drawer
           permanent
-          class="hidden-md-and-down"
+          class="hidden-md-and-down aside"
         >
           <v-toolbar color="primary" dark>
             <v-toolbar-title>Редактировать</v-toolbar-title>
@@ -93,7 +93,13 @@
                       </v-layout>
                     </v-flex>
                     <v-flex md4 xs12>
-                        <file-upload :id="data.id" :files="data.thumbnail" :multiple="false" />
+                      <file-upload
+                        :id="data.id"
+                        :files="data.thumbnail"
+                        :multiple="false"
+                        folder="/products/"
+                        @fileUpload="thumbnailUpload"
+                        @fileRemove="thumbnailRemove" />
                     </v-flex>
                   </v-layout>
                 </v-card>
@@ -128,6 +134,17 @@
               <v-tab-item>
                 <v-card flat>
                   <v-card-text>6</v-card-text>
+                  <v-layout>
+                    <v-flex xs12>
+                      <file-upload
+                        :id="data.id"
+                        :files="controls.files.gallery"
+                        multiple
+                        folder="/products/"
+                        @fileUpload="imageUpload"
+                        @fileRemove="imageRemove" />
+                    </v-flex>
+                  </v-layout>
                 </v-card>
               </v-tab-item>
               <v-tab-item>
@@ -185,14 +202,19 @@ export default {
     fileUpload
   },
   data: () => ({
-    tab: null,
+    tab: 5,
     needTab: null,
     loading: false,
     fieldsDirty: false,
+    fileDirty: false,
     controls: {
+      id: null,
       title: '',
-      name: '',
-      test: ''
+      test: '1',
+      files: {
+        thumbnail: null,
+        gallery: []
+      }
     },
     menu: [
       { title: 'Основное', icon: 'dashboard' },
@@ -200,7 +222,7 @@ export default {
       { title: 'Преимущества', icon: 'dashboard' },
       { title: 'Сопутка', icon: 'dashboard' },
       { title: 'Характеристики', icon: 'dashboard' },
-      { title: 'Фотографии', icon: 'dashboard' },
+      { title: 'Изображения', icon: 'dashboard' },
       { title: 'Видео', icon: 'dashboard' },
       { title: 'SEO', icon: 'dashboard' },
       { title: 'Отзывы', icon: 'dashboard' }
@@ -221,15 +243,18 @@ export default {
       return { data }
     } catch (e) {}
   },
-  mounted() {
+  created() {
+    this.controls.id = this.data.id
     this.controls.title = this.data.title
+    this.controls.files.thumbnail = this.data.thumbnail
+    this.controls.files.gallery = this.data.images.map(image => ({ src: image.path }))
   },
   methods: {
     menuTabs(idx) {
       this.$validator.validate(`scope${this.tab}.*`).then(valid => {
         if (!valid) {
           const msg = this.$validator.errors.items.map(item => item.msg)
-          this.$store.dispatch('getError', { text: msg.join('\n'), timeout: 3600 })
+          this.$store.dispatch('getMessage', { text: msg.join('\n'), timeout: 3600 })
           return false
         }
         if (this.isDirty) {
@@ -242,24 +267,47 @@ export default {
     },
     save() {
       this.loading = true
-      this.menu.forEach((item, idx) => {
-        this.$validator.validateAll(`scope${idx}`).then(valid => {
-          if (!valid) {
-            this.tab = idx
-            const msg = this.$validator.errors.items.map(item => item.msg)
-            this.$store.dispatch('getError', { text: msg.join('\n'), timeout: 7200 })
-            this.loading = false
-            return false
-          }
-          this.loading = false
-          this.$validator.reset()
-          if (this.fieldsDirty) {
-            this.menuTabs(this.needTab)
-          }
-          this.fieldsDirty = false
+      const validateAllScope = []
+      const promise = new Promise(resolve => {
+        this.menu.forEach((item, idx) => {
+          this.$validator.validateAll(`scope${idx}`).then(async valid => {
+            await validateAllScope.push(valid)
+            resolve(valid)
+            if (!valid) {
+              this.tab = idx
+              const msg = this.$validator.errors.items.map(item => item.msg)
+              this.$store.dispatch('getMessage', { text: msg.join('\n'), timeout: 7200 })
+              this.loading = false
+              return false
+            }
+          })
         })
       })
-    }
+      promise.then(async () => {
+        if (!validateAllScope.some(valid => !valid)) {
+          try {
+            await this.$store.dispatch('product/save', this.controls)
+            this.loading = false
+            this.$validator.reset()
+            if (this.fieldsDirty) {
+              this.menuTabs(this.needTab)
+            }
+            this.fieldsDirty = false
+            this.$store.dispatch('getMessage', { text: 'Изменения успешно сохранены', color: 'green', timeout: 3600 })
+          } catch (e) {}
+        }
+      })
+    },
+    thumbnailUpload(file) {
+      this.controls.files.thumbnail = file
+    },
+    thumbnailRemove() {
+      this.controls.files.thumbnail = null
+    },
+    imageUpload(files) {
+      this.controls.files.gallery.push(files)
+    },
+    imageRemove(files) {}
   }
 }
 </script>
@@ -267,5 +315,8 @@ export default {
 <style lang="scss" scoped>
 .flex {
   display: flex;
+}
+.aside {
+  z-index: 1;
 }
 </style>

@@ -20,7 +20,7 @@ export const actions = {
     try {
       return await this.$axios.$get(`api/${crud}/all/${page}${pageSize}`)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },
@@ -29,7 +29,7 @@ export const actions = {
     try {
       return await this.$axios.$get(`api/${crud}/one/?id=${id}`)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },
@@ -38,7 +38,7 @@ export const actions = {
       const crud = this.getters['crud/crud']
       return await this.$axios.$post(`api/${crud}/filtered/`, data)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },
@@ -47,7 +47,7 @@ export const actions = {
     try {
       await this.$axios.$post(`api/${crud}/change-status/`, { status, items })
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },
@@ -56,7 +56,7 @@ export const actions = {
       const crud = this.getters['crud/crud']
       await this.$axios.$post(`api/${crud}/change-title/`, data)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },
@@ -65,7 +65,7 @@ export const actions = {
       const crud = this.getters['crud/crud']
       await this.$axios.$post(`api/${crud}/delete/`, data)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   }

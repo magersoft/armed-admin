@@ -96,7 +96,7 @@ export default {
           await this.$store.dispatch('crud/delete', { items: [id] })
           this.$emit('deleted', [id])
           this.dialog = false
-          this.$store.dispatch('getError', { text: 'Удалено', color: 'green', timeout: 3600 })
+          this.$store.dispatch('getMessage', { text: 'Удалено', color: 'green', timeout: 3600 })
         } catch (e) {}
         this.loading = false
       }

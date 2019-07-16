@@ -85,7 +85,7 @@ export default {
 
     switch (message) {
       case 'login':
-        this.$store.dispatch('getError', {
+        this.$store.dispatch('getMessage', {
           color: 'primary',
           text: 'Вы уже авторизованы в системе'
         })

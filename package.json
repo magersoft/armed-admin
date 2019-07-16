@@ -21,7 +21,8 @@
     "filepond-plugin-image-preview": "^4.2.1",
     "nuxt": "^2.0.0",
     "nuxt-validate": "^1.0.1",
-    "vue-filepond": "^5.1.1"
+    "vue-filepond": "^5.1.1",
+    "vuedraggable": "^2.23.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",

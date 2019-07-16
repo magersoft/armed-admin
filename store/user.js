@@ -18,7 +18,7 @@ export const actions = {
       const { user } = await this.$axios.$get(`api/user/get/?token=${this.getters['auth/token']}`)
       commit('setUser', user)
     } catch (e) {
-      commit('setError', { text: e }, { root: true })
+      commit('setMessage', { text: e }, { root: true })
       throw e
     }
   }

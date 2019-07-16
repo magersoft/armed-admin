@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 import ru from 'vuetify/es5/locale/ru'
 
 export default {
-  mode: 'spa',
+  mode: 'universal',
   /*
   ** Headers of the page
   */
@@ -83,6 +83,11 @@ export default {
       locale: { ru },
       current: 'ru'
     }
+  },
+
+  env: {
+    baseURL: process.env.BASE_URL || 'http://dobrota.yii',
+    fileURL: process.env.FILE_URL || 'http://dobrota.yii'
   },
   /*
   ** Build configuration

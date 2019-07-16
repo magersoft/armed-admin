@@ -1,24 +1,24 @@
 export const state = () => ({
-  error: {},
+  message: {},
   menu: null
 })
 
 export const getters = {
-  error: state => state.error,
+  message: state => state.message,
   menu: state => state.menu
 }
 
 export const mutations = {
-  setError(state, error) {
-    state.error = {
+  setMessage(state, message) {
+    state.message = {
       state: true,
-      text: error.text,
-      color: error.color || 'red',
-      timeout: error.timeout || 0
+      text: message.text,
+      color: message.color || 'red',
+      timeout: message.timeout || 0
     }
   },
-  clearError(state) {
-    state.error = {}
+  clearMessage(state) {
+    state.message = {}
   },
   setMenu(state, payload) {
     state.menu = payload
@@ -26,18 +26,18 @@ export const mutations = {
 }
 
 export const actions = {
-  getError({ commit }, error) {
-    commit('setError', error)
+  getMessage({ commit }, message) {
+    commit('setMessage', message)
   },
-  clearError({ commit }) {
-    commit('clearError')
+  clearMessage({ commit }) {
+    commit('clearMessage')
   },
   async getMenu({ commit, dispatch }) {
     try {
       const menu = await this.$axios.$get(`api/menu/?user_id=${this.getters['user/currentUser'].user_id}`)
       commit('setMenu', menu)
     } catch (e) {
-      commit('setError', { text: e })
+      commit('setMessage', { text: e })
       throw e
     }
   }
