@@ -133,7 +133,7 @@
               </v-tab-item>
               <v-tab-item>
                 <v-card flat>
-                  <v-card-text>6</v-card-text>
+                  <v-card-text><h2>Галерея товара</h2></v-card-text>
                   <v-layout>
                     <v-flex xs12>
                       <file-upload
@@ -167,15 +167,16 @@
         </v-layout>
       </div>
     </v-card>
-    <v-dialog v-model="fieldsDirty" persistent max-width="360">
+    <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
         <v-card-title class="headline">
           Подтвердите действие
         </v-card-title>
-        <v-card-text>Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?</v-card-text>
+        <v-card-text v-if="notSave">Были загружены новые изображения. <br>Вы хотите сохранить их?</v-card-text>
+        <v-card-text v-else>Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?</v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="dark" flat :disabled="loading" @click="fieldsDirty = false">
+          <v-btn color="dark" flat :disabled="loading" @click="dialog = false">
             Отменить
           </v-btn>
           <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="save">
@@ -202,11 +203,12 @@ export default {
     fileUpload
   },
   data: () => ({
-    tab: 5,
+    tab: null,
     needTab: null,
     loading: false,
-    fieldsDirty: false,
+    dialog: false,
     fileDirty: false,
+    notSave: false,
     controls: {
       id: null,
       title: '',
@@ -247,7 +249,7 @@ export default {
     this.controls.id = this.data.id
     this.controls.title = this.data.title
     this.controls.files.thumbnail = this.data.thumbnail
-    this.controls.files.gallery = this.data.images.map(image => ({ src: image.path }))
+    this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
   },
   methods: {
     menuTabs(idx) {
@@ -257,8 +259,8 @@ export default {
           this.$store.dispatch('getMessage', { text: msg.join('\n'), timeout: 3600 })
           return false
         }
-        if (this.isDirty) {
-          this.fieldsDirty = true
+        if (this.isDirty || this.notSave) {
+          this.dialog = true
           this.needTab = idx
           return false
         }
@@ -289,10 +291,11 @@ export default {
             await this.$store.dispatch('product/save', this.controls)
             this.loading = false
             this.$validator.reset()
-            if (this.fieldsDirty) {
+            if (this.dialog) {
               this.menuTabs(this.needTab)
             }
-            this.fieldsDirty = false
+            this.dialog = false
+            this.notSave = false
             this.$store.dispatch('getMessage', { text: 'Изменения успешно сохранены', color: 'green', timeout: 3600 })
           } catch (e) {}
         }
@@ -305,6 +308,7 @@ export default {
       this.controls.files.thumbnail = null
     },
     imageUpload(files) {
+      this.notSave = true
       this.controls.files.gallery.push(files)
     },
     imageRemove(files) {}

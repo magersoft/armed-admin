@@ -13,6 +13,13 @@ export const actions = {
       commit('setMessage', { text: e }, { root: true })
     }
   },
+  async updateImagesSort({ commit }, array) {
+    try {
+      await this.$axios.$post('/api/product/update-sort/', array)
+    } catch (e) {
+      commit('setMessage', { text: e }, { root: true })
+    }
+  },
   async save({ commit }, data) {
     try {
       await this.$axios.$post('/api/product/save/', data)

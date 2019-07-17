@@ -1,21 +1,29 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-layout pa-3 column>
-    <v-flex v-if="loadFiles && !!loadFiles.length" xs12>
+    <v-flex v-if="loadFiles && !!loadFiles.length" xs12 style="position: relative">
+      <div v-if="loading" class="text-xs-center sortable-loading">
+        <v-progress-circular
+          :size="50"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div>
       <draggable
-          v-model="loadFiles"
-          @start="dragging = true"
-          @end="dragging = false"
-          class="layout row wrap"
+        v-model="loadFiles"
+        :class="{ 'sortable': loadFiles.length > 1 }"
+        class="layout row wrap"
+        @start="dragging = true"
+        @end="draggingEnd"
         >
           <v-flex
             v-for="(file) in loadFiles"
-            :key="file.src"
+            :key="file.id"
             :class="flexGrid"
             xs12
           >
             <v-img
-              :src="file.src"
-              :lazy-src="file.src"
+              :src="url + file.src"
+              :lazy-src="url + file.src"
               aspect-ratio="1"
               contain
               class="elevation-1 ma-2"
@@ -117,6 +125,7 @@ export default {
     }
   },
   data: () => ({
+    url: '',
     loadFiles: [],
     dialog: false,
     loading: false,
@@ -141,17 +150,17 @@ export default {
     }
   },
   created() {
+    this.url = process.env.fileURL
     this.loadFiles = this.files.map(file => {
       return {
-        src: process.env.fileURL + file.src
+        id: file.id,
+        src: file.src
       }
     })
   },
   methods: {
     handleFilePondInit() {
       // FilePond instance methods are available on `this.$refs.pond`
-
-      console.log(this.$refs.pond)
       this.server = {
         process: (fieldName, file, metadata, load, error, progress, abort) => {
           const formData = new FormData()
@@ -170,12 +179,13 @@ export default {
             if (request.status >= 200 && request.status < 300) {
               load(request.responseText)
               try {
+                const loadFile = JSON.parse(request.responseText)
                 if (this.multiple) {
-                  this.loadFiles.push(JSON.parse(request.responseText))
+                  this.loadFiles.push(loadFile)
                 } else {
-                  this.loadFiles = [JSON.parse(request.responseText)]
+                  this.loadFiles = [loadFile]
                 }
-                this.$emit('fileUpload', JSON.parse(request.responseText))
+                this.$emit('fileUpload', loadFile)
               } catch (e) {
                 alert('Validate error')
               }
@@ -231,13 +241,37 @@ export default {
       } catch (e) {}
       this.loading = false
       this.dialog = false
+    },
+    async draggingEnd() {
+      this.loading = true
+      this.$store.dispatch('clearMessage')
+      try {
+        await this.$store.dispatch('product/updateImagesSort', this.loadFiles)
+        this.$store.dispatch('getMessage', { text: 'Сортировка обновлена', color: 'green', timeout: 2000 })
+      } catch (e) {}
+      this.loading = false
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .filepond--wrapper {
   width: 100%;
+}
+.sortable {
+  .flex {
+    cursor: move;
+  }
+  &-loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    background-color: rgba(255,255,255,.1);
+  }
 }
 </style>
