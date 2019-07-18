@@ -106,12 +106,9 @@
                               <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.typeprefix"
-                                  v-validate="'required'"
-                                  :error-messages="errors.collect('scope0.typeprefix')"
                                   data-vv-name="typeprefix"
                                   data-vv-scope="scope0"
-                                  label="Тип товара"
-                                  required></v-text-field>
+                                  label="Тип товара"></v-text-field>
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
@@ -122,6 +119,32 @@
                                   data-vv-scope="scope0"
                                   label="Модель"
                                   required></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <v-select
+                                  v-model="controls.category_id"
+                                  :items="categories"
+                                  label="Категория"
+                                ></v-select>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <v-select
+                                  v-model="controls.manufacturer_id"
+                                  :items="manufacturers"
+                                  label="Производитель"
+                                ></v-select>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <v-text-field
+                                  v-model="controls.warranty"
+                                  v-validate="`min_value:1`"
+                                  :error-messages="errors.collect('scope0.warranty')"
+                                  data-vv-name="warranty"
+                                  data-vv-scope="scope0"
+                                  label="Гарантия (месяцев)"></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <multi-input />
                               </v-flex>
                             </v-layout>
                           </v-flex>
@@ -214,7 +237,7 @@
         </v-card-title>
         <v-card-text v-if="notSave" v-html="notSaveText" />
         <v-card-text v-else>
-          Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?
+          Были изменены некоторые поля. <br>Вы хотите сохранить изменения?
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -232,6 +255,7 @@
 
 <script>
 import fileUpload from '@/components/UploadFiles'
+import multiInput from '@/components/MultiInput'
 
 export default {
   validate({ params }) {
@@ -242,7 +266,7 @@ export default {
     validator: 'new'
   },
   components: {
-    fileUpload
+    fileUpload, multiInput
   },
   data: () => ({
     tab: null,
@@ -252,13 +276,18 @@ export default {
     fileDirty: false,
     notSave: false,
     notSaveText: null,
+    categories: [],
+    manufacturers: [],
     controls: {
       id: null,
       title: '',
       menutitle: '',
       typeprefix: '',
       model: '',
+      warranty: '',
       test: '1',
+      category_id: null,
+      manufacturer_id: null,
       files: {
         thumbnail: null,
         gallery: []
@@ -279,9 +308,6 @@ export default {
   computed: {
     isDirty() {
       return Object.keys(this.fields).some(key => key.startsWith('$') ? Object.keys(this.fields[key]).some(innerKey => this.fields[key][innerKey].dirty) : this.fields[key].dirty)
-    },
-    getDirty() {
-      return Object.keys(this.fields).map(key => key.startsWith('$') ? Object.keys(this.fields[key]).map(innerKey => this.fields[key][innerKey].dirty ? Object.keys(this.fields[key]) : null) : this.fields[key].dirty ? Object.keys(this.fields[key]) : null).join(',')
     }
   },
   async asyncData({ store, params }) {
@@ -301,6 +327,8 @@ export default {
     }
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
+    this.categories = this.data.categories
+    this.manufacturers = this.data.manufacturers
   },
   methods: {
     menuTabs(idx) {
