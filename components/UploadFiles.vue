@@ -35,13 +35,14 @@
                 <v-card-title>
                   <v-spacer />
 
-                  <v-btn icon :class="{ 'white v-btn--small': loadFiles.length > 2 }" class="mr-1">
-                    <v-icon>edit</v-icon>
-                  </v-btn>
-
-                  <v-btn icon :class="{ 'white v-btn--small': loadFiles.length > 2 }" @click="deleteFile(file.src)">
-                    <v-icon>delete</v-icon>
-                  </v-btn>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon small class="white" @click="deleteFile(file.src)" v-on="on">
+                        <v-icon color="red darken-1">delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Удалить</span>
+                  </v-tooltip>
                 </v-card-title>
               </v-layout>
               <template v-slot:placeholder>
@@ -122,6 +123,11 @@ export default {
     multiple: {
       type: Boolean,
       default: true
+    },
+    grid: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   data: () => ({
@@ -136,6 +142,9 @@ export default {
   }),
   computed: {
     flexGrid() {
+      if (this.grid) {
+        return this.grid
+      }
       if (this.files.length === 1) {
         return 'md12'
       } else if (this.files.length === 2) {

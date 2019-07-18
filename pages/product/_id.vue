@@ -139,6 +139,7 @@
                       <file-upload
                         :id="data.id"
                         :files="controls.files.gallery"
+                        grid="md2"
                         multiple
                         folder="/products/"
                         @fileUpload="imageUpload"
@@ -172,7 +173,7 @@
         <v-card-title class="headline">
           Подтвердите действие
         </v-card-title>
-        <v-card-text v-if="notSave">Были загружены новые изображения. <br>Вы хотите сохранить их?</v-card-text>
+        <v-card-text v-if="notSave" v-html="notSaveText"></v-card-text>
         <v-card-text v-else>Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?</v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -209,6 +210,7 @@ export default {
     dialog: false,
     fileDirty: false,
     notSave: false,
+    notSaveText: null,
     controls: {
       id: null,
       title: '',
@@ -309,9 +311,14 @@ export default {
     },
     imageUpload(files) {
       this.notSave = true
+      this.notSaveText = 'Были загружены новые изображения. <br>Вы хотите сохранить их?'
       this.controls.files.gallery.push(files)
     },
-    imageRemove(files) {}
+    imageRemove(file) {
+      this.notSave = true
+      this.notSaveText = 'Были удалены изображения с сервера. <br>Сохраните изменения!'
+      this.controls.files.gallery = this.controls.files.gallery.filter(img => img.src !== file)
+    }
   }
 }
 </script>
