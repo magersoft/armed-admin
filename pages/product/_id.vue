@@ -74,96 +74,135 @@
           </v-toolbar>
           <v-divider />
           <v-container>
-            <v-tabs-items v-model="tab">
-              <v-tab-item>
-                <v-card flat>
-                  <v-layout row wrap>
-                    <v-flex md8 xs12>
-                      <v-layout pa-3>
-                        <v-flex md12>
-                          <v-text-field
-                            v-model="controls.title"
-                            v-validate="'required'"
-                            :error-messages="errors.collect('scope0.title')"
-                            data-vv-name="title"
-                            data-vv-scope="scope0"
-                            label="Название"
-                            required></v-text-field>
-                        </v-flex>
-                      </v-layout>
-                    </v-flex>
-                    <v-flex md4 xs12>
-                      <file-upload
-                        :id="data.id"
-                        :files="data.thumbnail"
-                        :multiple="false"
-                        folder="/products/"
-                        @fileUpload="thumbnailUpload"
-                        @fileRemove="thumbnailRemove" />
-                    </v-flex>
-                  </v-layout>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-text-field
-                    v-model="controls.test"
-                    v-validate="'required'"
-                    :error-messages="errors.collect('scope1.test')"
-                    data-vv-name="test"
-                    data-vv-scope="scope1"
-                    label="Тест"
-                    required></v-text-field>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>3</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>4</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>5</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text><h2>Галерея товара</h2></v-card-text>
-                  <v-layout>
-                    <v-flex xs12>
-                      <file-upload
-                        :id="data.id"
-                        :files="controls.files.gallery"
-                        grid="md2"
-                        multiple
-                        folder="/products/"
-                        @fileUpload="imageUpload"
-                        @fileRemove="imageRemove" />
-                    </v-flex>
-                  </v-layout>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>7</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>8</v-card-text>
-                </v-card>
-              </v-tab-item>
-              <v-tab-item>
-                <v-card flat>
-                  <v-card-text>9</v-card-text>
-                </v-card>
-              </v-tab-item>
-            </v-tabs-items>
+            <v-form>
+              <v-tabs-items v-model="tab">
+                <v-tab-item>
+                  <v-card flat>
+                    <v-layout row wrap>
+                      <v-flex md8 xs12>
+                        <v-layout pa-3>
+                          <v-flex md12>
+                            <v-layout row wrap justify-start align-content-start>
+                              <v-flex xs12 md6>
+                                <v-text-field
+                                  v-model="controls.title"
+                                  v-validate="'required'"
+                                  :error-messages="errors.collect('scope0.title')"
+                                  data-vv-name="title"
+                                  data-vv-scope="scope0"
+                                  label="Название"
+                                  required></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <v-text-field
+                                  v-model="controls.menutitle"
+                                  v-validate="'required'"
+                                  :error-messages="errors.collect('scope0.menutitle')"
+                                  data-vv-name="menutitle"
+                                  data-vv-scope="scope0"
+                                  label="Заголовок в меню"
+                                  required></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <v-text-field
+                                  v-model="controls.typeprefix"
+                                  v-validate="'required'"
+                                  :error-messages="errors.collect('scope0.typeprefix')"
+                                  data-vv-name="typeprefix"
+                                  data-vv-scope="scope0"
+                                  label="Тип товара"
+                                  required></v-text-field>
+                              </v-flex>
+                              <v-flex xs12 md6>
+                                <v-text-field
+                                  v-model="controls.model"
+                                  v-validate="'required'"
+                                  :error-messages="errors.collect('scope0.model')"
+                                  data-vv-name="model"
+                                  data-vv-scope="scope0"
+                                  label="Модель"
+                                  required></v-text-field>
+                              </v-flex>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex md4 xs12>
+                        <file-upload
+                          :id="data.id"
+                          :files="data.thumbnail"
+                          :multiple="false"
+                          folder="/products/"
+                          @fileUpload="thumbnailUpload"
+                          @fileRemove="thumbnailRemove"
+                        />
+                      </v-flex>
+                    </v-layout>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-text-field
+                      v-model="controls.test"
+                      v-validate="'required'"
+                      :error-messages="errors.collect('scope1.test')"
+                      data-vv-name="test"
+                      data-vv-scope="scope1"
+                      label="Тест"
+                      required
+                    />
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text>3</v-card-text>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text>4</v-card-text>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text>5</v-card-text>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text><h2>Галерея товара</h2></v-card-text>
+                    <v-layout>
+                      <v-flex xs12>
+                        <file-upload
+                          :id="data.id"
+                          :files="controls.files.gallery"
+                          grid="md2"
+                          multiple
+                          folder="/products/"
+                          @fileUpload="imageUpload"
+                          @fileRemove="imageRemove"
+                        />
+                      </v-flex>
+                    </v-layout>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text>7</v-card-text>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text>8</v-card-text>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-card-text>9</v-card-text>
+                  </v-card>
+                </v-tab-item>
+              </v-tabs-items>
+            </v-form>
           </v-container>
         </v-layout>
       </div>
@@ -173,8 +212,10 @@
         <v-card-title class="headline">
           Подтвердите действие
         </v-card-title>
-        <v-card-text v-if="notSave" v-html="notSaveText"></v-card-text>
-        <v-card-text v-else>Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?</v-card-text>
+        <v-card-text v-if="notSave" v-html="notSaveText" />
+        <v-card-text v-else>
+          Были изменены следующие поля <b>{{ getDirty }}</b> <br>Вы хотите сохранить изменения?
+        </v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn color="dark" flat :disabled="loading" @click="dialog = false">
@@ -214,6 +255,9 @@ export default {
     controls: {
       id: null,
       title: '',
+      menutitle: '',
+      typeprefix: '',
+      model: '',
       test: '1',
       files: {
         thumbnail: null,
@@ -248,8 +292,13 @@ export default {
     } catch (e) {}
   },
   created() {
-    this.controls.id = this.data.id
-    this.controls.title = this.data.title
+    for (const name in this.data) {
+      if (this.data.hasOwnProperty(name)) {
+        if (this.controls.hasOwnProperty(name)) {
+          this.controls[name] = this.data[name]
+        }
+      }
+    }
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
   },
@@ -329,5 +378,8 @@ export default {
 }
 .aside {
   z-index: 1;
+}
+.v-input {
+  padding: 10px;
 }
 </style>
