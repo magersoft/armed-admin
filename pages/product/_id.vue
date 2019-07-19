@@ -135,6 +135,13 @@
                                 ></v-select>
                               </v-flex>
                               <v-flex xs12 md6>
+                                <v-select
+                                  v-model="controls.sizetable_id"
+                                  :items="manufacturers"
+                                  label="Таблица размеров"
+                                ></v-select>
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.warranty"
                                   v-validate="`min_value:1`"
@@ -144,22 +151,44 @@
                                   label="Гарантия (месяцев)"></v-text-field>
                               </v-flex>
                               <v-flex xs12 md6>
-                                <multi-input v-model="controls.features" label="Особенности товара" />
+                                <v-select
+                                  v-model="controls.additional_category"
+                                  :items="manufacturers"
+                                  label="Выбрать"
+                                  multiple
+                                  chips
+                                  hint="Дополнительные категорийные срезы"
+                                  persistent-hint
+                                ></v-select>
                               </v-flex>
-                              {{ controls.features }}
+                              <v-flex xs12>
+                                <v-textarea
+                                  box
+                                  name="text"
+                                  label="Описание товара"
+                                  :value="controls.text"
+                                ></v-textarea>
+                              </v-flex>
                             </v-layout>
                           </v-flex>
                         </v-layout>
                       </v-flex>
                       <v-flex md4 xs12>
-                        <file-upload
-                          :id="data.id"
-                          :files="data.thumbnail"
-                          :multiple="false"
-                          folder="/products/"
-                          @fileUpload="thumbnailUpload"
-                          @fileRemove="thumbnailRemove"
-                        />
+                        <v-layout column>
+                          <v-flex>
+                            <file-upload
+                              :id="data.id"
+                              :files="data.thumbnail"
+                              :multiple="false"
+                              folder="/products/"
+                              @fileUpload="thumbnailUpload"
+                              @fileRemove="thumbnailRemove"
+                            />
+                          </v-flex>
+                          <v-flex>
+                            <multi-input v-model="controls.features" label="Особенности товара" />
+                          </v-flex>
+                        </v-layout>
                       </v-flex>
                     </v-layout>
                   </v-card>
@@ -289,7 +318,10 @@ export default {
       test: '1',
       category_id: null,
       manufacturer_id: null,
+      sizetable_id: null,
       features: [],
+      additional_category: [],
+      text: '',
       files: {
         thumbnail: null,
         gallery: []
