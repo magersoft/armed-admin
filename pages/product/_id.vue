@@ -91,7 +91,8 @@
                                   data-vv-name="title"
                                   data-vv-scope="scope0"
                                   label="Название"
-                                  required></v-text-field>
+                                  required
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
@@ -101,14 +102,16 @@
                                   data-vv-name="menutitle"
                                   data-vv-scope="scope0"
                                   label="Заголовок в меню"
-                                  required></v-text-field>
+                                  required
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.typeprefix"
                                   data-vv-name="typeprefix"
                                   data-vv-scope="scope0"
-                                  label="Тип товара"></v-text-field>
+                                  label="Тип товара"
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
@@ -118,28 +121,29 @@
                                   data-vv-name="model"
                                   data-vv-scope="scope0"
                                   label="Модель"
-                                  required></v-text-field>
+                                  required
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-select
                                   v-model="controls.category_id"
                                   :items="categories"
                                   label="Категория"
-                                ></v-select>
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-select
                                   v-model="controls.manufacturer_id"
                                   :items="manufacturers"
                                   label="Производитель"
-                                ></v-select>
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-select
                                   v-model="controls.sizetable_id"
                                   :items="manufacturers"
                                   label="Таблица размеров"
-                                ></v-select>
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
@@ -148,7 +152,8 @@
                                   :error-messages="errors.collect('scope0.warranty')"
                                   data-vv-name="warranty"
                                   data-vv-scope="scope0"
-                                  label="Гарантия (месяцев)"></v-text-field>
+                                  label="Гарантия (месяцев)"
+                                />
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-select
@@ -159,15 +164,10 @@
                                   chips
                                   hint="Дополнительные категорийные срезы"
                                   persistent-hint
-                                ></v-select>
+                                />
                               </v-flex>
                               <v-flex xs12>
-                                <v-textarea
-                                  box
-                                  name="text"
-                                  label="Описание товара"
-                                  :value="controls.text"
-                                ></v-textarea>
+                                <vueditor ref="editor" />
                               </v-flex>
                             </v-layout>
                           </v-flex>
@@ -364,6 +364,9 @@ export default {
     this.controls.features = this.data.features.split('||')
     this.categories = this.data.categories
     this.manufacturers = this.data.manufacturers
+  },
+  mounted() {
+    this.$refs.editor.setContent(this.controls.text)
   },
   methods: {
     menuTabs(idx) {

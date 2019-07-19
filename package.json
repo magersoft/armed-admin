@@ -22,6 +22,7 @@
     "nuxt": "^2.0.0",
     "nuxt-validate": "^1.0.1",
     "vue-filepond": "^5.1.1",
+    "vueditor": "^0.3.1",
     "vuedraggable": "^2.23.0"
   },
   "devDependencies": {

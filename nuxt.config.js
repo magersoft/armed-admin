@@ -38,7 +38,8 @@ export default {
   */
   plugins: [
     '@/plugins/globals',
-    '@/plugins/axios'
+    '@/plugins/axios',
+    { src: '@/plugins/editor', ssr: false }
   ],
   /*
   ** Nuxt.js modules
