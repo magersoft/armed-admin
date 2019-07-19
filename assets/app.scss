@@ -6,6 +6,14 @@
   opacity: 0;
 }
 
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
+}
+
+
 .group-title {
   padding: 5px 10px;
 }

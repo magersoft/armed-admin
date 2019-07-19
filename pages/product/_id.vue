@@ -144,8 +144,9 @@
                                   label="Гарантия (месяцев)"></v-text-field>
                               </v-flex>
                               <v-flex xs12 md6>
-                                <multi-input />
+                                <multi-input v-model="controls.features" label="Особенности товара" />
                               </v-flex>
+                              {{ controls.features }}
                             </v-layout>
                           </v-flex>
                         </v-layout>
@@ -288,6 +289,7 @@ export default {
       test: '1',
       category_id: null,
       manufacturer_id: null,
+      features: [],
       files: {
         thumbnail: null,
         gallery: []
@@ -327,6 +329,7 @@ export default {
     }
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
+    this.controls.features = this.data.features.split('||')
     this.categories = this.data.categories
     this.manufacturers = this.data.manufacturers
   },
