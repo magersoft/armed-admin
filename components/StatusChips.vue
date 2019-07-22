@@ -15,7 +15,7 @@ export default {
       required: true
     },
     statuses: {
-      type: Array,
+      type: Object,
       required: true
     }
   },

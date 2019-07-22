@@ -3,10 +3,12 @@
     <v-card
       slot-scope="{ hover }"
       :class="`elevation-${hover ? 12 : 2}`"
+      class="card"
+      @click="go"
     >
       <v-img
-        :src="item.thumb"
-        :lazy-src="item.thumb"
+        :src="url + item.thumb"
+        :lazy-src="url + item.thumb"
         height="350px"
       />
       <v-card-actions>
@@ -18,7 +20,7 @@
           </v-layout>
         </div>
         <v-spacer />
-        <app-action-icon :item="item" :actions="actions" />
+        <app-action-icon v-if="actions" :item="item" :actions="actions" />
       </v-card-actions>
     </v-card>
   </v-hover>
@@ -38,7 +40,19 @@ export default {
     },
     actions: {
       type: Object,
-      required: false
+      required: false,
+      default: () => {}
+    }
+  },
+  data: () => ({
+    url: ''
+  }),
+  created() {
+    this.url = process.env.fileURL
+  },
+  methods: {
+    go() {
+      this.$router.push(`/product/${this.item.id}`)
     }
   }
 }
@@ -52,5 +66,8 @@ export default {
     display: block;
     overflow: hidden;
     height: 22px;
+}
+.card {
+  cursor: pointer;
 }
 </style>

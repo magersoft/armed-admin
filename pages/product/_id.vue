@@ -215,15 +215,25 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-text-field
-                      v-model="controls.test"
-                      v-validate="'required'"
-                      :error-messages="errors.collect('scope1.test')"
-                      data-vv-name="test"
-                      data-vv-scope="scope1"
-                      label="Тест"
-                      required
+                    <multi-select
+                      v-model="controls.analogs_ids"
+                      :items="analogs"
+                      multiple
+                      deletable-chips
+                      persistent-hint
+                      clearable
+                      label="Изменить аналоги"
                     />
+                    <label class="v-label v-label--active theme--light">Аналоги товара</label>
+                    <v-layout row wrap mt-2>
+                      <v-flex
+                        v-for="analog in analogsCard"
+                        :key="analog.id"
+                        xs3
+                      >
+                        <app-card :item="analog" />
+                      </v-flex>
+                    </v-layout>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -308,6 +318,7 @@ import fileUpload from '@/components/UploadFiles'
 import multiInput from '@/components/MultiInput'
 import multiSelect from '@/components/MultiSelect'
 import statusChips from '@/components/statusChips'
+import AppCard from '@/components/CRUD/Card'
 
 export default {
   validate({ params }) {
@@ -318,7 +329,7 @@ export default {
     validator: 'new'
   },
   components: {
-    fileUpload, multiInput, multiSelect, statusChips
+    fileUpload, multiInput, multiSelect, statusChips, AppCard
   },
   data: () => ({
     tab: null,
@@ -333,6 +344,8 @@ export default {
     manufacturers: [],
     sizetables: [],
     statuses: [],
+    analogs: [],
+    analogsCard: [],
     controls: {
       id: null,
       title: '',
@@ -343,7 +356,6 @@ export default {
       typeprefix: '',
       model: '',
       warranty: '',
-      test: '1',
       category_id: null,
       manufacturer_id: null,
       sizetable_id: null,
@@ -351,6 +363,7 @@ export default {
       additional_categories_ids: [],
       text: '',
       status: null,
+      analogs_ids: [],
       files: {
         thumbnail: null,
         gallery: []
@@ -396,6 +409,8 @@ export default {
     this.manufacturers = this.data.manufacturers
     this.sizetables = this.data.sizetables
     this.statuses = this.data.statuses
+    this.analogs = this.data.analogs
+    this.analogsCard = this.data.analogs_card
   },
   mounted() {
     this.$refs.editor.setContent(this.controls.text)

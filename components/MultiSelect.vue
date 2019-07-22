@@ -26,7 +26,7 @@
 export default {
   props: {
     value: {
-      type: Array,
+      type: [Number, Array],
       required: true
     },
     items: {
