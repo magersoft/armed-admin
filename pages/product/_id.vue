@@ -42,12 +42,10 @@
         </v-navigation-drawer>
         <v-layout column>
           <v-toolbar color="primary" dark>
-            <v-toolbar-title>{{ data.title }}</v-toolbar-title>
+            <v-toolbar-title>{{ data.displaytitle }}</v-toolbar-title>
             <v-spacer />
 
-            <v-btn icon>
-              <v-icon>search</v-icon>
-            </v-btn>
+            <status-chips :status="controls.status" :statuses="statuses" />
 
             <v-btn icon>
               <v-icon>more_vert</v-icon>
@@ -102,16 +100,14 @@
                                   data-vv-name="menutitle"
                                   data-vv-scope="scope0"
                                   label="Заголовок в меню"
-                                  required
-                                />
+                                  required></v-text-field>
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.typeprefix"
                                   data-vv-name="typeprefix"
                                   data-vv-scope="scope0"
-                                  label="Тип товара"
-                                />
+                                  label="Тип товара"></v-text-field>
                               </v-flex>
                               <v-flex xs12 md6>
                                 <v-text-field
@@ -121,27 +117,29 @@
                                   data-vv-name="model"
                                   data-vv-scope="scope0"
                                   label="Модель"
-                                  required
-                                />
+                                  required></v-text-field>
                               </v-flex>
                               <v-flex xs12 md6>
-                                <v-select
+                                <multi-select
                                   v-model="controls.category_id"
                                   :items="categories"
                                   label="Категория"
                                 />
                               </v-flex>
                               <v-flex xs12 md6>
-                                <v-select
+                                <multi-select
                                   v-model="controls.manufacturer_id"
                                   :items="manufacturers"
+                                  clearable
                                   label="Производитель"
                                 />
                               </v-flex>
                               <v-flex xs12 md6>
-                                <v-select
+                                <multi-select
                                   v-model="controls.sizetable_id"
-                                  :items="manufacturers"
+                                  :items="sizetables"
+                                  deletable-chips
+                                  clearable
                                   label="Таблица размеров"
                                 />
                               </v-flex>
@@ -152,22 +150,44 @@
                                   :error-messages="errors.collect('scope0.warranty')"
                                   data-vv-name="warranty"
                                   data-vv-scope="scope0"
-                                  label="Гарантия (месяцев)"
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <v-select
-                                  v-model="controls.additional_category"
-                                  :items="manufacturers"
-                                  label="Выбрать"
-                                  multiple
-                                  chips
-                                  hint="Дополнительные категорийные срезы"
-                                  persistent-hint
-                                />
+                                  label="Гарантия (месяцев)"></v-text-field>
                               </v-flex>
                               <v-flex xs12>
-                                <vueditor ref="editor" />
+                                <multi-select
+                                  v-model="controls.additional_categories_ids"
+                                  :items="additional_categories"
+                                  multiple
+                                  deletable-chips
+                                  persistent-hint
+                                  clearable
+                                  label="Выбрать"
+                                  hint="Дополнительные категорийные срезы"></multi-select>
+                              </v-flex>
+                              <v-flex>
+                                <v-switch
+                                  v-model="controls.is_bestseller"
+                                  color="primary"
+                                  label="Хит"
+                                  hide-details
+                                ></v-switch>
+                                <v-switch
+                                  v-model="controls.is_preorderable"
+                                  color="primary"
+                                  label="Доступен для предзаказа"
+                                  hide-details
+                                ></v-switch>
+                                <v-switch
+                                  v-model="controls.certificated_dialer"
+                                  color="primary"
+                                  label="Сертифицированный дилер компании Армед"
+                                  hide-details
+                                ></v-switch>
+                              </v-flex>
+                              <v-flex xs12>
+                                <div class="editor mt2">
+                                  <label class="v-label v-label--active theme--light">Описание товара</label>
+                                  <vueditor ref="editor" />
+                                </div>
                               </v-flex>
                             </v-layout>
                           </v-flex>
@@ -286,6 +306,8 @@
 <script>
 import fileUpload from '@/components/UploadFiles'
 import multiInput from '@/components/MultiInput'
+import multiSelect from '@/components/MultiSelect'
+import statusChips from '@/components/statusChips'
 
 export default {
   validate({ params }) {
@@ -296,7 +318,7 @@ export default {
     validator: 'new'
   },
   components: {
-    fileUpload, multiInput
+    fileUpload, multiInput, multiSelect, statusChips
   },
   data: () => ({
     tab: null,
@@ -307,11 +329,17 @@ export default {
     notSave: false,
     notSaveText: null,
     categories: [],
+    additional_categories: [],
     manufacturers: [],
+    sizetables: [],
+    statuses: [],
     controls: {
       id: null,
       title: '',
       menutitle: '',
+      is_bestseller: false,
+      is_preorderable: false,
+      certificated_dialer: false,
       typeprefix: '',
       model: '',
       warranty: '',
@@ -320,8 +348,9 @@ export default {
       manufacturer_id: null,
       sizetable_id: null,
       features: [],
-      additional_category: [],
+      additional_categories_ids: [],
       text: '',
+      status: null,
       files: {
         thumbnail: null,
         gallery: []
@@ -363,7 +392,10 @@ export default {
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
     this.controls.features = this.data.features.split('||')
     this.categories = this.data.categories
+    this.additional_categories = this.data.additional_categories
     this.manufacturers = this.data.manufacturers
+    this.sizetables = this.data.sizetables
+    this.statuses = this.data.statuses
   },
   mounted() {
     this.$refs.editor.setContent(this.controls.text)
@@ -447,5 +479,8 @@ export default {
 }
 .v-input {
   padding: 10px;
+}
+.editor {
+  height: 350px;
 }
 </style>

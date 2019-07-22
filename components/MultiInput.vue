@@ -14,7 +14,7 @@
               reorder
             </v-icon>
           </v-btn>
-          <v-text-field v-model="value[idx]" placeholder="Введите ..." />
+          <v-text-field v-model="value[idx]" placeholder="Введите ..." hide-details />
           <v-btn icon @click="remove(idx)">
             <v-icon color="red darken-2">
               close
