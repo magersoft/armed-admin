@@ -41,6 +41,13 @@ export const actions = {
       commit('setMessage', { text: e }, { root: true })
     }
   },
+  async removeAdvantage({ commit }, id) {
+    try {
+      await this.$axios.$delete(`/api/product/remove-advantage/?id=${id}`)
+    } catch (e) {
+      commit('setMessage', { text: e }, { root: true })
+    }
+  },
   async advantagesUpdateSort({ commit }, data) {
     try {
       await this.$axios.$post('/api/product/update-advantages-sort', data)
