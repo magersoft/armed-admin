@@ -197,7 +197,6 @@
                         <v-layout column>
                           <v-flex>
                             <file-upload
-                              :id="data.id"
                               :files="data.thumbnail"
                               :multiple="false"
                               folder="/products/"
@@ -238,7 +237,10 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text>3</v-card-text>
+                    <v-card-text>
+                      <label class="v-label v-label--active theme--light">Преимущества товара</label>
+                      <multi-block :id="controls.id" :data="controls.advantages" />
+                    </v-card-text>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -257,10 +259,10 @@
                     <v-layout>
                       <v-flex xs12>
                         <file-upload
-                          :id="data.id"
                           :files="controls.files.gallery"
                           grid="md2"
                           multiple
+                          draggable-files
                           folder="/products/"
                           @fileUpload="imageUpload"
                           @fileRemove="imageRemove"
@@ -317,6 +319,7 @@
 import fileUpload from '@/components/UploadFiles'
 import multiInput from '@/components/MultiInput'
 import multiSelect from '@/components/MultiSelect'
+import multiBlock from '@/components/MultiBlock'
 import statusChips from '@/components/statusChips'
 import AppCard from '@/components/CRUD/Card'
 
@@ -329,7 +332,7 @@ export default {
     validator: 'new'
   },
   components: {
-    fileUpload, multiInput, multiSelect, statusChips, AppCard
+    fileUpload, multiInput, multiSelect, multiBlock, statusChips, AppCard
   },
   data: () => ({
     tab: null,
@@ -364,6 +367,7 @@ export default {
       text: '',
       status: null,
       analogs_ids: [],
+      advantages: [],
       files: {
         thumbnail: null,
         gallery: []
@@ -397,7 +401,7 @@ export default {
     for (const name in this.data) {
       if (this.data.hasOwnProperty(name)) {
         if (this.controls.hasOwnProperty(name)) {
-          this.controls[name] = this.data[name]
+          this.controls[name] = this.data[name] ? this.data[name] : ''
         }
       }
     }

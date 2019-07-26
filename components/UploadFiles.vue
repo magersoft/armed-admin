@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-layout pa-3 column>
+  <v-layout column>
     <v-flex v-if="loadFiles && !!loadFiles.length" xs12 style="position: relative">
       <div v-if="loading" class="text-xs-center sortable-loading">
         <v-progress-circular
@@ -9,10 +9,11 @@
         ></v-progress-circular>
       </div>
       <draggable
+        v-if="draggableFiles"
         v-model="loadFiles"
         :class="{ 'sortable': loadFiles.length > 1 }"
         class="layout row wrap"
-        @start="dragging = true"
+        @start="draggingStart"
         @end="draggingEnd"
         >
           <v-flex
@@ -35,7 +36,7 @@
                 <v-card-title>
                   <v-spacer />
 
-                  <v-tooltip top>
+                  <v-tooltip v-if="removed" top>
                     <template v-slot:activator="{ on }">
                       <v-btn icon small class="white" @click="deleteFile(file.src)" v-on="on">
                         <v-icon color="red darken-1">delete</v-icon>
@@ -58,6 +59,50 @@
             </v-img>
           </v-flex>
         </draggable>
+      <v-layout row wrap v-if="!draggableFiles">
+        <v-flex
+          v-for="(file) in loadFiles"
+          :key="file.id"
+          :class="flexGrid"
+          xs12
+        >
+          <v-img
+            :src="url + file.src"
+            :lazy-src="url + file.src"
+            aspect-ratio="1"
+            contain
+            class="elevation-1 ma-2"
+          >
+            <v-layout
+              column
+              fill-height
+            >
+              <v-card-title>
+                <v-spacer />
+
+                <v-tooltip v-if="removed" top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon small class="white" @click="deleteFile(file.src)" v-on="on">
+                      <v-icon color="red darken-1">delete</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Удалить</span>
+                </v-tooltip>
+              </v-card-title>
+            </v-layout>
+            <template v-slot:placeholder>
+              <v-layout
+                fill-height
+                align-center
+                justify-center
+                ma-0
+              >
+                <v-progress-circular indeterminate color="primary" />
+              </v-layout>
+            </template>
+          </v-img>
+        </v-flex>
+      </v-layout>
     </v-flex>
     <v-flex xs12>
       <file-pond
@@ -106,10 +151,6 @@ export default {
     FilePond, draggable
   },
   props: {
-    id: {
-      type: Number,
-      required: true
-    },
     files: {
       type: Array,
       required: false,
@@ -122,12 +163,21 @@ export default {
     },
     multiple: {
       type: Boolean,
-      default: true
+      default: false
     },
     grid: {
       type: String,
       required: false,
       default: null
+    },
+    removed: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    draggableFiles: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -251,6 +301,9 @@ export default {
       this.loading = false
       this.dialog = false
     },
+    draggingStart() {
+      this.dragging = true
+    },
     async draggingEnd() {
       this.loading = true
       this.$store.dispatch('clearMessage')
@@ -258,6 +311,7 @@ export default {
         await this.$store.dispatch('product/updateImagesSort', this.loadFiles)
         this.$store.dispatch('getMessage', { text: 'Сортировка обновлена', color: 'green', timeout: 2000 })
       } catch (e) {}
+      this.dragging = false
       this.loading = false
     }
   }
