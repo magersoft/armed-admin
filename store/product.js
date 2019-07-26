@@ -20,16 +20,23 @@ export const actions = {
       commit('setMessage', { text: e }, { root: true })
     }
   },
-  async updateAdvantagesTitle({ commit }, data) {
+  async updateAdvantageTitle({ commit }, data) {
     try {
-      await this.$axios.$post('/api/product/update-advantages-title/', data)
+      await this.$axios.$post('/api/product/update-advantage-title/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
     }
   },
-  async updateAdvantagesDescription({ commit }, data) {
+  async updateAdvantageDescription({ commit }, data) {
     try {
-      await this.$axios.$post('/api/product/update-advantages-description/', data)
+      await this.$axios.$post('/api/product/update-advantage-description/', data)
+    } catch (e) {
+      commit('setMessage', { text: e }, { root: true })
+    }
+  },
+  async updateAdvantageImage({ commit }, data) {
+    try {
+      await this.$axios.$post('/api/product/update-advantage-image/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
     }

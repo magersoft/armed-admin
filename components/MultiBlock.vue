@@ -38,10 +38,10 @@
             <span>Удалить преимущество</span>
           </v-tooltip>
           <h3 class="title">
-            <inline-editor :id="item.id" :text="item.title" action="updateAdvantagesTitle" />
+            <inline-editor :id="item.id" :text="item.title" action="updateAdvantageTitle" />
           </h3>
           <div class="description mt1">
-            <inline-editor :id="item.id" :text="item.description" action="updateAdvantagesDescription" textarea />
+            <inline-editor :id="item.id" :text="item.description" action="updateAdvantageDescription" textarea />
           </div>
         </v-card>
       </v-flex>
@@ -166,8 +166,12 @@ export default {
       this.file = file
       this.addedImage = true
     },
-    changeImage(file) {
-      console.log(file)
+    async changeImage(file) {
+      this.$store.dispatch('clearMessage')
+      try {
+        await this.$store.dispatch('product/updateAdvantageImage', file)
+        this.$store.dispatch('getMessage', { text: 'Изображение обновлено', color: 'green', timeout: 2000 })
+      } catch (e) {}
     },
     addedBlock() {
       this.$validator.validateAll().then(async valid => {

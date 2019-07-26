@@ -241,10 +241,13 @@ export default {
                 const loadFile = JSON.parse(request.responseText)
                 if (this.multiple) {
                   this.loadFiles.push(loadFile)
+                  this.$emit('fileUpload', loadFile)
                 } else {
-                  this.loadFiles = [loadFile]
+                  this.loadFiles = this.loadFiles.length ? this.loadFiles.map(file => {
+                    return { src: loadFile.src, id: file.id || null }
+                  }) : [loadFile]
+                  this.$emit('fileUpload', this.loadFiles[0])
                 }
-                this.$emit('fileUpload', loadFile)
               } catch (e) {
                 alert('Validate error')
               }
