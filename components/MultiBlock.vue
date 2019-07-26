@@ -51,7 +51,7 @@
           flat
           height="100%"
         >
-          <div class="added-header" v-if="!addedImage">
+          <div v-show="!addedImage" class="added-header">
             <h2>Добавить новое преимущество</h2>
             <v-btn
               fab
@@ -182,7 +182,8 @@ export default {
               title: this.title,
               description: this.description,
               src: this.file.src,
-              id: this.id
+              id: this.id,
+              menuindex: this.items.length + 1
             })
             this.items.push(advantage)
             this.form = false

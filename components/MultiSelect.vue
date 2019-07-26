@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-select
-    v-model="value"
+    v-model="model"
     :items="searchItems"
     :label="label"
     :multiple="multiple"
@@ -71,7 +71,8 @@ export default {
     }
   },
   data: () => ({
-    search: []
+    search: [],
+    model: null
   }),
   computed: {
     searchItems() {
@@ -81,6 +82,9 @@ export default {
         }
       })
     }
+  },
+  created() {
+    this.model = this.value
   }
 }
 </script>
