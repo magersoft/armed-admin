@@ -308,7 +308,7 @@ export default {
       this.loading = true
       this.$store.dispatch('clearMessage')
       try {
-        await this.$store.dispatch('product/updateImagesSort', this.loadFiles)
+        await this.$store.dispatch('product/updateMediaSort', this.loadFiles)
         this.$store.dispatch('getMessage', { text: 'Сортировка обновлена', color: 'green', timeout: 2000 })
       } catch (e) {}
       this.dragging = false

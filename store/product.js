@@ -13,9 +13,9 @@ export const actions = {
       commit('setMessage', { text: e }, { root: true })
     }
   },
-  async updateImagesSort({ commit }, array) {
+  async updateMediaSort({ commit }, array) {
     try {
-      await this.$axios.$post('/api/product/update-sort/', array)
+      await this.$axios.$post('/api/product/update-media-sort/', array)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
     }
@@ -37,6 +37,13 @@ export const actions = {
   async addAdvantage({ commit }, data) {
     try {
       return await this.$axios.$post('/api/product/add-advantage/', data)
+    } catch (e) {
+      commit('setMessage', { text: e }, { root: true })
+    }
+  },
+  async advantagesUpdateSort({ commit }, data) {
+    try {
+      await this.$axios.$post('/api/product/update-advantages-sort', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
     }

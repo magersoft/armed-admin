@@ -3,7 +3,7 @@
     :list="data"
     class="layout row wrap"
     @start="dragging = true"
-    @end="dragging = false">
+    @end="draggindEnd">
     <v-flex
       v-for="item in data"
       :key="item.id"
@@ -39,33 +39,36 @@
           <v-btn
             fab
             dark
-            color="accent">
+            color="accent"
+            :disabled="form"
+            @click.prevent="form = !form">
             <v-icon>add</v-icon>
           </v-btn>
         </div>
-        <file-upload
-          :file="addedImage"
-          :multiple="false"
-          folder="/products/"
-          @fileUpload="newImageUpload"
-          ref="newUpload"
-        ></file-upload>
-        <v-text-field
-          v-model="title"
-          v-validate="'required'"
-          :error-messages="errors.collect('title')"
-          label="Заголовок преимущества"
-          data-vv-name="title"
-        ></v-text-field>
-        <v-textarea
-          v-model="description"
-          v-validate="'required'"
-          :error-messages="errors.collect('description')"
-          label="Описание преимущества"
-          data-vv-name="description"
-        ></v-textarea>
-
-        <v-card-actions>
+        <v-card-text v-if="form">
+          <file-upload
+            :file="addedImage"
+            :multiple="false"
+            folder="/products/"
+            @fileUpload="newImageUpload"
+            ref="newUpload"
+          ></file-upload>
+          <v-text-field
+            v-model="title"
+            v-validate="'required'"
+            :error-messages="errors.collect('title')"
+            label="Заголовок преимущества"
+            data-vv-name="title"
+          ></v-text-field>
+          <v-textarea
+            v-model="description"
+            v-validate="'required'"
+            :error-messages="errors.collect('description')"
+            label="Описание преимущества"
+            data-vv-name="description"
+          ></v-textarea>
+        </v-card-text>
+        <v-card-actions v-if="form">
           <v-btn flat @click.prevent="clear">Очистить</v-btn>
           <v-btn flat color="green" :loading="loading" :disabled="loading" @click.prevent="addedBlock">Добавить</v-btn>
         </v-card-actions>
@@ -102,7 +105,8 @@ export default {
     addedImage: false,
     file: null,
     loading: false,
-    draggable: false
+    draggable: false,
+    form: false
   }),
   methods: {
     newImageUpload(file) {
@@ -121,6 +125,7 @@ export default {
               id: this.id
             })
             this.data.push(advantage)
+            this.form = false
             this.clear()
           } catch (e) {}
           this.loading = false
@@ -134,6 +139,16 @@ export default {
       this.$refs.newUpload.$refs.pond.removeFiles()
       this.$refs.newUpload.loadFiles = []
       this.$validator.reset()
+    },
+    async draggindEnd() {
+      this.loading = true
+      this.$store.dispatch('clearMessage')
+      try {
+        await this.$store.dispatch('product/updateMediaSort', this.data)
+        this.$store.dispatch('getMessage', { text: 'Сортировка обновлена', color: 'green', timeout: 2000 })
+      } catch (e) {}
+      this.draggable = false
+      this.loading = false
     }
   }
 }
