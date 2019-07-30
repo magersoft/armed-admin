@@ -216,7 +216,7 @@
                   <v-card flat>
                     <multi-select
                       v-model="controls.analogs_ids"
-                      :items="analogs"
+                      :items="allProducts"
                       multiple
                       deletable-chips
                       persistent-hint
@@ -245,7 +245,24 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text>4</v-card-text>
+                    <multi-select
+                      v-model="controls.soput_ids"
+                      :items="allProducts"
+                      multiple
+                      deletable-chips
+                      persistent-hint
+                      clearable
+                      label="Сопутствующие товары"
+                    />
+                    <multi-select
+                      v-model="controls.second_soput_ids"
+                      :items="allProducts"
+                      multiple
+                      deletable-chips
+                      persistent-hint
+                      clearable
+                      label="Рекомендации для апсейла"
+                    />
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -347,7 +364,7 @@ export default {
     manufacturers: [],
     sizetables: [],
     statuses: [],
-    analogs: [],
+    allProducts: [],
     analogsCard: [],
     controls: {
       id: null,
@@ -367,6 +384,8 @@ export default {
       text: '',
       status: null,
       analogs_ids: [],
+      soput_ids: [],
+      second_soput_ids: [],
       advantages: [],
       files: {
         thumbnail: null,
@@ -413,7 +432,7 @@ export default {
     this.manufacturers = this.data.manufacturers
     this.sizetables = this.data.sizetables
     this.statuses = this.data.statuses
-    this.analogs = this.data.analogs
+    this.allProducts = this.data.all_products
     this.analogsCard = this.data.analogs_card
   },
   mounted() {
