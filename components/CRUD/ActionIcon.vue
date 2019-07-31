@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <div>
+  <div style="display: flex;">
     <v-tooltip v-if="actions.view" top>
       <template v-slot:activator="{ on }">
         <v-btn icon v-on="on">
@@ -47,7 +47,7 @@
       </template>
       <span>Удалить</span>
     </v-tooltip>
-    <app-variation-icon v-if="item.variations" :variations="item.variations" />
+    <app-variation-editor v-if="item.variations" crud :variations="item.variations" />
     <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
         <v-card-title class="headline">Подтвердите действие</v-card-title>
@@ -63,11 +63,11 @@
 </template>
 
 <script>
-import AppVariationIcon from '@/components/CRUD/VariationIcon'
+import AppVariationEditor from '@/components/VariationEditor'
 
 export default {
   components: {
-    AppVariationIcon
+    AppVariationEditor
   },
   props: {
     item: {

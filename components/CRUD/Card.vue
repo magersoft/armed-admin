@@ -9,7 +9,6 @@
       <v-img
         :src="url + item.thumb"
         :lazy-src="url + item.thumb"
-        height="350px"
       />
       <v-card-actions>
         <div>

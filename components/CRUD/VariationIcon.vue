@@ -22,10 +22,10 @@
 
     <v-card>
       <v-list>
+        <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
         <v-list-tile>
-
           <v-list-tile-content>
-            <v-list-tile-title>Опубликованные вариации</v-list-tile-title>
+            <v-list-tile-title>Вариации товара</v-list-tile-title>
           </v-list-tile-content>
 
           <v-list-tile-action></v-list-tile-action>
@@ -33,13 +33,13 @@
       </v-list>
 
       <v-divider></v-divider>
-
+      <small class="ma-4">Чтобы редактировать вариацию нажмите на нее</small>
       <v-list>
         <v-list-tile v-for="variation in variations" :key="variation.id">
           <v-list-tile-action>
             <v-switch v-model="model[variation.id]" color="purple"></v-switch>
           </v-list-tile-action>
-          <v-list-tile-title>{{ variation.title }}</v-list-tile-title>
+          <v-list-tile-title class="edit-variation" @click="goVariation({ productId: variation.product_id, variationId: variation.id })">{{ variation.title }}</v-list-tile-title>
         </v-list-tile>
       </v-list>
 
@@ -99,7 +99,22 @@ export default {
     },
     cancel() {
       this.menu = false
+    },
+    goVariation(ids) {
+      this.$emit('go', ids)
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.edit-variation {
+  cursor: pointer;
+}
+.v-progress-linear {
+  margin: 0;
+  margin-top: -8px;
+  height: 4px!important;
+  position: absolute;
+}
+</style>

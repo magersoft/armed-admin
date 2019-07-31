@@ -212,6 +212,12 @@
                     </v-layout>
                   </v-card>
                 </v-tab-item>
+                <v-tab-item v-if="variations">
+                  <v-card flat>
+                    <label class="v-label v-label--active theme--light">Вариации товара</label>
+                    <variation-editor :variations="variations" :statuses="statuses" @tabVariation="tabVariation" />
+                  </v-card>
+                </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
                     <multi-select
@@ -228,7 +234,8 @@
                       <v-flex
                         v-for="analog in analogsCard"
                         :key="analog.id"
-                        xs3
+                        xs2
+                        ma-1
                       >
                         <app-card :item="analog" />
                       </v-flex>
@@ -333,12 +340,13 @@
 </template>
 
 <script>
-import fileUpload from '@/components/UploadFiles'
-import multiInput from '@/components/MultiInput'
-import multiSelect from '@/components/MultiSelect'
-import multiBlock from '@/components/MultiBlock'
-import statusChips from '@/components/statusChips'
+import FileUpload from '@/components/UploadFiles'
+import MultiInput from '@/components/MultiInput'
+import MultiSelect from '@/components/MultiSelect'
+import MultiBlock from '@/components/MultiBlock'
+import StatusChips from '@/components/statusChips'
 import AppCard from '@/components/CRUD/Card'
+import VariationEditor from '@/components/VariationEditor'
 
 export default {
   validate({ params }) {
@@ -349,9 +357,10 @@ export default {
     validator: 'new'
   },
   components: {
-    fileUpload, multiInput, multiSelect, multiBlock, statusChips, AppCard
+    FileUpload, MultiInput, MultiSelect, MultiBlock, StatusChips, AppCard, VariationEditor
   },
   data: () => ({
+    url: '/',
     tab: null,
     needTab: null,
     loading: false,
@@ -366,6 +375,7 @@ export default {
     statuses: [],
     allProducts: [],
     analogsCard: [],
+    variations: null,
     controls: {
       id: null,
       title: '',
@@ -393,15 +403,16 @@ export default {
       }
     },
     menu: [
-      { title: 'Основное', icon: 'dashboard' },
-      { title: 'Аналоги', icon: 'dashboard' },
-      { title: 'Преимущества', icon: 'dashboard' },
-      { title: 'Сопутка', icon: 'dashboard' },
-      { title: 'Характеристики', icon: 'dashboard' },
-      { title: 'Изображения', icon: 'dashboard' },
-      { title: 'Видео', icon: 'dashboard' },
-      { title: 'SEO', icon: 'dashboard' },
-      { title: 'Отзывы', icon: 'dashboard' }
+      { title: 'Основное', icon: 'dashboard', show: true },
+      { title: 'Вариации', icon: 'dashboard', show: false },
+      { title: 'Аналоги', icon: 'dashboard', show: true },
+      { title: 'Преимущества', icon: 'dashboard', show: true },
+      { title: 'Сопутка', icon: 'dashboard', show: true },
+      { title: 'Характеристики', icon: 'dashboard', show: true },
+      { title: 'Изображения', icon: 'dashboard', show: true },
+      { title: 'Видео', icon: 'dashboard', show: true },
+      { title: 'SEO', icon: 'dashboard', show: true },
+      { title: 'Отзывы', icon: 'dashboard', show: true }
     ]
   }),
   computed: {
@@ -417,6 +428,7 @@ export default {
     } catch (e) {}
   },
   created() {
+    this.url = process.env.fileURL
     for (const name in this.data) {
       if (this.data.hasOwnProperty(name)) {
         if (this.controls.hasOwnProperty(name)) {
@@ -427,6 +439,7 @@ export default {
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
     this.controls.features = this.data.features.split('||')
+    this.variations = this.data.variations
     this.categories = this.data.categories
     this.additional_categories = this.data.additional_categories
     this.manufacturers = this.data.manufacturers
@@ -437,6 +450,13 @@ export default {
   },
   mounted() {
     this.$refs.editor.setContent(this.controls.text)
+
+    this.menu = this.menu.map(item => {
+      if (item.title === 'Вариации') {
+        item.show = this.variations
+      }
+      return item
+    }).filter(item => !!item.show)
   },
   methods: {
     menuTabs(idx) {
@@ -503,6 +523,9 @@ export default {
       this.notSave = true
       this.notSaveText = 'Были удалены изображения с сервера. <br>Сохраните изменения!'
       this.controls.files.gallery = this.controls.files.gallery.filter(img => img.src !== file)
+    },
+    tabVariation() {
+      this.tab = 1
     }
   }
 }
