@@ -16,7 +16,7 @@ export const actions = {
   async getAll({ commit }, params = null) {
     const crud = this.getters['crud/crud']
     const page = params ? `?page=${params.page}` : ''
-    const pageSize = params ? `&size=${params.rowsPerPage}` : ''
+    const pageSize = params ? `&size=${params.itemsPerPage}` : ''
     try {
       return await this.$axios.$get(`api/${crud}/all/${page}${pageSize}`)
     } catch (e) {

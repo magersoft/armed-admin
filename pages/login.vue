@@ -9,7 +9,7 @@
         label="E-mail"
         data-vv-name="email"
         required
-      ></v-text-field>
+      />
       <v-text-field
         v-model="controls.password"
         v-validate="'required|min:6'"
@@ -18,14 +18,14 @@
         label="Пароль"
         data-vv-name="password"
         required
-      ></v-text-field>
+      />
       <v-checkbox
         v-model="controls.checkbox"
         value="1"
         label="Запомнить меня"
         data-vv-name="checkbox"
         type="checkbox"
-      ></v-checkbox>
+      />
 
       <v-btn @click="submit">
         Войти в систему
@@ -108,6 +108,7 @@ export default {
             }
             await this.$store.dispatch('auth/login', formData)
             this.$router.push('/')
+            this.$vuetify.theme.dark = false
           } catch (e) {}
         }
       })

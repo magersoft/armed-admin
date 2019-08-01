@@ -1,5 +1,5 @@
 <template>
-  <v-app dark fixed app>
+  <v-app app>
     <v-content>
       <div class="bg">
         <v-container>
@@ -17,7 +17,7 @@
       {{ snackbar.text }}
       <v-btn
         dark
-        flat
+        text
         @click="closeSnackbar"
       >
         Закрыть
@@ -49,6 +49,9 @@ export default {
       this.snackbar.timeout = timeout
     }
   },
+  created() {
+    this.$vuetify.theme.dark = true
+  },
   methods: {
     closeSnackbar() {
       this.snackbar.state = false
@@ -62,6 +65,8 @@ export default {
 .bg {
   display: flex;
   height: 100vh;
+  justify-content: center;
+  align-items: center;
   background-image: url('/img/bg.jpg');
   background-size: cover;
 }

@@ -1,85 +1,86 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-app :dark="dark">
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
+      width="300"
       fixed
       app
     >
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
+          <v-list-item avatar>
+            <v-list-item-avatar>
               <img src="/img/user.png">
-            </v-list-tile-avatar>
+            </v-list-item-avatar>
 
-            <v-list-tile-content>
-              <v-list-tile-title class="username">
+            <v-list-item-content>
+              <v-list-item-title class="username">
                 {{ user.surname }} {{ user.name }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" @click="logout"><v-icon>exit_to_app</v-icon></v-btn>
+                    <v-btn icon v-on="on" @click="logout">
+                      <v-icon>exit_to_app</v-icon>
+                    </v-btn>
                   </template>
                   <span>Выйти из системы</span>
                 </v-tooltip>
-              </v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-toolbar>
       <v-list class="pt-0" dense>
-        <v-divider></v-divider>
+        <v-divider />
         <v-progress-circular
           v-if="!menu"
           indeterminate
           color="primary"
           class="wait-menu"
-        ></v-progress-circular>
+        />
         <div
           v-for="(items, group) in menu"
           v-else
-          :key="group">
-          <h4 class="group-title" v-if="!miniVariant">{{ group }}</h4>
-          <v-list-tile
+          :key="group"
+        >
+          <h4 v-if="!miniVariant" class="group-title">
+            {{ group }}
+          </h4>
+          <v-list-item
             v-for="(item, i) in items"
             :key="i"
             :to="item.to"
             router
-            exact>
+            exact
+          >
             <v-tooltip right :disabled="!miniVariant">
               <template v-slot:activator="{ on }">
-                <v-list-tile-action v-on="on">
+                <v-list-item-action v-on="on">
                   <v-icon>{{ item.icon }}</v-icon>
-                </v-list-tile-action>
+                </v-list-item-action>
               </template>
               <span>{{ item.title }}</span>
             </v-tooltip>
-            <v-list-tile-content>
-              <v-list-tile-title v-text="item.title" />
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider></v-divider>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title" />
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider />
         </div>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar
+    <v-app-bar
       :clipped-left="clipped"
       fixed
       app
     >
-      <v-toolbar-side-icon class="hidden-lg-and-up" @click="drawer = !drawer" />
+      <v-app-bar-nav-icon class="hidden-lg-and-up" @click="drawer = !drawer" />
       <v-btn
         icon
         @click.stop="miniVariant = !miniVariant"
       >
         <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>remove</v-icon>
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
@@ -89,12 +90,11 @@
       >
         <v-icon>menu</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-app-bar>
     <v-content>
       <v-container>
         <nuxt />
       </v-container>
-      <app-action-button />
     </v-content>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -103,25 +103,26 @@
       fixed
     >
       <v-list>
-        <v-list-tile @click.native="right = !right">
-          <v-list-tile-action>
+        <v-list-item @click.native="right = !right">
+          <v-list-item-action>
             <v-icon light>
               compare_arrows
             </v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-footer
-      :fixed="fixed"
+      fixed
       app
+      class="pa-0"
     >
       <span>&copy; 2019</span>
       <v-switch
-              v-model="dark"
-              label="Темная тема">
-      </v-switch>
+        v-model="$vuetify.theme.dark"
+        label="Темная тема"
+      />
     </v-footer>
     <v-snackbar
       v-if="message"
@@ -144,17 +145,11 @@
 
 <script>
 // import { mapGetters } from 'vuex'
-import AppActionButton from '@/components/layouts/ActionButton'
 
 export default {
-  components: {
-    AppActionButton
-  },
   data: () => ({
     clipped: false,
     drawer: true,
-    fixed: false,
-    dark: false,
     miniVariant: true,
     right: true,
     rightDrawer: false,

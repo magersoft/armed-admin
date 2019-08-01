@@ -71,6 +71,7 @@ export default {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
+    font: true,
     theme: {
       primary: colors.blue.darken2,
       accent: colors.grey.darken3,

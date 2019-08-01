@@ -1,6 +1,6 @@
 <template>
-  <v-layout>
-    <v-flex text-xs-center>
+  <v-row>
+    <v-col class="text-xs-center">
       <img
         src="/v.png"
         alt="Vuetify.js"
@@ -14,6 +14,6 @@
           </small>
         </footer>
       </blockquote>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>

@@ -22,31 +22,37 @@
 
     <v-card>
       <v-list>
-        <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
-        <v-list-tile>
-          <v-list-tile-content>
-            <v-list-tile-title>Вариации товара</v-list-tile-title>
-          </v-list-tile-content>
+        <v-progress-linear v-if="loading" :indeterminate="true" />
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>Вариации товара</v-list-item-title>
+          </v-list-item-content>
 
-          <v-list-tile-action></v-list-tile-action>
-        </v-list-tile>
+          <v-list-item-action />
+        </v-list-item>
       </v-list>
 
-      <v-divider></v-divider>
+      <v-divider />
       <small class="ma-4">Чтобы редактировать вариацию нажмите на нее</small>
       <v-list>
-        <v-list-tile v-for="variation in variations" :key="variation.id">
-          <v-list-tile-action>
-            <v-switch v-model="model[variation.id]" color="purple"></v-switch>
-          </v-list-tile-action>
-          <v-list-tile-title class="edit-variation" @click="goVariation({ productId: variation.product_id, variationId: variation.id })">{{ variation.title }}</v-list-tile-title>
-        </v-list-tile>
+        <v-list-item v-for="variation in variations" :key="variation.id">
+          <v-list-item-action>
+            <v-switch v-model="model[variation.id]" color="purple" />
+          </v-list-item-action>
+          <v-list-item-title class="edit-variation" @click="goVariation({ productId: variation.product_id, variationId: variation.id })">
+            {{ variation.title }}
+          </v-list-item-title>
+        </v-list-item>
       </v-list>
 
       <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn flat @click="cancel()">Отменить</v-btn>
-        <v-btn color="primary" :disabled="loading || disable || disableSave" :loading="loading" flat @click="save()">{{ saveText }}</v-btn>
+        <v-spacer />
+        <v-btn text @click="cancel()">
+          Отменить
+        </v-btn>
+        <v-btn color="primary" :disabled="loading || disable || disableSave" :loading="loading" text @click="save()">
+          {{ saveText }}
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-menu>

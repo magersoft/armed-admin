@@ -9,7 +9,9 @@
     @open="open"
     @close="close"
   >
-    <div class="text">{{ text }}</div>
+    <div class="text">
+      {{ text }}
+    </div>
     <template v-slot:input>
       <div class="mt-3 title">
         Обновить
@@ -23,18 +25,19 @@
         single-line
         counter
         autofocus
-      ></v-textarea>
+      />
       <v-text-field
         v-if="!textarea"
         v-model="text"
         label="Редактировать"
         single-line
         counter
-        autofocus></v-text-field>
+        autofocus
+      />
     </template>
     <v-snackbar v-model="snack" :timeout="3600" :color="snackColor">
       {{ snackText }}
-      <v-btn flat @click="snack = false">
+      <v-btn text @click="snack = false">
         Закрыть
       </v-btn>
     </v-snackbar>

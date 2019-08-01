@@ -1,13 +1,13 @@
 <template>
   <div>
     <variation-icon v-if="crud" :variations="variations" @go="goVariation" />
-    <v-layout v-else-if="!query" row wrap mt-2>
-      <v-flex
+    <v-row v-else-if="!query" class="mt-2">
+      <v-col
         v-for="variation in variations"
         :key="variation.id"
-        md2
-        xs12
-        ma-1
+        class="ma-1"
+        md="2"
+        cols="12"
       >
         <v-hover>
           <v-card
@@ -18,7 +18,8 @@
           >
             <v-img
               :src="url + variation.thumbnail"
-              :lazy-src="url + variation.thumbnail">
+              :lazy-src="url + variation.thumbnail"
+            >
               <v-expand-transition>
                 <div
                   v-if="hover"
@@ -31,31 +32,31 @@
                     indeterminate
                     color="primary"
                     :size="50"
-                  ></v-progress-circular>
-                  <span style="text-align: center;" v-else>Редактировать</span>
+                  />
+                  <span v-else style="text-align: center;">Редактировать</span>
                 </div>
               </v-expand-transition>
             </v-img>
-            <v-layout row justify-space-between align-center ml-2 mr-2>
+            <v-row class="ml-2 mr-2" justify="space-between" align="center">
               <status-chips :status="variation.status" :statuses="statuses" />
               <div>{{ variation.stock }} шт.</div>
-            </v-layout>
+            </v-row>
             <v-card-actions>
               <div>
-                <v-layout fill-height>
-                  <v-flex class="card-title" xs12 align-end flexbox>
+                <v-row class="fill-height">
+                  <v-col class="card-title align-end flexbox" cols="12">
                     <span class="black--text" v-text="variation.title" />
-                  </v-flex>
-                </v-layout>
-                <v-divider class="mt-1 mb-2"></v-divider>
+                  </v-col>
+                </v-row>
+                <v-divider class="mt-1 mb-2" />
                 <span>{{ variation.price_individual | currency }}</span>
               </div>
               <v-spacer />
             </v-card-actions>
           </v-card>
         </v-hover>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
     <div v-else>
       <div class="back-button">
         <v-tooltip top>

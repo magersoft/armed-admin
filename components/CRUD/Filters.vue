@@ -17,8 +17,8 @@
     <v-slide-y-transition>
       <v-container v-show="filterShow">
         <v-form ref="filter">
-          <v-layout row wrap>
-            <v-flex v-for="(filter, idx) in data.filters" :key="idx" xs12 md2>
+          <v-row>
+            <v-col v-for="(filter, idx) in data.filters" :key="idx" cols="12" md="2">
               <v-text-field
                 v-if="filter.type === 'text'"
                 v-model="model[idx]"
@@ -47,8 +47,8 @@
                   :value="item.value"
                 />
               </v-radio-group>
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
           <div class="buttons">
             <v-btn
               type="submit"

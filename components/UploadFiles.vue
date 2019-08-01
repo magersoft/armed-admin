@@ -1,12 +1,12 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-layout column>
-    <v-flex v-if="loadFiles && !!loadFiles.length" xs12 style="position: relative">
+  <v-row column>
+    <v-col v-if="loadFiles && !!loadFiles.length" cols="12" style="position: relative">
       <div v-if="loading" class="text-xs-center sortable-loading">
         <v-progress-circular
           :size="50"
           color="primary"
           indeterminate
-        ></v-progress-circular>
+        />
       </div>
       <draggable
         v-if="draggableFiles"
@@ -15,56 +15,12 @@
         class="layout row wrap"
         @start="draggingStart"
         @end="draggingEnd"
-        >
-          <v-flex
-            v-for="(file) in loadFiles"
-            :key="file.id"
-            :class="flexGrid"
-            xs12
-          >
-            <v-img
-              :src="url + file.src"
-              :lazy-src="url + file.src"
-              aspect-ratio="1"
-              contain
-              class="elevation-1 ma-2"
-            >
-              <v-layout
-                column
-                fill-height
-              >
-                <v-card-title>
-                  <v-spacer />
-
-                  <v-tooltip v-if="removed" top>
-                    <template v-slot:activator="{ on }">
-                      <v-btn icon small class="white" @click="deleteFile(file.src)" v-on="on">
-                        <v-icon color="red darken-1">delete</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Удалить</span>
-                  </v-tooltip>
-                </v-card-title>
-              </v-layout>
-              <template v-slot:placeholder>
-                <v-layout
-                  fill-height
-                  align-center
-                  justify-center
-                  ma-0
-                >
-                  <v-progress-circular indeterminate color="primary" />
-                </v-layout>
-              </template>
-            </v-img>
-          </v-flex>
-        </draggable>
-      <v-layout row wrap v-if="!draggableFiles">
-        <v-flex
+      >
+        <v-col
           v-for="(file) in loadFiles"
           :key="file.id"
           :class="flexGrid"
-          xs12
+          cols="12"
         >
           <v-img
             :src="url + file.src"
@@ -73,9 +29,9 @@
             contain
             class="elevation-1 ma-2"
           >
-            <v-layout
+            <v-row
+              class="fill-height"
               column
-              fill-height
             >
               <v-card-title>
                 <v-spacer />
@@ -83,28 +39,76 @@
                 <v-tooltip v-if="removed" top>
                   <template v-slot:activator="{ on }">
                     <v-btn icon small class="white" @click="deleteFile(file.src)" v-on="on">
-                      <v-icon color="red darken-1">delete</v-icon>
+                      <v-icon color="red darken-1">
+                        delete
+                      </v-icon>
                     </v-btn>
                   </template>
                   <span>Удалить</span>
                 </v-tooltip>
               </v-card-title>
-            </v-layout>
+            </v-row>
             <template v-slot:placeholder>
-              <v-layout
-                fill-height
-                align-center
-                justify-center
-                ma-0
+              <v-row
+                class="fill-height ma-0"
+
+                align="center"
+                justify="center"
               >
                 <v-progress-circular indeterminate color="primary" />
-              </v-layout>
+              </v-row>
             </template>
           </v-img>
-        </v-flex>
-      </v-layout>
-    </v-flex>
-    <v-flex xs12>
+        </v-col>
+      </draggable>
+      <v-row v-if="!draggableFiles">
+        <v-col
+          v-for="(file) in loadFiles"
+          :key="file.id"
+          :class="flexGrid"
+          cols="12"
+        >
+          <v-img
+            :src="url + file.src"
+            :lazy-src="url + file.src"
+            aspect-ratio="1"
+            contain
+            class="elevation-1 ma-2"
+          >
+            <v-row
+              class="fill-height"
+              column
+            >
+              <v-card-title>
+                <v-spacer />
+
+                <v-tooltip v-if="removed" top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon small class="white" @click="deleteFile(file.src)" v-on="on">
+                      <v-icon color="red darken-1">
+                        delete
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Удалить</span>
+                </v-tooltip>
+              </v-card-title>
+            </v-row>
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="primary" />
+              </v-row>
+            </template>
+          </v-img>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col cols="12">
       <file-pond
         ref="pond"
         name="file"
@@ -115,7 +119,7 @@
         :files="myFiles"
         @init="handleFilePondInit"
       />
-    </v-flex>
+    </v-col>
     <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
         <v-card-title class="headline">
@@ -124,16 +128,16 @@
         <v-card-text>Вы хотите удалить это изображение.<br> Вы уверены?</v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="green darken-1" flat :disabled="loading" @click="dialog = false">
+          <v-btn color="green darken-1" text :disabled="loading" @click="dialog = false">
             Отмена
           </v-btn>
-          <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="deleteFile(deleted)">
+          <v-btn color="green darken-1" text :loading="loading" :disabled="loading" @click="deleteFile(deleted)">
             Принять
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

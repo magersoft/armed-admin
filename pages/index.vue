@@ -1,13 +1,13 @@
 <template>
-  <v-layout
+  <v-row
     column
-    justify-center
-    align-center
+    justify="center"
+    align="center"
   >
-    <v-flex
-      xs12
-      sm8
-      md6
+    <v-col
+      cols="12"
+      sm="8"
+      md="6"
     >
       <div class="text-xs-center">
         <logo />
@@ -58,7 +58,7 @@
           <v-spacer />
           <v-btn
             color="primary"
-            flat
+            text
             nuxt
             to="/inspire"
           >
@@ -66,8 +66,8 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

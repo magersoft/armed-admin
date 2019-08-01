@@ -21,11 +21,12 @@
         label="Редактировать"
         single-line
         counter
-        autofocus></v-text-field>
+        autofocus
+      />
     </template>
     <v-snackbar v-model="snack" :timeout="3600" :color="snackColor">
       {{ snackText }}
-      <v-btn flat @click="snack = false">
+      <v-btn text @click="snack = false">
         Закрыть
       </v-btn>
     </v-snackbar>

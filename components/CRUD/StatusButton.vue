@@ -11,13 +11,13 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-tile
+        <v-list-item
           v-for="(status, key) in statuses.actions"
           :key="key"
           @click="changeStatus(key)"
         >
-          <v-list-tile-title>{{ status }}</v-list-tile-title>
-        </v-list-tile>
+          <v-list-item-title>{{ status }}</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
   </div>

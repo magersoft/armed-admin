@@ -35,7 +35,7 @@
           class="loading"
           width="3"
           size="24"
-        ></v-progress-circular>
+        />
         <v-btn v-show="!loading" :disabled="loading" icon v-on="on">
           <v-icon
             color="red darken-2"
@@ -50,12 +50,18 @@
     <app-variation-editor v-if="item.variations" crud :variations="item.variations" />
     <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
-        <v-card-title class="headline">Подтвердите действие</v-card-title>
+        <v-card-title class="headline">
+          Подтвердите действие
+        </v-card-title>
         <v-card-text>Вы хотите удалить запись "<b>{{ item.title }}</b>".<br> Вы уверены?</v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat :disabled="loading" @click="dialog = false">Отмена</v-btn>
-          <v-btn color="green darken-1" flat :loading="loading" :disabled="loading" @click="deleteItem(item.id)">Принять</v-btn>
+          <v-spacer />
+          <v-btn color="green darken-1" text :disabled="loading" @click="dialog = false">
+            Отмена
+          </v-btn>
+          <v-btn color="green darken-1" text :loading="loading" :disabled="loading" @click="deleteItem(item.id)">
+            Принять
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

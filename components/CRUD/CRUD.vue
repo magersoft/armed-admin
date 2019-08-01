@@ -14,12 +14,12 @@
         v-model="selected"
         :headers="data.headers"
         :items="data.body"
-        :rows-per-page-items="[10, 25, 50]"
-        :total-items="data.total"
+        :items-per-page-options="[10, 25, 50]"
+        :server-items-length="data.total"
         :loading="loading"
-        :pagination.sync="pagination"
-        rows-per-page-text="Записей на странице:"
-        select-all
+        :options.sync="options"
+        items-per-page-text="Записей на странице:"
+        show-select
         item-key="id"
         class="elevation-1"
       >
@@ -28,7 +28,7 @@
             Ничего не найдено :(
           </v-alert>
         </template>
-        <template v-slot:headers="props">
+        <template v-slot:header="props">
           <tr>
             <th>
               <v-checkbox
@@ -42,7 +42,7 @@
             <th
               v-for="header in props.headers"
               :key="header.text"
-              :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+              :class="['column sortable', options.descending ? 'desc' : 'asc', header.value === options.sortBy ? 'active' : '']"
               @click="changeSort(header.value)"
             >
               <v-icon small>
@@ -52,7 +52,7 @@
             </th>
           </tr>
         </template>
-        <template v-slot:items="props">
+        <template v-slot:item="props">
           <tr :active="props.selected">
             <td class="status">
               <v-checkbox
@@ -86,14 +86,14 @@
                     </span>
                   </template>
                   <v-list v-if="props.item[row].value > 0" class="stock-list">
-                    <v-list-tile v-for="(stock, key) in props.item[row].data" :key="key" class="stock-menu">
+                    <v-list-item v-for="(stock, key) in props.item[row].data" :key="key" class="stock-menu">
                       <v-list-tile-title class="stock-item">
                         <div class="stock-title">
                           {{ stock.title }}
                         </div>
                         <div>{{ stock.count }} шт.</div>
                       </v-list-tile-title>
-                    </v-list-tile>
+                    </v-list-item>
                   </v-list>
                 </v-menu>
               </div>
@@ -101,14 +101,20 @@
                 <div v-if="Array.isArray(props.item[row])">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                      <div v-on="on">{{ props.item[row][0] }} <v-icon small>help</v-icon></div>
+                      <div v-on="on">
+                        {{ props.item[row][0] }} <v-icon small>
+                          help
+                        </v-icon>
+                      </div>
                     </template>
                     <span>{{ props.item[row].join(', ') }}</span>
                   </v-tooltip>
                 </div>
-                <div v-else>{{ props.item[row] }}</div>
+                <div v-else>
+                  {{ props.item[row] }}
+                </div>
               </div>
-              <div v-else v-html="props.item[row.split(':')[0]]"></div>
+              <div v-else v-html="props.item[row.split(':')[0]]" />
             </td>
             <td class="layout px-0 text-xs-right">
               <app-action-icon :item="props.item" :actions="actions" @deleted="deleted" />
@@ -122,17 +128,16 @@
       <div v-else>
         <v-container
           fluid
-          grid-list-md
         >
-          <v-layout row wrap>
-            <v-flex
+          <v-row>
+            <v-col
               v-for="item in data.body"
               :key="item.id"
-              xs3
+              cols="3"
             >
               <app-card :item="item" :actions="actions" />
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
         </v-container>
       </div>
     </v-card>
@@ -170,7 +175,7 @@ export default {
   },
   data: () => ({
     selected: [],
-    pagination: {},
+    options: {},
     loading: false,
     grid: false
   }),
@@ -180,20 +185,20 @@ export default {
     }
   },
   watch: {
-    pagination: {
+    options: {
       async handler() {
         this.loading = true
-        const { sortBy, descending, page, rowsPerPage } = this.pagination
+        const { sortBy, descending, page, itemsPerPage } = this.options
         const params = {
           page,
-          rowsPerPage
+          itemsPerPage
         }
         try {
           const { body, total } = await this.$store.dispatch('crud/getAll', params)
           this.data.body = body
           this.data.total = total
 
-          if (this.pagination.sortBy) {
+          if (this.options.sortBy) {
             this.data.body = this.data.body.sort((a, b) => {
               const sortA = a[sortBy]
               const sortB = b[sortBy]
@@ -224,11 +229,11 @@ export default {
       }
     },
     changeSort(column) {
-      if (this.pagination.sortBy === column) {
-        this.pagination.descending = !this.pagination.descending
+      if (this.options.sortBy === column) {
+        this.options.descending = !this.options.descending
       } else {
-        this.pagination.sortBy = column
-        this.pagination.descending = false
+        this.options.sortBy = column
+        this.options.descending = false
       }
     },
     gridChange(state) {
@@ -236,10 +241,10 @@ export default {
     },
     async deleted(ids) {
       this.loading = true
-      const { page, rowsPerPage } = this.pagination
+      const { page, itemsPerPage } = this.options
       const params = {
         page,
-        rowsPerPage
+        itemsPerPage
       }
       try {
         this.data.body = this.data.body.filter(item => !ids.includes(item.id))

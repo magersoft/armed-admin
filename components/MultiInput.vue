@@ -1,5 +1,5 @@
 <template>
-  <v-layout column>
+  <v-row column>
     <label class="v-label v-label--active theme--light">{{ label }}</label>
     <draggable
       :list="value"
@@ -7,8 +7,8 @@
       @start="dragging = true"
       @end="dragging = false"
     >
-      <v-flex v-for="(i, idx) in value" :key="idx">
-        <v-layout row justify-center align-center>
+      <v-col v-for="(i, idx) in value" :key="idx">
+        <v-row justify="center" align="center">
           <v-btn icon>
             <v-icon class="move">
               reorder
@@ -20,18 +20,18 @@
               close
             </v-icon>
           </v-btn>
-        </v-layout>
-      </v-flex>
-      <v-layout row justify-space-between align-center>
+        </v-row>
+      </v-col>
+      <v-row justify="space-between" align="center">
         <div class="validate-input">
           <span v-if="disabled">Максимум {{ max }}</span>
         </div>
         <v-btn icon :disabled="disabled" @click="add">
           <v-icon>add</v-icon>
         </v-btn>
-      </v-layout>
+      </v-row>
     </draggable>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

@@ -8,7 +8,8 @@
     :clearable="clearable"
     :hint="hint"
     :persistent-hint="persistentHint"
-    :deletable-chips="deletableChips">
+    :deletable-chips="deletableChips"
+  >
     <template v-slot:prepend-item>
       <v-text-field
         v-model="search"
@@ -16,8 +17,8 @@
         :placeholder="placeholder"
         hide-details
         class="ma-2"
-      ></v-text-field>
-      <v-divider></v-divider>
+      />
+      <v-divider />
     </template>
   </v-select>
 </template>
