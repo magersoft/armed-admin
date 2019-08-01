@@ -1,13 +1,13 @@
 <template>
   <div>
     <variation-icon v-if="crud" :variations="variations" @go="goVariation" />
-    <v-row v-else-if="!query" class="mt-2">
-      <v-col
+    <v-layout v-else-if="!query" class="mt-2">
+      <v-flex
         v-for="variation in variations"
         :key="variation.id"
-        class="ma-1"
-        md="2"
-        cols="12"
+        ma-1
+        md2
+        xs12
       >
         <v-hover>
           <v-card
@@ -37,17 +37,17 @@
                 </div>
               </v-expand-transition>
             </v-img>
-            <v-row class="ml-2 mr-2" justify="space-between" align="center">
+            <v-layout class="ml-2 mr-2" justify-space-between align-center>
               <status-chips :status="variation.status" :statuses="statuses" />
               <div>{{ variation.stock }} шт.</div>
-            </v-row>
+            </v-layout>
             <v-card-actions>
               <div>
-                <v-row class="fill-height">
-                  <v-col class="card-title align-end flexbox" cols="12">
-                    <span class="black--text" v-text="variation.title" />
-                  </v-col>
-                </v-row>
+                <v-layout class="fill-height">
+                  <v-flex class="card-title align-end flexbox" xs12>
+                    <span class="black--text" v-text="variation.title"></span>
+                  </v-flex>
+                </v-layout>
                 <v-divider class="mt-1 mb-2" />
                 <span>{{ variation.price_individual | currency }}</span>
               </div>
@@ -55,13 +55,13 @@
             </v-card-actions>
           </v-card>
         </v-hover>
-      </v-col>
-    </v-row>
+      </v-flex>
+    </v-layout>
     <div v-else>
       <div class="back-button">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on" @click="back">
+            <v-btn icon small v-on="on" @click="back">
               <v-icon>arrow_back</v-icon>
             </v-btn>
           </template>

@@ -1,7 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <v-tooltip top>
     <template v-slot:activator="{ on }">
-      <v-btn icon @click="gridChange" v-on="on">
+      <v-btn icon small @click="gridChange" v-on="on">
         <v-icon>{{ gridIcon }}</v-icon>
       </v-btn>
     </template>

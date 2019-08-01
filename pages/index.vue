@@ -1,14 +1,10 @@
 <template>
-  <v-row
+  <v-layout
     column
-    justify="center"
-    align="center"
+    justify-center
+    align-center
   >
-    <v-col
-      cols="12"
-      sm="8"
-      md="6"
-    >
+    <v-flex xs12 sm8 md6>
       <div class="text-xs-center">
         <logo />
         <vuetify-logo />
@@ -66,8 +62,8 @@
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-col>
-  </v-row>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

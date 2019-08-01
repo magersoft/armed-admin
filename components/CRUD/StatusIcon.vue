@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-tooltip bottom>
+  <v-tooltip top>
     <template v-slot:activator="{ on }">
       <v-icon :color="statusColor" v-on="on">
         {{ statusIcon }}
@@ -46,7 +46,6 @@ export default {
     this.$root.$on(`crud:selectedItem-${this.id}`, value => {
       this.status.value = value
     })
-  },
-  methods: {}
+  }
 }
 </script>

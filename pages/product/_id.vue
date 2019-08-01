@@ -40,14 +40,12 @@
             </div>
           </v-list>
         </v-navigation-drawer>
-        <v-row column>
+        <v-layout column>
           <v-toolbar color="primary" dark>
             <v-toolbar-title>{{ data.displaytitle }}</v-toolbar-title>
             <v-spacer />
-
             <status-chips :status="controls.status" :statuses="statuses" />
-
-            <v-btn icon>
+            <v-btn icon small>
               <v-icon>more_vert</v-icon>
             </v-btn>
             <template v-slot:extension>
@@ -76,12 +74,12 @@
               <v-tabs-items v-model="tab">
                 <v-tab-item>
                   <v-card flat>
-                    <v-row>
-                      <v-col md="8" cols="12">
-                        <v-row class="pa-3">
-                          <v-col md="12">
-                            <v-row justify="start" align-content="start">
-                              <v-col cols="12" md="6">
+                    <v-layout>
+                      <v-flex md8 xs12>
+                        <v-layout class="pa-3">
+                          <v-flex md12>
+                            <v-layout wrap justify-start align-content-start>
+                              <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.title"
                                   v-validate="'required'"
@@ -91,8 +89,8 @@
                                   label="Название"
                                   required
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.menutitle"
                                   v-validate="'required'"
@@ -102,16 +100,16 @@
                                   label="Заголовок в меню"
                                   required
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.typeprefix"
                                   data-vv-name="typeprefix"
                                   data-vv-scope="scope0"
                                   label="Тип товара"
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.model"
                                   v-validate="'required'"
@@ -121,23 +119,23 @@
                                   label="Модель"
                                   required
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <multi-select
                                   v-model="controls.category_id"
                                   :items="categories"
                                   label="Категория"
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <multi-select
                                   v-model="controls.manufacturer_id"
                                   :items="manufacturers"
                                   clearable
                                   label="Производитель"
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <multi-select
                                   v-model="controls.sizetable_id"
                                   :items="sizetables"
@@ -145,8 +143,8 @@
                                   clearable
                                   label="Таблица размеров"
                                 />
-                              </v-col>
-                              <v-col cols="12" md="6">
+                              </v-flex>
+                              <v-flex xs12 md6>
                                 <v-text-field
                                   v-model="controls.warranty"
                                   v-validate="`min_value:1`"
@@ -155,8 +153,8 @@
                                   data-vv-scope="scope0"
                                   label="Гарантия (месяцев)"
                                 />
-                              </v-col>
-                              <v-col cols="12">
+                              </v-flex>
+                              <v-flex xs12>
                                 <multi-select
                                   v-model="controls.additional_categories_ids"
                                   :items="additional_categories"
@@ -167,8 +165,8 @@
                                   label="Выбрать"
                                   hint="Дополнительные категорийные срезы"
                                 />
-                              </v-col>
-                              <v-col>
+                              </v-flex>
+                              <v-flex>
                                 <v-switch
                                   v-model="controls.is_bestseller"
                                   color="primary"
@@ -187,20 +185,20 @@
                                   label="Сертифицированный дилер компании Армед"
                                   hide-details
                                 />
-                              </v-col>
-                              <v-col cols="12">
+                              </v-flex>
+                              <v-flex xs12>
                                 <div class="editor mt2">
                                   <label class="v-label v-label--active theme--light">Описание товара</label>
                                   <vueditor ref="editorText" />
                                 </div>
-                              </v-col>
-                            </v-row>
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                      <v-col md="4" cols="12">
-                        <v-row column>
-                          <v-col>
+                              </v-flex>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+                      </v-flex>
+                      <v-flex md4 xs12>
+                        <v-layout column>
+                          <v-flex>
                             <file-upload
                               :files="data.thumbnail"
                               :multiple="false"
@@ -208,13 +206,13 @@
                               @fileUpload="thumbnailUpload"
                               @fileRemove="thumbnailRemove"
                             />
-                          </v-col>
-                          <v-col>
+                          </v-flex>
+                          <v-flex>
                             <multi-input v-model="controls.features" label="Особенности товара" />
-                          </v-col>
-                        </v-row>
-                      </v-col>
-                    </v-row>
+                          </v-flex>
+                        </v-layout>
+                      </v-flex>
+                    </v-layout>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item v-if="variations">
@@ -235,16 +233,16 @@
                       label="Изменить аналоги"
                     />
                     <label class="v-label v-label--active theme--light">Аналоги товара</label>
-                    <v-row class="mt-2">
-                      <v-col
+                    <v-layout class="mt-2">
+                      <v-flex
                         v-for="analog in analogsCard"
                         :key="analog.id"
                         class="ma-1"
-                        cols="2"
+                        xs2
                       >
                         <app-card :item="analog" />
-                      </v-col>
-                    </v-row>
+                      </v-flex>
+                    </v-layout>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -285,8 +283,8 @@
                 <v-tab-item>
                   <v-card flat>
                     <v-card-text><h2>Галерея товара</h2></v-card-text>
-                    <v-row>
-                      <v-col cols="12">
+                    <v-layout>
+                      <v-flex xs12>
                         <file-upload
                           :files="controls.files.gallery"
                           grid="md2"
@@ -296,8 +294,8 @@
                           @fileUpload="imageUpload"
                           @fileRemove="imageRemove"
                         />
-                      </v-col>
-                    </v-row>
+                      </v-flex>
+                    </v-layout>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -318,7 +316,7 @@
               </v-tabs-items>
             </v-form>
           </v-container>
-        </v-row>
+        </v-layout>
       </div>
     </v-card>
     <v-dialog v-model="dialog" persistent max-width="360">
@@ -548,5 +546,8 @@ export default {
 }
 .editor {
   height: 350px;
+}
+.v-toolbar {
+  flex: none;
 }
 </style>

@@ -20,7 +20,7 @@
                 {{ user.surname }} {{ user.name }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" @click="logout">
+                    <v-btn icon small v-on="on" @click="logout">
                       <v-icon>exit_to_app</v-icon>
                     </v-btn>
                   </template>
@@ -133,8 +133,7 @@
     >
       {{ snackbar.text }}
       <v-btn
-        dark
-        flat
+        text
         @click="closeSnackbar"
       >
         Закрыть

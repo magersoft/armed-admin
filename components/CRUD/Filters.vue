@@ -1,10 +1,10 @@
 <template>
   <v-card v-if="data.filters" class="mb2">
     <v-card-title class="filters-title">
-      <h3>Фильтры</h3>
+      <h5>Фильтры</h5>
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on" @click.prevent="filterShow = !filterShow">
+          <v-btn icon small v-on="on" @click.prevent="filterShow = !filterShow">
             <v-icon :class="{ active: !filterShow }">
               unfold_more
             </v-icon>
@@ -17,8 +17,8 @@
     <v-slide-y-transition>
       <v-container v-show="filterShow">
         <v-form ref="filter">
-          <v-row>
-            <v-col v-for="(filter, idx) in data.filters" :key="idx" cols="12" md="2">
+          <v-layout wrap>
+            <v-flex v-for="(filter, idx) in data.filters" :key="idx" xs3 md2>
               <v-text-field
                 v-if="filter.type === 'text'"
                 v-model="model[idx]"
@@ -47,8 +47,8 @@
                   :value="item.value"
                 />
               </v-radio-group>
-            </v-col>
-          </v-row>
+            </v-flex>
+          </v-layout>
           <div class="buttons">
             <v-btn
               type="submit"
@@ -120,6 +120,9 @@ export default {
 .buttons {
     display: flex;
     justify-content: flex-end;
+    button {
+      margin: 0 10px
+    }
 }
 .filters-title {
     display: flex;

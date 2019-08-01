@@ -1,6 +1,6 @@
 <template>
   <v-chip :color="statusColor" text-color="white">
-    <v-avatar>
+    <v-avatar left>
       <v-icon>{{ statusIcon }}</v-icon>
     </v-avatar>
     {{ statusText }}

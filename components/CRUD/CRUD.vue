@@ -3,7 +3,7 @@
     <app-filters v-if="data.filters.length" :data="data" />
     <v-card>
       <v-card-title>
-        <h3>{{ data.name }}</h3>
+        <h5>{{ data.name }}</h5>
         <v-spacer />
         <app-status-button v-if="actions.update" :statuses="statuses" :items="selected" />
         <app-delete-button v-if="actions.delete" :items="selected" @deleted="deleted" />
@@ -30,15 +30,6 @@
         </template>
         <template v-slot:header="props">
           <tr>
-            <th>
-              <v-checkbox
-                :input-value="props.all"
-                :indeterminate="props.indeterminate"
-                primary
-                hide-details
-                @click.stop="toggleAll"
-              />
-            </th>
             <th
               v-for="header in props.headers"
               :key="header.text"
@@ -55,13 +46,7 @@
         <template v-slot:item="props">
           <tr :active="props.selected">
             <td class="status">
-              <v-checkbox
-                :input-value="props.selected"
-                color="primary"
-                hide-details
-                @change="props.selected = !props.selected"
-              />
-              <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" @deleted="deleted" />
+              <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" />
             </td>
             <td v-for="row in rows" :key="row">
               <app-inline-editor v-if="row === 'title:editable'" :item="props.item" />
@@ -121,7 +106,7 @@
             </td>
           </tr>
         </template>
-        <template v-slot:pageText="props">
+        <template v-slot:footer.page-text="props">
           {{ props.pageStart }} - {{ props.pageStop }} из {{ props.itemsLength }}
         </template>
       </v-data-table>
@@ -129,15 +114,15 @@
         <v-container
           fluid
         >
-          <v-row>
-            <v-col
+          <v-layout>
+            <v-flex
               v-for="item in data.body"
               :key="item.id"
-              cols="3"
+              xs3
             >
               <app-card :item="item" :actions="actions" />
-            </v-col>
-          </v-row>
+            </v-flex>
+          </v-layout>
         </v-container>
       </div>
     </v-card>

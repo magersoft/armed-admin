@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-row column>
-    <v-col v-if="loadFiles && !!loadFiles.length" cols="12" style="position: relative">
+  <v-layout column>
+    <v-flex v-if="loadFiles && !!loadFiles.length" xs12 style="position: relative">
       <div v-if="loading" class="text-xs-center sortable-loading">
         <v-progress-circular
           :size="50"
@@ -16,11 +16,11 @@
         @start="draggingStart"
         @end="draggingEnd"
       >
-        <v-col
+        <v-flex
           v-for="(file) in loadFiles"
           :key="file.id"
           :class="flexGrid"
-          cols="12"
+          xs12
         >
           <v-img
             :src="url + file.src"
@@ -29,7 +29,7 @@
             contain
             class="elevation-1 ma-2"
           >
-            <v-row
+            <v-layout
               class="fill-height"
               column
             >
@@ -47,35 +47,34 @@
                   <span>Удалить</span>
                 </v-tooltip>
               </v-card-title>
-            </v-row>
+            </v-layout>
             <template v-slot:placeholder>
-              <v-row
+              <v-layout
                 class="fill-height ma-0"
-
-                align="center"
-                justify="center"
+                align-center
+                justify-center
               >
                 <v-progress-circular indeterminate color="primary" />
-              </v-row>
+              </v-layout>
             </template>
           </v-img>
-        </v-col>
+        </v-flex>
       </draggable>
-      <v-row v-if="!draggableFiles">
-        <v-col
+      <v-layout v-if="!draggableFiles">
+        <v-flex
           v-for="(file) in loadFiles"
           :key="file.id"
           :class="flexGrid"
-          cols="12"
+          xs12
         >
           <v-img
             :src="url + file.src"
             :lazy-src="url + file.src"
             aspect-ratio="1"
             contain
-            class="elevation-1 ma-2"
+            class="elevation-1 ma-2 handle"
           >
-            <v-row
+            <v-layout
               class="fill-height"
               column
             >
@@ -93,22 +92,21 @@
                   <span>Удалить</span>
                 </v-tooltip>
               </v-card-title>
-            </v-row>
+            </v-layout>
             <template v-slot:placeholder>
-              <v-row
+              <v-layout
                 class="fill-height ma-0"
-
-                align="center"
-                justify="center"
+                align-center
+                justify-center
               >
                 <v-progress-circular indeterminate color="primary" />
-              </v-row>
+              </v-layout>
             </template>
           </v-img>
-        </v-col>
-      </v-row>
-    </v-col>
-    <v-col cols="12">
+        </v-flex>
+      </v-layout>
+    </v-flex>
+    <v-flex xs12>
       <file-pond
         ref="pond"
         name="file"
@@ -119,7 +117,7 @@
         :files="myFiles"
         @init="handleFilePondInit"
       />
-    </v-col>
+    </v-flex>
     <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
         <v-card-title class="headline">
@@ -137,7 +135,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </v-layout>
 </template>
 
 <script>

@@ -1,22 +1,24 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <v-row column>
+  <v-layout column>
     <draggable
       :list="items"
       class="layout row wrap"
+      handle=".handle"
       @start="dragging = true"
       @end="draggindEnd"
     >
-      <v-col
+      <v-flex
         v-for="item in items"
         :key="item.id"
-        cols="3"
+        md3
+        xs12
       >
         <v-card
           class="ma-1 mt-2 hovered"
           flat
           height="100%"
         >
-          <div style="cursor: move; z-index: 1">
+          <div style="cursor: move">
             <file-upload
               :files="[item]"
               :multiple="false"
@@ -28,11 +30,10 @@
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
-                class="remove-icon"
+                class="remove-icon white"
                 icon
                 absolute
-                top
-                right
+                small
                 @click="remove(item.id)"
                 v-on="on"
               >
@@ -50,8 +51,8 @@
             <inline-editor :id="item.id" :text="item.description" action="updateAdvantageDescription" textarea />
           </div>
         </v-card>
-      </v-col>
-      <v-col cols="3">
+      </v-flex>
+      <v-flex md3 xs12>
         <v-card
           class="mx-auto pa-2 mt-2 new-block"
           flat
@@ -101,7 +102,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-col>
+      </v-flex>
     </draggable>
     <v-dialog v-model="dialog" persistent max-width="360">
       <v-card>
@@ -120,7 +121,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </v-layout>
 </template>
 
 <script>
@@ -241,6 +242,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.handle {
+  cursor: move;
+}
 .description {
   overflow: hidden;
 }

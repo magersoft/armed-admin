@@ -1,11 +1,11 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <div style="display: flex;">
+  <div class="action-icons">
     <v-tooltip v-if="actions.view" top>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
+        <v-btn small icon v-on="on">
           <v-icon
             color="blue darken-2"
-            @click="deleteItem(item.id)"
+            @click="editItem(item.id)"
           >
             visibility
           </v-icon>
@@ -15,7 +15,7 @@
     </v-tooltip>
     <v-tooltip v-if="actions.update" top>
       <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
+        <v-btn small icon v-on="on">
           <v-icon
             color="orange darken-2"
             @click="editItem(item.id)"
@@ -36,7 +36,7 @@
           width="3"
           size="24"
         />
-        <v-btn v-show="!loading" :disabled="loading" icon v-on="on">
+        <v-btn small v-show="!loading" :disabled="loading" icon v-on="on">
           <v-icon
             color="red darken-2"
             @click="deleteItem(item.id)"
@@ -112,7 +112,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.action-icons {
+  display: flex;
+  justify-content:center;
+  align-items: center;
+}
 .loading {
-  padding: 0 26px;
+  margin: 0 7px
 }
 </style>

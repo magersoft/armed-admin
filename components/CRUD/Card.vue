@@ -12,11 +12,11 @@
       />
       <v-card-actions>
         <div>
-          <v-row class="fill-height">
-            <v-col class="align-end flexbox" cols="12">
-              <span class="card-title black--text" v-text="item.title" />
-            </v-col>
-          </v-row>
+          <v-layout class="fill-height">
+            <v-flex class="align-end flexbox" xs12>
+              <span class="card-title black--text" v-text="item.title"></span>
+            </v-flex>
+          </v-layout>
         </div>
         <v-spacer />
         <app-action-icon v-if="actions" :item="item" :actions="actions" />
