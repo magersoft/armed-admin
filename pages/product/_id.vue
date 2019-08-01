@@ -13,7 +13,7 @@
             <v-list-item
               v-for="(item, idx) in menu"
               :key="idx"
-              :class="{ 'primary--text v-list__tile--active': tab === idx }"
+              :class="{ 'primary--text v-list-item--active': tab === idx }"
               @click="menuTabs(idx)"
             >
               <v-list-item-action>
@@ -189,7 +189,7 @@
                               <v-flex xs12>
                                 <div class="editor mt2">
                                   <label class="v-label v-label--active theme--light">Описание товара</label>
-                                  <vueditor ref="editorText" />
+                                  <vueditor ref="editor"></vueditor>
                                 </div>
                               </v-flex>
                             </v-layout>
@@ -218,7 +218,7 @@
                 <v-tab-item v-if="variations">
                   <v-card flat>
                     <label class="v-label v-label--active theme--light">Вариации товара</label>
-                    <variation-editor :variations="variations" :statuses="statuses" @activeTab="activeTab" />
+                    <variation-editor :variations="variations" :statuses="statuses" />
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -452,14 +452,18 @@ export default {
     this.analogsCard = this.data.analogs_card
   },
   mounted() {
-    // this.$refs.editor.setContent(this.controls.text)
-    console.log(this.$refs)
+    setTimeout(() => {
+      this.$refs.editor.setContent(this.controls.text)
+    })
     this.menu = this.menu.map(item => {
       if (item.title === 'Вариации') {
         item.show = this.variations
       }
       return item
     }).filter(item => !!item.show)
+    if (window.location.search) {
+      this.tab = 1
+    }
   },
   methods: {
     menuTabs(idx) {
@@ -526,9 +530,6 @@ export default {
       this.notSave = true
       this.notSaveText = 'Были удалены изображения с сервера. <br>Сохраните изменения!'
       this.controls.files.gallery = this.controls.files.gallery.filter(img => img.src !== file)
-    },
-    activeTab(idx) {
-      this.tab = idx
     }
   }
 }

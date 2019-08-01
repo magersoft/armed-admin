@@ -14,7 +14,7 @@
             slot-scope="{ hover }"
             :class="`elevation-${hover ? 12 : 2}`"
             class="card"
-            height="400px"
+            height="450px"
           >
             <v-img
               :src="url + variation.thumbnail"
@@ -37,7 +37,7 @@
                 </div>
               </v-expand-transition>
             </v-img>
-            <v-layout class="ml-2 mr-2" justify-space-between align-center>
+            <v-layout class="ma-2" justify-space-between align-center>
               <status-chips :status="variation.status" :statuses="statuses" />
               <div>{{ variation.stock }} шт.</div>
             </v-layout>
@@ -109,7 +109,8 @@ export default {
   },
   mounted() {
     if (window.location.search) {
-      this.getVariation(+window.location.search.replace('?variation=', ''))
+      const id = +window.location.search.replace('?variation=', '')
+      this.getVariation(id)
     }
   },
   methods: {
@@ -123,7 +124,6 @@ export default {
           window.history.pushState(null, null, `?variation=${id}`)
         }
         this.query = window.location.search
-        this.$emit('activeTab', this.query ? 1 : 0)
       } catch (e) {
         console.error(e)
       }
@@ -144,7 +144,7 @@ export default {
 
 <style lang="scss" scoped>
 .card-title {
-  height: 60px;
+  height: 80px;
   overflow: hidden;
 }
 </style>
