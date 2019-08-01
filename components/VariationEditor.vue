@@ -57,6 +57,17 @@
       </v-flex>
     </v-layout>
     <div v-else>
+      <div class="back-button">
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on" @click="back">
+              <v-icon>arrow_back</v-icon>
+            </v-btn>
+          </template>
+          <span>Вернуться назад</span>
+        </v-tooltip>
+        <h2>{{ variation.title }}</h2>
+      </div>
       {{ query }}
     </div>
   </div>
@@ -96,9 +107,8 @@ export default {
     this.url = process.env.fileURL
   },
   mounted() {
-    this.query = window.location.search
-    if (this.query) {
-      this.$emit('selectTab')
+    if (window.location.search) {
+      this.getVariation(+window.location.search.replace('?variation=', ''))
     }
   },
   methods: {
@@ -108,14 +118,24 @@ export default {
       this.loading = true
       try {
         this.variation = await this.$store.dispatch('crud/getOne', id)
-        window.history.pushState(null, null, `?variation=${id}`)
+        if (!window.location.search) {
+          window.history.pushState(null, null, `?variation=${id}`)
+        }
         this.query = window.location.search
-      } catch (e) {}
+        this.$emit('activeTab', this.query ? 1 : 0)
+      } catch (e) {
+        console.error(e)
+      }
       this.loading = false
       this.$store.commit('crud/set', currentState)
     },
     goVariation({ productId, variationId }) {
       this.$router.push(`/product/${productId}?variation=${variationId}`)
+    },
+    back() {
+      window.history.replaceState(null, null, this.variation.product_id)
+      this.query = ''
+      this.variation = null
     }
   }
 }

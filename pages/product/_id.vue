@@ -215,7 +215,7 @@
                 <v-tab-item v-if="variations">
                   <v-card flat>
                     <label class="v-label v-label--active theme--light">Вариации товара</label>
-                    <variation-editor :variations="variations" :statuses="statuses" @tabVariation="tabVariation" />
+                    <variation-editor :variations="variations" :statuses="statuses" @activeTab="activeTab" />
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -524,8 +524,8 @@ export default {
       this.notSaveText = 'Были удалены изображения с сервера. <br>Сохраните изменения!'
       this.controls.files.gallery = this.controls.files.gallery.filter(img => img.src !== file)
     },
-    tabVariation() {
-      this.tab = 1
+    activeTab(idx) {
+      this.tab = idx
     }
   }
 }
