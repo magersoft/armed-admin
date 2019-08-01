@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <div class="text-xs-center">
+  <div class="text-xs-center mx-1">
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
         <v-btn

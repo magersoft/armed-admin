@@ -10,7 +10,7 @@
     >
       <v-toolbar flat class="transparent">
         <v-list class="pa-0">
-          <v-list-item avatar>
+          <v-list-item class="pa-1">
             <v-list-item-avatar>
               <img src="/img/user.png">
             </v-list-item-avatar>
@@ -20,7 +20,7 @@
                 {{ user.surname }} {{ user.name }}
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
-                    <v-btn icon small v-on="on" @click="logout">
+                    <v-btn icon small class="ml-2" v-on="on" @click="logout">
                       <v-icon>exit_to_app</v-icon>
                     </v-btn>
                   </template>
@@ -78,6 +78,8 @@
       <v-app-bar-nav-icon class="hidden-lg-and-up" @click="drawer = !drawer" />
       <v-btn
         icon
+        small
+        class="mx-1"
         @click.stop="miniVariant = !miniVariant"
       >
         <v-icon>{{ `chevron_${miniVariant ? 'right' : 'left'}` }}</v-icon>
@@ -152,7 +154,7 @@ export default {
     miniVariant: true,
     right: true,
     rightDrawer: false,
-    title: 'Админочка',
+    title: 'Админочка 2.0',
     snackbar: {
       state: false,
       color: 'red',
@@ -202,7 +204,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 38px;
+    height: 100%;
     span.v-tooltip--bottom {
       display: none;
     }

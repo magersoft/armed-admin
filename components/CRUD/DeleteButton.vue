@@ -1,5 +1,5 @@
 <template>
-  <div class="text-xs-center">
+  <div class="text-xs-center mx-1">
     <v-btn color="error" :loading="loading" :disabled="!items.length || loading" @click.prevent="deleteItems">
       Удалить
     </v-btn>

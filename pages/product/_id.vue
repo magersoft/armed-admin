@@ -347,7 +347,7 @@ import FileUpload from '@/components/UploadFiles'
 import MultiInput from '@/components/MultiInput'
 import MultiSelect from '@/components/MultiSelect'
 import MultiBlock from '@/components/MultiBlock'
-import StatusChips from '@/components/statusChips'
+import StatusChips from '@/components/StatusChips'
 import AppCard from '@/components/CRUD/Card'
 import VariationEditor from '@/components/VariationEditor'
 
