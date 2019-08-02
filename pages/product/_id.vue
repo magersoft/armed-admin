@@ -24,7 +24,7 @@
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <div class="flex justify-space-between mt2">
+            <div class="flex justify-space-between mx-2">
               <v-btn text>
                 Назад
               </v-btn>
@@ -217,8 +217,7 @@
                 </v-tab-item>
                 <v-tab-item v-if="variations">
                   <v-card flat>
-                    <label class="v-label v-label--active theme--light">Вариации товара</label>
-                    <variation-editor :variations="variations" :statuses="statuses" />
+                    <variation-editor v-model="controls.variation" :variations="variations" :statuses="statuses" @back="save" />
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -232,7 +231,7 @@
                       clearable
                       label="Изменить аналоги"
                     />
-                    <label class="v-label v-label--active theme--light">Аналоги товара</label>
+                    <v-card-text><h2>Аналоги товара</h2></v-card-text>
                     <v-layout class="mt-2">
                       <v-flex
                         v-for="analog in analogsCard"
@@ -247,10 +246,10 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text>
-                      <label class="v-label v-label--active theme--light">Преимущества товара</label>
-                      <multi-block :id="controls.id" :data="controls.advantages" />
-                    </v-card-text>
+                    <v-card-text><h2>Преимущества товара</h2></v-card-text>
+                    <v-flex xs12 class="mx-2">
+                      <multi-block :id="controls.id" :data="advantages" />
+                    </v-flex>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -378,6 +377,7 @@ export default {
     statuses: [],
     allProducts: [],
     analogsCard: [],
+    advantages: [],
     variations: null,
     controls: {
       id: null,
@@ -399,10 +399,20 @@ export default {
       analogs_ids: [],
       soput_ids: [],
       second_soput_ids: [],
-      advantages: [],
       files: {
         thumbnail: null,
         gallery: []
+      },
+      variation: {
+        title: null,
+        text: null,
+        markettitle: null,
+        seo_title: null,
+        seo_description: null,
+        files: {
+          thumbnail: null,
+          gallery: []
+        }
       }
     },
     menu: [
@@ -450,6 +460,7 @@ export default {
     this.statuses = this.data.statuses
     this.allProducts = this.data.all_products
     this.analogsCard = this.data.analogs_card
+    this.advantages = this.data.advantages
   },
   mounted() {
     setTimeout(() => {
@@ -484,7 +495,7 @@ export default {
     save() {
       this.loading = true
       const validateAllScope = []
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve, reject) => {
         this.menu.forEach((item, idx) => {
           this.$validator.validateAll(`scope${idx}`).then(async valid => {
             await validateAllScope.push(valid)

@@ -144,6 +144,11 @@ export default {
     data: {
       type: Array,
       required: true
+    },
+    variationId: {
+      type: Number,
+      required: false,
+      default: () => null
     }
   },
   data: () => ({
@@ -194,7 +199,8 @@ export default {
               title: this.title,
               description: this.description,
               src: this.file.src,
-              id: this.id,
+              product_id: this.id,
+              variation_id: this.variationId,
               menuindex: this.items.length + 1
             })
             this.items.push(advantage)

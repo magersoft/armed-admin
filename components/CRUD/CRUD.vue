@@ -44,11 +44,9 @@
           <template v-slot:item="props">
             <tr>
               <td>
-                <v-checkbox
-                  :input-value="props.selected"
+                <v-simple-checkbox
                   color="purple"
-                  @change="props.selected = !props.selected"
-                ></v-checkbox>
+                ></v-simple-checkbox>
               </td>
               <td class="status">
                 <app-status-icon :id="props.item.id" :statuses="statuses" :status="props.item.status" />

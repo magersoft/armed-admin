@@ -43,6 +43,7 @@ export const actions = {
   },
   async addAdvantage({ commit }, data) {
     try {
+      console.log(data)
       return await this.$axios.$post('/api/product/add-advantage/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
