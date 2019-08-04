@@ -9,6 +9,7 @@
     :hint="hint"
     :persistent-hint="persistentHint"
     :deletable-chips="deletableChips"
+    @change="$emit('input', model)"
   >
     <template v-slot:prepend-item>
       <v-text-field

@@ -69,12 +69,12 @@
             </template>
           </v-toolbar>
           <v-divider />
-          <v-container>
+          <div class="container">
             <v-form>
               <v-tabs-items v-model="tab">
                 <v-tab-item>
                   <v-card flat>
-                    <v-layout>
+                    <v-layout wrap>
                       <v-flex md8 xs12>
                         <v-layout class="pa-3">
                           <v-flex md12>
@@ -314,7 +314,7 @@
                 </v-tab-item>
               </v-tabs-items>
             </v-form>
-          </v-container>
+          </div>
         </v-layout>
       </div>
     </v-card>
@@ -403,17 +403,7 @@ export default {
         thumbnail: null,
         gallery: []
       },
-      variation: {
-        title: null,
-        text: null,
-        markettitle: null,
-        seo_title: null,
-        seo_description: null,
-        files: {
-          thumbnail: null,
-          gallery: []
-        }
-      }
+      variation: null
     },
     menu: [
       { title: 'Основное', icon: 'dashboard', show: true },
@@ -461,6 +451,21 @@ export default {
     this.allProducts = this.data.all_products
     this.analogsCard = this.data.analogs_card
     this.advantages = this.data.advantages
+
+    if (this.variations) {
+      this.controls.variation = {
+        id: null,
+        title: null,
+        text: null,
+        markettitle: null,
+        seo_title: null,
+        seo_description: null,
+        files: {
+          thumbnail: null,
+          gallery: []
+        }
+      }
+    }
   },
   mounted() {
     setTimeout(() => {
@@ -513,8 +518,9 @@ export default {
       promise.then(async () => {
         if (!validateAllScope.some(valid => !valid)) {
           try {
-            await this.$store.dispatch('product/save', this.controls)
-            this.loading = false
+            const response = await this.$store.dispatch('product/save', this.controls)
+            if (response) throw response
+
             this.$validator.reset()
             if (this.dialog) {
               this.menuTabs(this.needTab)
@@ -522,7 +528,10 @@ export default {
             this.dialog = false
             this.notSave = false
             this.$store.dispatch('getMessage', { text: 'Изменения успешно сохранены', color: 'green', timeout: 3600 })
-          } catch (e) {}
+          } catch (e) {
+            this.$store.dispatch('getMessage', { text: String(Object.values(e)), color: 'red', timeout: 7200 })
+          }
+          this.loading = false
         }
       })
     },

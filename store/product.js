@@ -4,6 +4,7 @@ export const actions = {
       return await this.$axios.$post('/api/product/change-status-variation/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async getThumb({ commit }, id) {
@@ -11,6 +12,7 @@ export const actions = {
       return await this.$axios.$get(`/api/product/get-thumb/?id=${id}`)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async updateMediaSort({ commit }, array) {
@@ -18,6 +20,7 @@ export const actions = {
       await this.$axios.$post('/api/product/update-media-sort/', array)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async updateAdvantageTitle({ commit }, data) {
@@ -25,6 +28,7 @@ export const actions = {
       await this.$axios.$post('/api/product/update-advantage-title/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async updateAdvantageDescription({ commit }, data) {
@@ -32,6 +36,7 @@ export const actions = {
       await this.$axios.$post('/api/product/update-advantage-description/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async updateAdvantageImage({ commit }, data) {
@@ -39,6 +44,7 @@ export const actions = {
       await this.$axios.$post('/api/product/update-advantage-image/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async addAdvantage({ commit }, data) {
@@ -47,6 +53,7 @@ export const actions = {
       return await this.$axios.$post('/api/product/add-advantage/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async removeAdvantage({ commit }, id) {
@@ -54,6 +61,7 @@ export const actions = {
       await this.$axios.$delete(`/api/product/remove-advantage/?id=${id}`)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async advantagesUpdateSort({ commit }, data) {
@@ -61,13 +69,15 @@ export const actions = {
       await this.$axios.$post('/api/product/update-advantages-sort', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   },
   async save({ commit }, data) {
     try {
-      await this.$axios.$post('/api/product/save/', data)
+      return await this.$axios.$post('/api/product/save/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
+      throw e
     }
   }
 }

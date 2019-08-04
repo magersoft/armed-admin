@@ -198,12 +198,12 @@ export default {
     }
   },
   data: () => ({
-    dialog: false,
     url: '',
     query: null,
     loading: false,
     variation: null,
     currentItem: null,
+    notSave: false,
     controls: {},
     items: ['Основное', 'Преимущества', 'Изображения', 'Видео', 'SEO']
   }),
@@ -251,20 +251,26 @@ export default {
       window.history.replaceState(null, null, this.variation.product_id)
       this.query = ''
       this.variation = null
-      // TODO: Пока так, а вообще надо эмитить только если были изменения и не было сохраненно пользователем
-      this.$emit('back')
+      if (this.notSave) {
+        this.$emit('back')
+        this.notSave = false
+      }
     },
     thumbnailUpload(file) {
       this.controls.files.thumbnail = file
+      this.notSave = true
     },
     thumbnailRemove() {
       this.controls.files.thumbnail = null
+      this.notSave = true
     },
     imageUpload(files) {
       this.controls.files.gallery.push(files)
+      this.notSave = true
     },
     imageRemove(file) {
       this.controls.files.gallery = this.controls.files.gallery.filter(img => img.src !== file)
+      this.notSave = true
     }
   }
 }
