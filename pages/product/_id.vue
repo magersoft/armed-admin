@@ -189,7 +189,7 @@
                               <v-flex xs12>
                                 <div class="editor mt2">
                                   <label class="v-label v-label--active theme--light">Описание товара</label>
-                                  <vueditor ref="editor"></vueditor>
+                                  <ckeditor v-model="controls.text" type="classic" :config="{ language: 'ru' }"></ckeditor>
                                 </div>
                               </v-flex>
                             </v-layout>
@@ -304,7 +304,27 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text>8</v-card-text>
+                    <v-card-text><h2>SEO</h2></v-card-text>
+                    <v-layout column wrap>
+                      <v-text-field
+                        v-model="controls.seo_title"
+                        label="SEO заголовок"
+                        counter
+                        maxlength="65"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="controls.h1"
+                        label="H1 заголовок"
+                        counter
+                        maxlength="255"
+                      ></v-text-field>
+                      <v-textarea
+                        v-model="controls.seo_description"
+                        label="SEO описание"
+                        counter
+                        maxlength="255"
+                      ></v-textarea>
+                    </v-layout>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -399,6 +419,9 @@ export default {
       analogs_ids: [],
       soput_ids: [],
       second_soput_ids: [],
+      h1: null,
+      seo_title: null,
+      seo_description: null,
       files: {
         thumbnail: null,
         gallery: []
@@ -468,9 +491,6 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.$refs.editor.setContent(this.controls.text)
-    })
     this.menu = this.menu.map(item => {
       if (item.title === 'Вариации') {
         item.show = this.variations
@@ -518,9 +538,11 @@ export default {
       promise.then(async () => {
         if (!validateAllScope.some(valid => !valid)) {
           try {
-            const response = await this.$store.dispatch('product/save', this.controls)
-            if (response) throw response
-
+            try {
+              await this.$store.dispatch('product/save', this.controls)
+            } catch (e) {
+              throw e
+            }
             this.$validator.reset()
             if (this.dialog) {
               this.menuTabs(this.needTab)
@@ -529,7 +551,7 @@ export default {
             this.notSave = false
             this.$store.dispatch('getMessage', { text: 'Изменения успешно сохранены', color: 'green', timeout: 3600 })
           } catch (e) {
-            this.$store.dispatch('getMessage', { text: String(Object.values(e)), color: 'red', timeout: 7200 })
+            this.$store.dispatch('getMessage', { text: String(Object.values(e.response.data)), color: 'red', timeout: 7200 })
           }
           this.loading = false
         }

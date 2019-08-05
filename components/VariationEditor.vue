@@ -60,7 +60,7 @@
               <div>
                 <v-layout class="fill-height">
                   <v-flex class="card-title align-end flexbox" xs12>
-                    <span class="black--text" v-text="variation.title"></span>
+                    <span class="black--text" v-text="variation.title" />
                   </v-flex>
                 </v-layout>
                 <v-divider class="mt-1 mb-2" />
@@ -106,20 +106,56 @@
                   <v-flex md12>
                     <v-layout wrap justify-start align-content-start>
                       <v-flex xs12>
-                        <div v-for="property in variation.variableProperties" :key="property.id">
-                          {{ property.title }}
-                          {{ property.value }}
-                          {{ property.is_selectable }}
-                          {{ property.dimension }}
-                          {{ property.ignore }}
-                        </div>
-                      </v-flex>
-                      <v-flex xs12 md6>
                         <v-text-field
                           v-model="controls.title"
+                          class="pa-2"
                           label="Название"
                           required
                         />
+                      </v-flex>
+                      <v-flex xs12>
+                        <v-text-field
+                          v-model="controls.markettitle"
+                          class="pa-2"
+                          label="Заголовок для Яндекс.Маркета"
+                        />
+                      </v-flex>
+                      <v-flex xs12 class="mb-4">
+                        <ckeditor v-model="controls.text" type="classic" :config="{ language: 'ru' }"></ckeditor>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h5>Свойства вариации</h5>
+                        <div v-for="property in variation.variableProperties" :key="property.id">
+                          <v-layout row wrap align-center>
+                            <v-flex xs12 md4>
+                              <v-select
+                                v-model="property.value"
+                                :items="property.values"
+                                filled
+                                hide-details
+                                :label="property.title"
+                                class="pa-2"
+                              />
+                            </v-flex>
+                            <v-flex xs12 md4>
+                              <v-select
+                                v-model="property.dimension"
+                                :items="property.dimensions"
+                                filled
+                                hide-details
+                                label="Единица измерения"
+                                class="pa-2"
+                              />
+                            </v-flex>
+                            <v-flex xs12 md4>
+                              <v-layout column class="px-2">
+                                <v-checkbox v-model="property.is_selectable" color="primary" hide-details label="Выбираемый" class="mt-0" />
+                                <v-checkbox v-model="property.ignore" color="primary" hide-details label="Игнорировать вариацию" class="mt-0" />
+                              </v-layout>
+                            </v-flex>
+                          </v-layout>
+                          <v-divider class="ma-2" />
+                        </div>
                       </v-flex>
                     </v-layout>
                   </v-flex>
@@ -154,13 +190,33 @@
             draggable-files
             folder="/products/"
             @fileUpload="imageUpload"
-            @fileRemove="imageRemove"></file-upload>
+            @fileRemove="imageRemove"
+          />
         </v-tab-item>
         <v-tab-item>
           Видео
         </v-tab-item>
         <v-tab-item>
-          сео
+          <v-layout column wrap>
+            <v-text-field
+              v-model="controls.seo_title"
+              label="SEO заголовок"
+              counter
+              maxlength="65"
+            ></v-text-field>
+            <v-text-field
+              v-model="controls.h1"
+              label="H1 заголовок"
+              counter
+              maxlength="255"
+            ></v-text-field>
+            <v-textarea
+              v-model="controls.seo_description"
+              label="SEO описание"
+              counter
+              maxlength="255"
+            ></v-textarea>
+          </v-layout>
         </v-tab-item>
       </v-tabs-items>
     </div>

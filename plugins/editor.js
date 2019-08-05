@@ -1,6 +1,13 @@
 import Vue from 'vue'
-import Vueditor from 'vueditor'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import '@ckeditor/ckeditor5-build-classic/build/translations/ru'
+import VueCkeditor from 'vue-ckeditor5'
 
-import 'vueditor/dist/style/vueditor.min.css'
+const options = {
+  editors: {
+    classic: ClassicEditor
+  },
+  name: 'ckeditor'
+}
 
-Vue.use(Vueditor)
+Vue.use(VueCkeditor.plugin, options)

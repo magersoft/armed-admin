@@ -3,7 +3,7 @@
     <label class="v-label v-label--active theme--light">{{ label }}</label>
     <draggable
       :list="value"
-      class="layout column"
+      class="layout column mt-2"
       @start="dragging = true"
       @end="dragging = false"
     >
@@ -14,7 +14,7 @@
               reorder
             </v-icon>
           </v-btn>
-          <v-text-field v-model="value[idx]" placeholder="Введите ..." hide-details />
+          <v-text-field v-model="value[idx]" placeholder="Введите ..." solo hide-details class="pa-1" />
           <v-btn icon small @click="remove(idx)">
             <v-icon color="red darken-2">
               close

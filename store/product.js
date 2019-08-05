@@ -74,7 +74,7 @@ export const actions = {
   },
   async save({ commit }, data) {
     try {
-      return await this.$axios.$post('/api/product/save/', data)
+      await this.$axios.$post('/api/product/save/', data)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
       throw e
