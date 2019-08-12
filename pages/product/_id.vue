@@ -208,7 +208,7 @@
                             />
                           </v-flex>
                           <v-flex>
-                            <multi-input v-model="controls.features" label="Особенности товара" />
+                            <multi-input v-model="controls.features_array" label="Особенности товара" />
                           </v-flex>
                         </v-layout>
                       </v-flex>
@@ -299,7 +299,8 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text>7</v-card-text>
+                    <v-card-text><h2>Видео товара</h2></v-card-text>
+                    <multi-video :id="controls.id" :data="controls.videos_array" />
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
@@ -369,6 +370,7 @@ import MultiBlock from '@/components/MultiBlock'
 import StatusChips from '@/components/StatusChips'
 import AppCard from '@/components/CRUD/Card'
 import VariationEditor from '@/components/VariationEditor'
+import MultiVideo from '@/components/MultiVideo'
 
 export default {
   validate({ params }) {
@@ -379,7 +381,7 @@ export default {
     validator: 'new'
   },
   components: {
-    FileUpload, MultiInput, MultiSelect, MultiBlock, StatusChips, AppCard, VariationEditor
+    FileUpload, MultiInput, MultiSelect, MultiBlock, StatusChips, AppCard, VariationEditor, MultiVideo
   },
   data: () => ({
     url: '/',
@@ -412,7 +414,8 @@ export default {
       category_id: null,
       manufacturer_id: null,
       sizetable_id: null,
-      features: [],
+      features_array: [],
+      videos_array: [],
       additional_categories_ids: [],
       text: '',
       status: null,
@@ -464,7 +467,8 @@ export default {
     }
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
-    this.controls.features = this.data.features.split('||')
+    this.controls.features_array = this.data.features.split('||')
+    this.controls.videos_array = this.data.videos
     this.variations = this.data.variations
     this.categories = this.data.categories
     this.additional_categories = this.data.additional_categories

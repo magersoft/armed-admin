@@ -4,7 +4,7 @@
       :list="items"
       class="layout row wrap"
       handle=".handle"
-      @start="dragging = true"
+      @start="draggable = true"
       @end="draggindEnd"
     >
       <v-flex
@@ -63,7 +63,7 @@
             <v-btn
               fab
               dark
-              color="accent"
+              color="primary"
               :disabled="form"
               @click.prevent="form = !form"
             >
