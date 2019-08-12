@@ -15,14 +15,6 @@ export const actions = {
       throw e
     }
   },
-  async updateMediaSort({ commit }, array) {
-    try {
-      await this.$axios.$post('/api/product/update-media-sort/', array)
-    } catch (e) {
-      commit('setMessage', { text: e }, { root: true })
-      throw e
-    }
-  },
   async updateAdvantageTitle({ commit }, data) {
     try {
       await this.$axios.$post('/api/product/update-advantage-title/', data)
@@ -56,17 +48,17 @@ export const actions = {
       throw e
     }
   },
-  async removeAdvantage({ commit }, id) {
+  async removeMedia({ commit }, id) {
     try {
-      await this.$axios.$delete(`/api/product/remove-advantage/?id=${id}`)
+      await this.$axios.$delete(`/api/product/remove-media/?id=${id}`)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
       throw e
     }
   },
-  async advantagesUpdateSort({ commit }, data) {
+  async updateMediaSort({ commit }, array) {
     try {
-      await this.$axios.$post('/api/product/update-advantages-sort', data)
+      await this.$axios.$post('/api/product/update-media-sort/', array)
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
       throw e

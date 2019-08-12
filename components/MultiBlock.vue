@@ -227,7 +227,7 @@ export default {
       }
       this.loading = true
       try {
-        await this.$store.dispatch('product/removeAdvantage', id)
+        await this.$store.dispatch('product/removeMedia', id)
         this.items = this.items.filter(item => item.id !== id)
       } catch (e) {}
       this.loading = false

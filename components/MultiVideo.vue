@@ -14,19 +14,35 @@
         xs12
       >
         <v-card
-          class="ma-1 mt-2"
+          class="ma-1 mt-2 hovered"
           flat
           height="100%"
         >
           <div class="handle">
             <v-img v-if="item.path" :src="`http://i1.ytimg.com/vi/${item.path}/mqdefault.jpg`"></v-img>
           </div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="remove-icon white"
+                icon
+                absolute
+                small
+                @click="remove(item.id)"
+                v-on="on"
+              >
+                <v-icon color="red darken-2">
+                  delete
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Удалить видео</span>
+          </v-tooltip>
           <v-text-field
             v-model="items[idx].path"
             solo
             hide-details
             label="Ссылка на Youtube"
-            append-icon="play_circle_filled"
             class="mt-2"
             @change="getPreview"
             @click:append="getVideo"
@@ -50,6 +66,23 @@
         </v-card>
       </v-flex>
     </draggable>
+    <v-dialog v-model="dialog" persistent max-width="360">
+      <v-card>
+        <v-card-title class="headline">
+          Подтвердите действие
+        </v-card-title>
+        <v-card-text>Вы хотите удалить это видео.<br> Вы уверены?</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="green darken-1" text :disabled="loading" @click="dialog = false">
+            Отмена
+          </v-btn>
+          <v-btn color="green darken-1" text :loading="loading" :disabled="loading" @click="remove(deleted)">
+            Принять
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -79,10 +112,23 @@ export default {
     items: [],
     draggable: false,
     loading: false,
-    form: false
+    form: false,
+    dialog: false,
+    deleted: null
   }),
   created() {
     this.items = this.data
+  },
+  mounted() {
+    const hovered = document.querySelectorAll('.hovered')
+    Array.from(hovered).forEach(hover => {
+      hover.onmouseover = () => {
+        hover.querySelector('.remove-icon').classList.add('active')
+      }
+      hover.onmouseleave = () => {
+        hover.querySelector('.remove-icon').classList.remove('active')
+      }
+    })
   },
   methods: {
     getPreview() {
@@ -93,6 +139,20 @@ export default {
     },
     getVideo() {
       console.log('video')
+    },
+    async remove(id) {
+      if (!this.dialog) {
+        this.dialog = true
+        this.deleted = id
+        return
+      }
+      this.loading = true
+      try {
+        await this.$store.dispatch('product/removeMedia', id)
+        this.items = this.items.filter(item => item.id !== id)
+      } catch (e) {}
+      this.loading = false
+      this.dialog = false
     },
     async draggingEnd() {
       this.loading = true
@@ -123,5 +183,16 @@ export default {
   color: #7f828b;
   font-size: 18px;
   margin: 10px 0;
+}
+.remove-icon {
+  opacity: 0;
+  visibility: hidden;
+  transition: .3s;
+  top: 20px;
+  right: 20px;
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 </style>
