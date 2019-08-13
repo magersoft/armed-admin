@@ -194,7 +194,7 @@
           />
         </v-tab-item>
         <v-tab-item>
-          Видео
+          <multi-video :id="variation.product_id" v-model="variation.videos_array" :variation-id="variation.id" />
         </v-tab-item>
         <v-tab-item>
           <v-layout column wrap>
@@ -228,10 +228,11 @@ import VariationIcon from '@/components/CRUD/VariationIcon'
 import StatusChips from '@/components/StatusChips.vue'
 import MultiBlock from '@/components/MultiBlock.vue'
 import FileUpload from '@/components/UploadFiles.vue'
+import MultiVideo from '@/components/MultiVideo'
 
 export default {
   components: {
-    VariationIcon, StatusChips, MultiBlock, FileUpload
+    VariationIcon, StatusChips, MultiBlock, FileUpload, MultiVideo
   },
   props: {
     value: {

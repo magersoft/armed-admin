@@ -9,7 +9,7 @@
     >
       <v-flex
         v-for="(item, idx) in items"
-        :key="item.id"
+        :key="idx"
         md2
         xs12
       >
@@ -28,7 +28,7 @@
                 icon
                 absolute
                 small
-                @click="remove(item.id)"
+                @click="remove(item.id, idx)"
                 v-on="on"
               >
                 <v-icon color="red darken-2">
@@ -44,25 +44,31 @@
             hide-details
             label="Ссылка на Youtube"
             class="mt-2"
-            @change="getPreview"
+            @change.native="getPreview($event, idx)"
             @click:append="getVideo"
           ></v-text-field>
         </v-card>
       </v-flex>
       <v-flex md2 xs12>
         <v-card
-          class="mx-auto pa-2 mt-2 new-block"
+          class="mx-auto pa-2 mt-2 new-block elevation-1"
           flat
-          height="100%"
+          height="194px"
         >
-          <v-btn
-            fab
-            dark
-            color="primary"
-            @click.prevent="items.push({ path: '' })"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                fab
+                dark
+                color="primary"
+                @click.prevent="items.push({ path: '' })"
+                v-on="on"
+              >
+                <v-icon>add</v-icon>
+              </v-btn>
+            </template>
+            <span>Добавить видео</span>
+          </v-tooltip>
         </v-card>
       </v-flex>
     </draggable>
@@ -98,7 +104,7 @@ export default {
       type: Number,
       required: true
     },
-    data: {
+    value: {
       type: Array,
       required: true
     },
@@ -117,39 +123,35 @@ export default {
     deleted: null
   }),
   created() {
-    this.items = this.data
+    this.items = this.value
   },
   mounted() {
-    const hovered = document.querySelectorAll('.hovered')
-    Array.from(hovered).forEach(hover => {
-      hover.onmouseover = () => {
-        hover.querySelector('.remove-icon').classList.add('active')
-      }
-      hover.onmouseleave = () => {
-        hover.querySelector('.remove-icon').classList.remove('active')
-      }
-    })
+    this.hovered()
   },
   methods: {
-    getPreview() {
-      this.items = this.items.map(item => {
-        item.path = item.path.replace('https://youtu.be/', '').replace('https://www.youtube.com/watch?v=', '')
-        return item
+    getPreview($event, idx) {
+      this.items[idx].path = $event.target.value.replace('https://youtu.be/', '').replace('https://www.youtube.com/watch?v=', '')
+      setTimeout(() => {
+        this.hovered()
       })
     },
     getVideo() {
       console.log('video')
     },
-    async remove(id) {
+    async remove(id, idx) {
+      if (!id) {
+        this.items.splice(idx, 1)
+        return false
+      }
       if (!this.dialog) {
         this.dialog = true
-        this.deleted = id
+        this.deleted = { id, idx }
         return
       }
       this.loading = true
       try {
-        await this.$store.dispatch('product/removeMedia', id)
-        this.items = this.items.filter(item => item.id !== id)
+        await this.$store.dispatch('product/removeMedia', this.deleted.id)
+        this.items.splice(this.deleted.idx, 1)
       } catch (e) {}
       this.loading = false
       this.dialog = false
@@ -163,6 +165,17 @@ export default {
       } catch (e) {}
       this.draggable = false
       this.loading = false
+    },
+    hovered() {
+      const hovered = document.querySelectorAll('.hovered')
+      Array.from(hovered).forEach(hover => {
+        hover.onmouseover = () => {
+          hover.querySelector('.remove-icon').classList.add('active')
+        }
+        hover.onmouseleave = () => {
+          hover.querySelector('.remove-icon').classList.remove('active')
+        }
+      })
     }
   }
 }
@@ -188,8 +201,8 @@ export default {
   opacity: 0;
   visibility: hidden;
   transition: .3s;
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  right: 10px;
   &.active {
     opacity: 1;
     visibility: visible;

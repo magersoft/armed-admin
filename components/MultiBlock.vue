@@ -58,17 +58,22 @@
           flat
           height="100%"
         >
-          <div v-show="!addedImage" class="added-header">
-            <h2>Добавить новое преимущество</h2>
-            <v-btn
-              fab
-              dark
-              color="primary"
-              :disabled="form"
-              @click.prevent="form = !form"
-            >
-              <v-icon>add</v-icon>
-            </v-btn>
+          <div v-if="!addedImage" class="added-header">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  fab
+                  dark
+                  color="primary"
+                  :disabled="form"
+                  @click.prevent="form = !form"
+                  v-on="on"
+                >
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </template>
+              <span>Добавить преимущество</span>
+            </v-tooltip>
           </div>
           <v-card-text v-if="form">
             <file-upload
@@ -168,15 +173,7 @@ export default {
     this.items = this.data
   },
   mounted() {
-    const hovered = document.querySelectorAll('.hovered')
-    Array.from(hovered).forEach(hover => {
-      hover.onmouseover = () => {
-        hover.querySelector('.remove-icon').classList.add('active')
-      }
-      hover.onmouseleave = () => {
-        hover.querySelector('.remove-icon').classList.remove('active')
-      }
-    })
+    this.hovered()
   },
   methods: {
     newImageUpload(file) {
@@ -206,8 +203,13 @@ export default {
             this.items.push(advantage)
             this.form = false
             this.clear()
+            setTimeout(() => {
+              this.hovered()
+            })
           } catch (e) {}
           this.loading = false
+        } else {
+          this.$store.dispatch('getMessage', { text: 'Загрузите изображение', color: 'red', timeout: 2000 })
         }
       })
     },
@@ -229,6 +231,7 @@ export default {
       try {
         await this.$store.dispatch('product/removeMedia', id)
         this.items = this.items.filter(item => item.id !== id)
+        this.$store.dispatch('getMessage', { text: 'Преимущество удалено', color: 'green', timeout: 2000 })
       } catch (e) {}
       this.loading = false
       this.dialog = false
@@ -242,6 +245,17 @@ export default {
       } catch (e) {}
       this.draggable = false
       this.loading = false
+    },
+    hovered() {
+      const hovered = document.querySelectorAll('.hovered')
+      Array.from(hovered).forEach(hover => {
+        hover.onmouseover = () => {
+          hover.querySelector('.remove-icon').classList.add('active')
+        }
+        hover.onmouseleave = () => {
+          hover.querySelector('.remove-icon').classList.remove('active')
+        }
+      })
     }
   }
 }
@@ -259,6 +273,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
   h2 {
     color: #7f828b;
     text-transform: uppercase;

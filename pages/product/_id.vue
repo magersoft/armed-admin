@@ -74,7 +74,8 @@
               <v-tabs-items v-model="tab">
                 <v-tab-item>
                   <v-card flat>
-                    <v-layout wrap>
+                    <v-container>
+                      <v-layout wrap>
                       <v-flex md8 xs12>
                         <v-layout class="pa-3">
                           <v-flex md12>
@@ -213,124 +214,143 @@
                         </v-layout>
                       </v-flex>
                     </v-layout>
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item v-if="variations">
                   <v-card flat>
-                    <variation-editor v-model="controls.variation" :variations="variations" :statuses="statuses" @back="save" />
+                    <v-container>
+                      <variation-editor v-model="controls.variation" :variations="variations" :statuses="statuses" @back="save" />
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <multi-select
-                      v-model="controls.analogs_ids"
-                      :items="allProducts"
-                      multiple
-                      deletable-chips
-                      persistent-hint
-                      clearable
-                      label="Изменить аналоги"
-                    />
-                    <v-card-text><h2>Аналоги товара</h2></v-card-text>
-                    <v-layout class="mt-2">
-                      <v-flex
-                        v-for="analog in analogsCard"
-                        :key="analog.id"
-                        class="ma-1"
-                        xs2
-                      >
-                        <app-card :item="analog" />
+                    <v-container>
+                      <multi-select
+                        v-model="controls.analogs_ids"
+                        :items="allProducts"
+                        multiple
+                        deletable-chips
+                        persistent-hint
+                        clearable
+                        label="Изменить аналоги"
+                      />
+                      <v-card-text><h2>Аналоги товара</h2></v-card-text>
+                      <v-layout class="mt-2">
+                        <v-flex
+                          v-for="analog in analogsCard"
+                          :key="analog.id"
+                          class="ma-1"
+                          xs2
+                        >
+                          <app-card :item="analog" />
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-card>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-card flat>
+                    <v-container>
+                      <v-card-text><h2>Преимущества товара</h2></v-card-text>
+                      <v-flex xs12 class="mx-2">
+                        <multi-block :id="controls.id" :data="advantages" />
                       </v-flex>
-                    </v-layout>
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text><h2>Преимущества товара</h2></v-card-text>
-                    <v-flex xs12 class="mx-2">
-                      <multi-block :id="controls.id" :data="advantages" />
-                    </v-flex>
+                    <v-container>
+                      <multi-select
+                        v-model="controls.soput_ids"
+                        :items="allProducts"
+                        multiple
+                        deletable-chips
+                        persistent-hint
+                        clearable
+                        label="Сопутствующие товары"
+                      />
+                      <multi-select
+                        v-model="controls.second_soput_ids"
+                        :items="allProducts"
+                        multiple
+                        deletable-chips
+                        persistent-hint
+                        clearable
+                        label="Рекомендации для апсейла"
+                      />
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <multi-select
-                      v-model="controls.soput_ids"
-                      :items="allProducts"
-                      multiple
-                      deletable-chips
-                      persistent-hint
-                      clearable
-                      label="Сопутствующие товары"
-                    />
-                    <multi-select
-                      v-model="controls.second_soput_ids"
-                      :items="allProducts"
-                      multiple
-                      deletable-chips
-                      persistent-hint
-                      clearable
-                      label="Рекомендации для апсейла"
-                    />
+                    <v-container>
+                      <v-card-text>Характеристики товара</v-card-text>
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text>5</v-card-text>
+                    <v-container>
+                      <v-card-text><h2>Галерея товара</h2></v-card-text>
+                      <v-layout>
+                        <v-flex xs12>
+                          <file-upload
+                            :files="controls.files.gallery"
+                            grid="md2"
+                            multiple
+                            draggable-files
+                            folder="/products/"
+                            @fileUpload="imageUpload"
+                            @fileRemove="imageRemove"
+                          />
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text><h2>Галерея товара</h2></v-card-text>
-                    <v-layout>
-                      <v-flex xs12>
-                        <file-upload
-                          :files="controls.files.gallery"
-                          grid="md2"
-                          multiple
-                          draggable-files
-                          folder="/products/"
-                          @fileUpload="imageUpload"
-                          @fileRemove="imageRemove"
-                        />
-                      </v-flex>
-                    </v-layout>
+                    <v-container>
+                      <v-card-text><h2>Видео товара</h2></v-card-text>
+                      <multi-video :id="controls.id" v-model="controls.videos_array" />
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text><h2>Видео товара</h2></v-card-text>
-                    <multi-video :id="controls.id" :data="controls.videos_array" />
+                    <v-container>
+                      <v-card-text><h2>SEO</h2></v-card-text>
+                      <v-layout column wrap>
+                        <v-text-field
+                          v-model="controls.seo_title"
+                          label="SEO заголовок"
+                          counter
+                          maxlength="65"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="controls.h1"
+                          label="H1 заголовок"
+                          counter
+                          maxlength="255"
+                        ></v-text-field>
+                        <v-textarea
+                          v-model="controls.seo_description"
+                          label="SEO описание"
+                          counter
+                          maxlength="255"
+                        ></v-textarea>
+                      </v-layout>
+                    </v-container>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item>
                   <v-card flat>
-                    <v-card-text><h2>SEO</h2></v-card-text>
-                    <v-layout column wrap>
-                      <v-text-field
-                        v-model="controls.seo_title"
-                        label="SEO заголовок"
-                        counter
-                        maxlength="65"
-                      ></v-text-field>
-                      <v-text-field
-                        v-model="controls.h1"
-                        label="H1 заголовок"
-                        counter
-                        maxlength="255"
-                      ></v-text-field>
-                      <v-textarea
-                        v-model="controls.seo_description"
-                        label="SEO описание"
-                        counter
-                        maxlength="255"
-                      ></v-textarea>
-                    </v-layout>
-                  </v-card>
-                </v-tab-item>
-                <v-tab-item>
-                  <v-card flat>
-                    <v-card-text>9</v-card-text>
+                    <v-container>
+                      <v-card-text>Отзывы товара</v-card-text>
+                    </v-container>
                   </v-card>
                 </v-tab-item>
               </v-tabs-items>
@@ -468,7 +488,6 @@ export default {
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
     this.controls.features_array = this.data.features.split('||')
-    this.controls.videos_array = this.data.videos
     this.variations = this.data.variations
     this.categories = this.data.categories
     this.additional_categories = this.data.additional_categories
@@ -487,6 +506,7 @@ export default {
         markettitle: null,
         seo_title: null,
         seo_description: null,
+        videos_array: [],
         files: {
           thumbnail: null,
           gallery: []
