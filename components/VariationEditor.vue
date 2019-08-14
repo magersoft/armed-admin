@@ -53,7 +53,7 @@
               <span v-else style="text-align: center;">Редактировать</span>
             </div>
             <v-layout class="ma-2" justify-space-between align-center>
-              <status-chips :status="variation.status" :statuses="statuses" />
+              <status-chips :id="variation.id" :status="variation.status" :statuses="statuses" variation />
               <div>{{ variation.stock }} шт.</div>
             </v-layout>
             <v-card-actions>
@@ -237,7 +237,8 @@ export default {
   props: {
     value: {
       type: Object,
-      required: true
+      required: false,
+      default: () => {}
     },
     variations: {
       type: [Array, Object],

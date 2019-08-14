@@ -24,8 +24,9 @@
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <div class="flex justify-space-between mx-2">
-              <v-btn text>
+            <v-divider/>
+            <div class="flex justify-space-between ma-2">
+              <v-btn text @click="$router.go(-1)">
                 Назад
               </v-btn>
               <v-btn
@@ -44,7 +45,7 @@
           <v-toolbar color="primary" dark>
             <v-toolbar-title>{{ data.displaytitle }}</v-toolbar-title>
             <v-spacer />
-            <status-chips :status="controls.status" :statuses="statuses" />
+            <status-chips :id="controls.id" :status="controls.status" :statuses="statuses" />
             <v-btn icon small>
               <v-icon>more_vert</v-icon>
             </v-btn>
@@ -76,144 +77,144 @@
                   <v-card flat>
                     <v-container>
                       <v-layout wrap>
-                      <v-flex md8 xs12>
-                        <v-layout class="pa-3">
-                          <v-flex md12>
-                            <v-layout wrap justify-start align-content-start>
-                              <v-flex xs12 md6>
-                                <v-text-field
-                                  v-model="controls.title"
-                                  v-validate="'required'"
-                                  :error-messages="errors.collect('scope0.title')"
-                                  data-vv-name="title"
-                                  data-vv-scope="scope0"
-                                  label="Название"
-                                  required
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <v-text-field
-                                  v-model="controls.menutitle"
-                                  v-validate="'required'"
-                                  :error-messages="errors.collect('scope0.menutitle')"
-                                  data-vv-name="menutitle"
-                                  data-vv-scope="scope0"
-                                  label="Заголовок в меню"
-                                  required
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <v-text-field
-                                  v-model="controls.typeprefix"
-                                  data-vv-name="typeprefix"
-                                  data-vv-scope="scope0"
-                                  label="Тип товара"
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <v-text-field
-                                  v-model="controls.model"
-                                  v-validate="'required'"
-                                  :error-messages="errors.collect('scope0.model')"
-                                  data-vv-name="model"
-                                  data-vv-scope="scope0"
-                                  label="Модель"
-                                  required
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <multi-select
-                                  v-model="controls.category_id"
-                                  :items="categories"
-                                  label="Категория"
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <multi-select
-                                  v-model="controls.manufacturer_id"
-                                  :items="manufacturers"
-                                  clearable
-                                  label="Производитель"
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <multi-select
-                                  v-model="controls.sizetable_id"
-                                  :items="sizetables"
-                                  deletable-chips
-                                  clearable
-                                  label="Таблица размеров"
-                                />
-                              </v-flex>
-                              <v-flex xs12 md6>
-                                <v-text-field
-                                  v-model="controls.warranty"
-                                  v-validate="`min_value:1`"
-                                  :error-messages="errors.collect('scope0.warranty')"
-                                  data-vv-name="warranty"
-                                  data-vv-scope="scope0"
-                                  label="Гарантия (месяцев)"
-                                />
-                              </v-flex>
-                              <v-flex xs12>
-                                <multi-select
-                                  v-model="controls.additional_categories_ids"
-                                  :items="additional_categories"
-                                  multiple
-                                  deletable-chips
-                                  persistent-hint
-                                  clearable
-                                  label="Выбрать"
-                                  hint="Дополнительные категорийные срезы"
-                                />
-                              </v-flex>
-                              <v-flex>
-                                <v-switch
-                                  v-model="controls.is_bestseller"
-                                  color="primary"
-                                  label="Хит"
-                                  hide-details
-                                />
-                                <v-switch
-                                  v-model="controls.is_preorderable"
-                                  color="primary"
-                                  label="Доступен для предзаказа"
-                                  hide-details
-                                />
-                                <v-switch
-                                  v-model="controls.certificated_dialer"
-                                  color="primary"
-                                  label="Сертифицированный дилер компании Армед"
-                                  hide-details
-                                />
-                              </v-flex>
-                              <v-flex xs12>
-                                <div class="editor mt2">
-                                  <label class="v-label v-label--active theme--light">Описание товара</label>
-                                  <ckeditor v-model="controls.text" type="classic" :config="{ language: 'ru' }"></ckeditor>
-                                </div>
-                              </v-flex>
-                            </v-layout>
-                          </v-flex>
-                        </v-layout>
-                      </v-flex>
-                      <v-flex md4 xs12>
-                        <v-layout column>
-                          <v-flex>
-                            <file-upload
-                              :files="data.thumbnail"
-                              :multiple="false"
-                              folder="/products/"
-                              @fileUpload="thumbnailUpload"
-                              @fileRemove="thumbnailRemove"
-                            />
-                          </v-flex>
-                          <v-flex>
-                            <multi-input v-model="controls.features_array" label="Особенности товара" />
-                          </v-flex>
-                        </v-layout>
-                      </v-flex>
-                    </v-layout>
+                        <v-flex md8 xs12>
+                          <v-layout class="pa-3">
+                            <v-flex md12>
+                              <v-layout wrap justify-start align-content-start>
+                                <v-flex xs12 md6>
+                                  <v-text-field
+                                    v-model="controls.title"
+                                    v-validate="'required'"
+                                    :error-messages="errors.collect('scope0.title')"
+                                    data-vv-name="title"
+                                    data-vv-scope="scope0"
+                                    label="Название"
+                                    required
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <v-text-field
+                                    v-model="controls.menutitle"
+                                    v-validate="'required'"
+                                    :error-messages="errors.collect('scope0.menutitle')"
+                                    data-vv-name="menutitle"
+                                    data-vv-scope="scope0"
+                                    label="Заголовок в меню"
+                                    required
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <v-text-field
+                                    v-model="controls.typeprefix"
+                                    data-vv-name="typeprefix"
+                                    data-vv-scope="scope0"
+                                    label="Тип товара"
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <v-text-field
+                                    v-model="controls.model"
+                                    v-validate="'required'"
+                                    :error-messages="errors.collect('scope0.model')"
+                                    data-vv-name="model"
+                                    data-vv-scope="scope0"
+                                    label="Модель"
+                                    required
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <multi-select
+                                    v-model="controls.category_id"
+                                    :items="categories"
+                                    label="Категория"
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <multi-select
+                                    v-model="controls.manufacturer_id"
+                                    :items="manufacturers"
+                                    clearable
+                                    label="Производитель"
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <multi-select
+                                    v-model="controls.sizetable_id"
+                                    :items="sizetables"
+                                    deletable-chips
+                                    clearable
+                                    label="Таблица размеров"
+                                  />
+                                </v-flex>
+                                <v-flex xs12 md6>
+                                  <v-text-field
+                                    v-model="controls.warranty"
+                                    v-validate="`min_value:1`"
+                                    :error-messages="errors.collect('scope0.warranty')"
+                                    data-vv-name="warranty"
+                                    data-vv-scope="scope0"
+                                    label="Гарантия (месяцев)"
+                                  />
+                                </v-flex>
+                                <v-flex xs12>
+                                  <multi-select
+                                    v-model="controls.additional_categories_ids"
+                                    :items="additional_categories"
+                                    multiple
+                                    deletable-chips
+                                    persistent-hint
+                                    clearable
+                                    label="Выбрать"
+                                    hint="Дополнительные категорийные срезы"
+                                  />
+                                </v-flex>
+                                <v-flex>
+                                  <v-switch
+                                    v-model="controls.is_bestseller"
+                                    color="primary"
+                                    label="Хит"
+                                    hide-details
+                                  />
+                                  <v-switch
+                                    v-model="controls.is_preorderable"
+                                    color="primary"
+                                    label="Доступен для предзаказа"
+                                    hide-details
+                                  />
+                                  <v-switch
+                                    v-model="controls.certificated_dialer"
+                                    color="primary"
+                                    label="Сертифицированный дилер компании Армед"
+                                    hide-details
+                                  />
+                                </v-flex>
+                                <v-flex xs12>
+                                  <div class="editor mt2">
+                                    <label class="v-label v-label--active theme--light">Описание товара</label>
+                                    <ckeditor v-model="controls.text" type="classic" :config="{ language: 'ru' }"></ckeditor>
+                                  </div>
+                                </v-flex>
+                              </v-layout>
+                            </v-flex>
+                          </v-layout>
+                        </v-flex>
+                        <v-flex md4 xs12>
+                          <v-layout column>
+                            <v-flex>
+                              <file-upload
+                                :files="data.thumbnail"
+                                :multiple="false"
+                                folder="/products/"
+                                @fileUpload="thumbnailUpload"
+                                @fileRemove="thumbnailRemove"
+                              />
+                            </v-flex>
+                            <v-flex>
+                              <multi-input v-model="controls.features_array" label="Особенности товара" />
+                            </v-flex>
+                          </v-layout>
+                        </v-flex>
+                      </v-layout>
                     </v-container>
                   </v-card>
                 </v-tab-item>
@@ -421,6 +422,7 @@ export default {
     analogsCard: [],
     advantages: [],
     variations: null,
+    price: null,
     controls: {
       id: null,
       title: '',
@@ -460,8 +462,8 @@ export default {
       { title: 'Характеристики', icon: 'dashboard', show: true },
       { title: 'Изображения', icon: 'dashboard', show: true },
       { title: 'Видео', icon: 'dashboard', show: true },
-      { title: 'SEO', icon: 'dashboard', show: true },
-      { title: 'Отзывы', icon: 'dashboard', show: true }
+      { title: 'SEO', icon: 'dashboard', show: true }
+      // { title: 'Отзывы', icon: 'dashboard', show: true }
     ]
   }),
   computed: {
@@ -488,6 +490,7 @@ export default {
     this.controls.files.thumbnail = this.data.thumbnail
     this.controls.files.gallery = this.data.images.map(image => ({ id: image.id, src: image.path }))
     this.controls.features_array = this.data.features.split('||')
+    this.controls.status = this.data.status
     this.variations = this.data.variations
     this.categories = this.data.categories
     this.additional_categories = this.data.additional_categories
@@ -497,6 +500,7 @@ export default {
     this.allProducts = this.data.all_products
     this.analogsCard = this.data.analogs_card
     this.advantages = this.data.advantages
+    this.price = this.data.price
 
     if (this.variations) {
       this.controls.variation = {
@@ -607,6 +611,7 @@ export default {
 }
 .aside {
   z-index: 1;
+  flex-shrink: 0;
 }
 .v-input {
   padding: 10px;

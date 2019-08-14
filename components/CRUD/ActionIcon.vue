@@ -83,6 +83,11 @@ export default {
     actions: {
       type: Object,
       required: false
+    },
+    page: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
   data: () => ({
@@ -91,6 +96,7 @@ export default {
   }),
   methods: {
     editItem(id) {
+      this.$store.dispatch('crud/savePage', this.page)
       this.$router.push(`product/${id}`)
     },
     async deleteItem(id) {

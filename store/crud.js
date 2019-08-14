@@ -1,14 +1,19 @@
 export const state = () => ({
-  crud: null
+  crud: null,
+  page: null
 })
 
 export const getters = {
-  crud: state => state.crud
+  crud: state => state.crud,
+  page: state => state.page
 }
 
 export const mutations = {
   set(state, payload) {
     state.crud = payload
+  },
+  page(state, payload) {
+    state.page = payload
   }
 }
 
@@ -42,10 +47,18 @@ export const actions = {
       throw e
     }
   },
+  async search({ commit }, query) {
+    try {
+      const crud = this.getters['crud/crud']
+      return await this.$axios.$get(`api/${crud}/search/?query=${query}`)
+    } catch (e) {
+      commit('setMessage', { text: e }, { root: true })
+    }
+  },
   async changeStatus({ commit }, { status, items }) {
     const crud = this.getters['crud/crud']
     try {
-      await this.$axios.$post(`api/${crud}/change-status/`, { status, items })
+      return await this.$axios.$post(`api/${crud}/change-status/`, { status, items })
     } catch (e) {
       commit('setMessage', { text: e }, { root: true })
       throw e
@@ -68,5 +81,8 @@ export const actions = {
       commit('setMessage', { text: e }, { root: true })
       throw e
     }
+  },
+  savePage({ commit }, page) {
+    commit('page', page)
   }
 }

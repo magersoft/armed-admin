@@ -1,10 +1,19 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div>
-    <app-filters v-if="data.filters.length" :data="data" />
+    <app-filters v-if="data.filters.length" :data="data" @search="search" />
     <v-card>
       <v-card-title>
         <h5>{{ data.name }}</h5>
         <v-spacer />
+        <div class="search-field">
+          <v-text-field
+            hide-details
+            class="ma-2 search-field"
+            :loading="loading"
+            label="Поиск ..."
+            @keyup.native="search($event.target.value)"
+          ></v-text-field>
+        </div>
         <app-status-button v-if="actions.update" :statuses="statuses" :items="selected" />
         <app-delete-button v-if="actions.delete" :items="selected" @deleted="deleted" />
       </v-card-title>
@@ -109,7 +118,7 @@
                 <div v-else v-html="props.item[row.split(':')[0]]"></div>
               </td>
               <td class="layout px-0 text-xs-right">
-                <app-action-icon :item="props.item" :actions="actions" @deleted="deleted" />
+                <app-action-icon :item="props.item" :actions="actions" :page="options.page" @deleted="deleted" />
               </td>
             </tr>
           </template>
@@ -160,6 +169,7 @@ export default {
     options: {
       async handler() {
         this.loading = true
+        this.options.page = this.$store.getters['crud/page'] || this.options.page
         const { sortBy, descending, page, itemsPerPage } = this.options
         const params = {
           page,
@@ -167,6 +177,7 @@ export default {
         }
         try {
           const { body, total } = await this.$store.dispatch('crud/getAll', params)
+          this.$store.dispatch('crud/savePage', null)
           this.data.body = body
           this.data.total = total
 
@@ -225,6 +236,15 @@ export default {
         this.data.total = total
       } catch (e) {}
       this.loading = false
+    },
+    async search(query) {
+      this.loading = true
+      try {
+        const result = await this.$store.dispatch('crud/search', query)
+        this.data.body = result.body
+        this.data.total = result.total
+      } catch (e) {}
+      this.loading = false
     }
   }
 }
@@ -260,5 +280,9 @@ table.v-table {
   &-list {
     padding: 0;
   }
+}
+.search-field {
+  display: flex;
+  width: 400px;
 }
 </style>
