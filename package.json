@@ -20,7 +20,7 @@
     "filepond": "^4.4.11",
     "filepond-plugin-file-validate-type": "^1.2.4",
     "filepond-plugin-image-preview": "^4.2.1",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.15.8",
     "nuxt-validate": "^1.0.1",
     "vue-ckeditor5": "^0.4.1",
     "vue-filepond": "^5.1.1",
